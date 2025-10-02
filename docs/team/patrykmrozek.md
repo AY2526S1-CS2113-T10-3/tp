@@ -1,4 +1,4 @@
-# John Doe - Project Portfolio Page
+# Patryk Mrozek - Project Portfolio Page
 
 ## Overview
 
