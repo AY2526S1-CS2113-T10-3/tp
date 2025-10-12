@@ -31,6 +31,7 @@ public class UI {
         System.out.println("Hello from\n" + logo);
         System.out.println("Hello! I'm Uniflow");
         System.out.println("What can I do for you?");
+        System.out.flush();
     }
 
     /**

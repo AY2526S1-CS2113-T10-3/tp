@@ -1,6 +1,7 @@
 package seedu.duke;
 
 public class Parser {
+    private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
 
     public static Command parse(String fullCommand) throws UniflowException {
@@ -8,6 +9,9 @@ public class Parser {
             throw new UniflowException("Command cannot be empty");
         }
         String trimmedCommand = fullCommand.trim();
+        if (trimmedCommand.equals(COMMAND_BYE)) {
+            return new ExitCommand();
+        }
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
         }

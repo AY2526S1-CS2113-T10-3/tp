@@ -13,7 +13,7 @@ public class InsertCommand extends Command {
         this.endTime = endTime;
     }
     @Override
-    public void execute() throws UniflowException {
+    public void execute(UI ui) throws UniflowException {
         // empty for now
     }
 
