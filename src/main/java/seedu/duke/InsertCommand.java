@@ -1,5 +1,4 @@
 package seedu.duke;
-import seedu.duke.UniflowException;
 
 public class InsertCommand extends Command {
     private final String moduleName;

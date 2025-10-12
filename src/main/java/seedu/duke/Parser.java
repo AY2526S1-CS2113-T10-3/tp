@@ -1,7 +1,5 @@
 package seedu.duke;
 
-import javax.swing.text.DefaultEditorKit;
-
 public class Parser {
     private static final String COMMAND_INSERT = "insert";
 
