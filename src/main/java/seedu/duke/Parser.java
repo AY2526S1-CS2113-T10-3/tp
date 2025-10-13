@@ -17,6 +17,10 @@ public class Parser {
             return parseInsertCommand(trimmedCommand);
         }
 
+        if (trimmedCommand.startsWith(COMMAND_SCORE)) {
+            return parseScoreCommand(trimmedCommand);
+        }
+
         throw new UniflowException("Invalid command");
     }
 
