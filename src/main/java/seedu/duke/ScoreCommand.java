@@ -29,24 +29,22 @@ public class ScoreCommand extends Command {
             if (pair.length != 2) {
                 throw new UniflowException("Invalid token: \"" + token + "\" (use a/b format)");
             }
-
-            int userScore;
-            int maxScore;
-
+            
             try {
-                userScore = Integer.parseInt(pair[0]);
-                maxScore = Integer.parseInt(pair[1]);
+                int userScore = Integer.parseInt(pair[0]);
+                int maxScore = Integer.parseInt(pair[1]);
+
+                if (userScore < 0 || maxScore <= 0 || userScore > maxScore) {
+                    throw new UniflowException("Each a/b must satisfy 0 ≤ a ≤ b and b > 0. Offender: \"" + token + "\"");
+                }
+
+                earnedScore += userScore;
+                possibleScore += maxScore;
             } catch (NumberFormatException e) {
                 throw new UniflowException("Scores must be integers: \"" + token + "\"");
             }
-
-            if (userScore < 0 || maxScore <= 0 || userScore > maxScore) {
-                throw new UniflowException("Each a/b must satisfy 0 ≤ a ≤ b and b > 0. Offender: \"" + token + "\"");
-            }
-
-            earnedScore += userScore;
-            possibleScore += maxScore;
         }
+
 
         if (possibleScore != 100) {
             throw new UniflowException("Total possible score must add up to 100 (got " + possibleScore + ").");

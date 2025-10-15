@@ -63,7 +63,7 @@ public class Parser {
                 throw new UniflowException("Missing fields in insert command.");
             }
             return new InsertCommand(id, moduleName, day, startTime, endTime, sessionType);
-        } catch (Exception e) {
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             throw new UniflowException("Failed to parse insert command: " + e.getMessage());
         }
     }
