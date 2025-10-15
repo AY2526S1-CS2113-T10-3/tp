@@ -7,6 +7,7 @@ package seedu.duke;
  */
 public class Uniflow {
     private UI ui;
+    private ModuleList modules;
 
     /**
      * Constructs a new Uniflow chatbot instance.
@@ -15,6 +16,7 @@ public class Uniflow {
      */
     public Uniflow(String filePath) {
         ui = new UI();
+        modules = new ModuleList();
         // Initialization of storage or other components can go here
         // try {
         //     // code to load tasks
@@ -36,7 +38,7 @@ public class Uniflow {
                 ui.showLine(); // show the divider line ("_______")
                 Command c = Parser.parse(fullCommand);
                 // c.execute(tasks, ui, storage);
-                c.execute(ui);
+                c.execute(ui, modules);
                 isExit = c.isExit();
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());
