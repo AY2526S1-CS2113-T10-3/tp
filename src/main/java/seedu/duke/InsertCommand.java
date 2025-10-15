@@ -1,20 +1,15 @@
 package seedu.duke;
 
 public class InsertCommand extends Command {
-    private final String moduleName;
-    private final String day;
-    private final String startTime;
-    private final String endTime;
+    private final Module module;
 
-    InsertCommand(String moduleName, String day, String startTime, String endTime) {
-        this.moduleName = moduleName;
-        this.day = day;
-        this.startTime = startTime;
-        this.endTime = endTime;
+    InsertCommand(String id, String moduleName, String day, String startTime, String endTime) {
+        this.module = new Module(id, moduleName, day, startTime, endTime);
     }
     @Override
-    public void execute(UI ui) throws UniflowException {
+    public void execute(UI ui, ModuleList modules) throws UniflowException {
         // empty for now
+        modules.addModule(module);
     }
 
     /**
@@ -24,6 +19,6 @@ public class InsertCommand extends Command {
      */
     @Override
     public boolean isExit() {
-        return true;
+        return false;
     }
 }

@@ -43,6 +43,23 @@ public class UI {
         return scanner.nextLine();
     }
 
+    public void showModuleList(ModuleList modules) {
+        System.out.println(DIVIDER);
+        if (modules.isEmpty()) {
+            System.out.println(" Your Module list is empty.");
+        } else {
+            System.out.println(" Here are the Modules in your list:");
+            for (int i = 0; i < modules.getSize(); i++) {
+                try {
+                    System.out.println(" " + (i + 1) + "." + modules.getModule(i));
+                } catch (UniflowException e) {
+                    System.out.println(" " + (i + 1) + ". [Error loading Module: " + e.getMessage() + "]");
+                }
+            }
+        }
+        System.out.println(DIVIDER);
+    }
+    
     /**
      * Displays a goodbye message to the user.
      */
@@ -80,10 +97,10 @@ public class UI {
     }
 
     /**
-     * Displays a message indicating that there was an error loading tasks from file.
+     * Displays a message indicating that there was an error loading Modules from file.
      */
     public void showLoadingError() {
-        showMessage("Error loading tasks from file. Starting with an empty task list.");
+        showMessage("Error loading Modules from file. Starting with an empty Module list.");
     }
     
     /**
