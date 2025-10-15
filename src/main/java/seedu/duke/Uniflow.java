@@ -8,6 +8,7 @@ package seedu.duke;
 public class Uniflow {
     private UI ui;
     private ModuleList modules;
+    private static CourseRecord courseRecord;
 
     /**
      * Constructs a new Uniflow chatbot instance.
@@ -17,6 +18,7 @@ public class Uniflow {
     public Uniflow(String filePath) {
         ui = new UI();
         modules = new ModuleList();
+        courseRecord = new CourseRecord();
         // Initialization of storage or other components can go here
         // try {
         //     // code to load tasks
@@ -46,6 +48,10 @@ public class Uniflow {
                 ui.showLine();
             }
         }
+    }
+
+    public static CourseRecord getCourseRecord() {
+        return courseRecord;
     }
 
     /**
