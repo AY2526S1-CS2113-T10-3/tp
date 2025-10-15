@@ -17,11 +17,6 @@ public class Module {
         this.sessionType = sessionType != null ? sessionType.toLowerCase() : "lecture";
     }
 
-    // Constructor for backward compatibility (defaults to "lecture")
-    public Module(String id, String name, String day, String startTime, String endTime) {
-        this(id, name, day, startTime, endTime, "lecture");
-    }
-
     public String getId() {
         return id;
     }

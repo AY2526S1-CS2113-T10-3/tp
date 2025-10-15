@@ -54,9 +54,4 @@ public class ScoreCommand extends Command {
         double percentScore = earnedScore;
         ui.showMessage(String.format("Total: %.2f%% (%d/100)", percentScore, earnedScore));
     }
-
-    @Override
-    public boolean isExit() {
-        return false;
-    }
 }

@@ -7,11 +7,6 @@ public class InsertCommand extends Command {
         this.module = new Module(id, moduleName, day, startTime, endTime, sessionType);
     }
 
-    // Backward compatibility constructor
-    InsertCommand(String id, String moduleName, String day, String startTime, String endTime) {
-        this(id, moduleName, day, startTime, endTime, "lecture");
-    }
-
     @Override
     public void execute(UI ui, ModuleList modules) throws UniflowException {
         modules.addModule(module);
