@@ -29,13 +29,14 @@ public class ScoreCommand extends Command {
             if (pair.length != 2) {
                 throw new UniflowException("Invalid token: \"" + token + "\" (use a/b format)");
             }
-            
+
             try {
                 int userScore = Integer.parseInt(pair[0]);
                 int maxScore = Integer.parseInt(pair[1]);
 
                 if (userScore < 0 || maxScore <= 0 || userScore > maxScore) {
-                    throw new UniflowException("Each a/b must satisfy 0 ≤ a ≤ b and b > 0. Offender: \"" + token + "\"");
+                    throw new UniflowException("Each a/b must satisfy 0 ≤ a ≤ b and b > 0. "
+                            + "Offender: \"" + token + "\"");
                 }
 
                 earnedScore += userScore;
