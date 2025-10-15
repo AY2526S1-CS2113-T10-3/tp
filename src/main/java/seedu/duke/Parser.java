@@ -73,5 +73,4 @@ public class Parser {
     private static Command parseListCommand() throws UniflowException {
         return new ListCommand();
     }
-
 }
