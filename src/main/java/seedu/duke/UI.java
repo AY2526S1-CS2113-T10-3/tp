@@ -59,7 +59,30 @@ public class UI {
         }
         System.out.println(DIVIDER);
     }
-    
+
+    /**
+     * Displays filtered modules with a description of the filter applied.
+     *
+     * @param modules the filtered module list
+     * @param filterDescription description of what filter was applied
+     */
+    public void showFilteredModules(ModuleList modules, String filterDescription) {
+        System.out.println(DIVIDER);
+        if (modules.isEmpty()) {
+            System.out.println(" No modules found matching " + filterDescription + ".");
+        } else {
+            System.out.println(" Found " + modules.getSize() + " module(s) matching " + filterDescription + ":");
+            for (int i = 0; i < modules.getSize(); i++) {
+                try {
+                    System.out.println(" " + (i + 1) + ". " + modules.getModule(i));
+                } catch (UniflowException e) {
+                    System.out.println(" " + (i + 1) + ". [Error loading Module: " + e.getMessage() + "]");
+                }
+            }
+        }
+        System.out.println(DIVIDER);
+    }
+
     /**
      * Displays a goodbye message to the user.
      */
@@ -102,7 +125,7 @@ public class UI {
     public void showLoadingError() {
         showMessage("Error loading Modules from file. Starting with an empty Module list.");
     }
-    
+
     /**
      * Closes the scanner and releases system resources.
      */
