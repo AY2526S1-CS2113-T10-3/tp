@@ -1,4 +1,5 @@
 package seedu.duke;
+import java.util.ArrayList;
 
 /**
  * Uniflow is a personal task management chatbot that helps users manage their tasks.
@@ -13,6 +14,13 @@ public class Uniflow {
      *
      * @param filePath the path to the file where tasks are stored
      */
+
+    private static ArrayList<String> timetable = new ArrayList<>();
+
+    public static ArrayList<String> getTimetable() {
+        return timetable;
+    }
+
     public Uniflow(String filePath) {
         ui = new UI();
         // Initialization of storage or other components can go here
@@ -32,16 +40,15 @@ public class Uniflow {
         boolean isExit = false;
         while (!isExit) {
             try {
-                String fullCommand = ui.readCommand();
-                ui.showLine(); // show the divider line ("_______")
+                String fullCommand = ui.readCommand().trim();
+                if (fullCommand.isEmpty()) {
+                    continue; // pomijamy puste linie, nie pokazujemy błędu
+                }
                 Command c = Parser.parse(fullCommand);
-                // c.execute(tasks, ui, storage);
                 c.execute(ui);
                 isExit = c.isExit();
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
             }
         }
     }

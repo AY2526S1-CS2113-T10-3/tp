@@ -15,6 +15,12 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
         }
+        if (trimmedCommand.equals("show timetable")) {
+            return new ShowTimetable();
+        }
+        if (trimmedCommand.equals("reset timetable")) {
+            return new ResetTimetable();
+        }
 
         throw new UniflowException("Invalid command");
     }

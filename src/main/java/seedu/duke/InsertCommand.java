@@ -14,16 +14,9 @@ public class InsertCommand extends Command {
     }
     @Override
     public void execute(UI ui) throws UniflowException {
-        // empty for now
+        String entry = moduleName + " " + day + " " + startTime + "-" + endTime;
+        Uniflow.getTimetable().add(entry);
+        ui.showMessage(entry + " has been inserted into the timetable.");
     }
 
-    /**
-     * Returns true since this is an exit command.
-     *
-     * @return true to indicate the application should exit
-     */
-    @Override
-    public boolean isExit() {
-        return true;
-    }
 }
