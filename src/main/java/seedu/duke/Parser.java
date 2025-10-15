@@ -3,6 +3,7 @@ package seedu.duke;
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
+    private static final String COMMAND_SCORE = "score";
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_FILTER = "filter";
 
@@ -22,6 +23,10 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
+        }
+
+        if (trimmedCommand.startsWith(COMMAND_SCORE)) {
+            return parseScoreCommand(trimmedCommand);
         }
 
         throw new UniflowException("Invalid command");
@@ -61,6 +66,15 @@ public class Parser {
         } catch (Exception e) {
             throw new UniflowException("Failed to parse insert command: " + e.getMessage());
         }
+    }
+
+    private static Command parseScoreCommand(String command) throws UniflowException {
+        String args = command.substring(COMMAND_SCORE.length()).trim();
+        //score 10/10 15/20 ... denominators must add up to 100
+        if (args.isEmpty()) {
+            throw new UniflowException("Usage: score x1/y1 x2/y2 ...");
+        }
+        return new ScoreCommand(args);
     }
 
     private static Command parseListCommand() throws UniflowException {
