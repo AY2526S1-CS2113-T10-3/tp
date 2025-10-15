@@ -23,7 +23,10 @@ public class ScoreCommand extends Command {
             if (pair.length != 2) {
                 throw new UniflowException("Invalid token: \"" + token + "\"");
             }
-            int userScore, maxScore;
+            
+            int userScore;
+            int maxScore;
+            
             try {
                 userScore = Integer.parseInt(pair[0]);
                 maxScore = Integer.parseInt(pair[1]);
@@ -41,8 +44,8 @@ public class ScoreCommand extends Command {
             throw new UniflowException("Total possible score must add up to 100");
         }
 
-        double percentScore = (earnedScore / 100.0) * possibleScore;
-        ui.showMessage("Score " + percentScore);
+        double percentScore = (earnedScore * 100.0) / possibleScore;
+        ui.showMessage("Score: " + percentScore);
     }
 
     @Override
