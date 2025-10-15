@@ -27,7 +27,7 @@ public class UI {
             | | | | '_ \\| | |_| |/ _ \\ \\ /\\ / /
             | |_| | | | | |  _| | (_) \\ V  V /
              \\___/|_| |_|_|_| |_|\\___/ \\_/\\_/
-        """;
+            """;
         System.out.println("Hello from\n" + logo);
         System.out.println("Hello! I'm Uniflow");
         System.out.println("What can I do for you?");
