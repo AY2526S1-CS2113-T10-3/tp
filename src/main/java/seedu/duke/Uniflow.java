@@ -6,9 +6,11 @@ package seedu.duke;
  * Tasks can be of three types: ToDo, Deadline, or Event.
  */
 public class Uniflow {
+    private static CourseRecord courseRecord;
+    
     private UI ui;
     private ModuleList modules;
-    private static CourseRecord courseRecord;
+
 
     /**
      * Constructs a new Uniflow chatbot instance.
