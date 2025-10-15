@@ -22,12 +22,12 @@ public class UI {
      */
     public void showWelcome() {
         String logo = """
-             __     __ _   _ _ _                      
-             \\ \\   / /| | | | | | ___  ___  ___  ___ 
-              \\ \\ / / | |_| | | |/ _ \\/ __|/ _ \\/ __|
-               \\ V /  |  _  | | |  __/\\__ \\  __/\\__ \\
-                \\_/   |_| |_|_|_|\\___||___/\\___||___/
-            """;
+             _   _       _  __ _                
+            | | | |_ __ (_)/ _| | _____      __ 
+            | | | | '_ \\| | |_| |/ _ \\ \\ /\\ / / 
+            | |_| | | | | |  _| | (_) \\ V  V /  
+             \\___/|_| |_|_|_| |_|\\___/ \\_/\\_/   
+        """;
         System.out.println("Hello from\n" + logo);
         System.out.println("Hello! I'm Uniflow");
         System.out.println("What can I do for you?");
