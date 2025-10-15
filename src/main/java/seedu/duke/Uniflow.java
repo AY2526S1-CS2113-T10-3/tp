@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class Uniflow {
     private UI ui;
+    private ModuleList modules;
 
     /**
      * Constructs a new Uniflow chatbot instance.
@@ -23,6 +24,7 @@ public class Uniflow {
 
     public Uniflow(String filePath) {
         ui = new UI();
+        modules = new ModuleList();
         // Initialization of storage or other components can go here
         // try {
         //     // code to load tasks
@@ -45,7 +47,12 @@ public class Uniflow {
                     continue; // pomijamy puste linie, nie pokazujemy błędu
                 }
                 Command c = Parser.parse(fullCommand);
+<<<<<<< HEAD
                 c.execute(ui);
+=======
+                // c.execute(tasks, ui, storage);
+                c.execute(ui, modules);
+>>>>>>> 33c15f92a5174ab04794e7d05b7ae1f4343b3720
                 isExit = c.isExit();
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());

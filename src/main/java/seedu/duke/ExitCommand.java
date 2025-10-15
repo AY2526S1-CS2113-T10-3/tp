@@ -2,7 +2,7 @@ package seedu.duke;
 
 public class ExitCommand extends Command {
     @Override
-    public void execute(UI ui) throws UniflowException {
+    public void execute(UI ui, ModuleList modules) throws UniflowException {
         ui.showGoodbye();
     }
 
