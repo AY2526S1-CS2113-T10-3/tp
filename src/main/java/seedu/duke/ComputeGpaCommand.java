@@ -24,7 +24,8 @@ public class ComputeGpaCommand extends Command {
         }
 
         double gpa = totalGradePoints / totalCredits;
-        ui.showMessage("Your total grade points are " + totalGradePoints + "\n"
+        ui.showMessage("You have studied " + courseRecord.getSize() + " courses.\n"
+                + "Your total grade points are " + totalGradePoints + "\n"
                 + "Number of credits you have studied: " + totalCredits + "\n"
                 + String.format("Your GPA is: %.2f", gpa));
     }
