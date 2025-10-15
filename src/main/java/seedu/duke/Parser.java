@@ -68,6 +68,7 @@ public class Parser {
             throw new UniflowException("Usage: score x1/y1 x2/y2 ...");
         }
         return new ScoreCommand(args);
+    }
       
     private static Command parseListCommand() throws UniflowException {
         return new ListCommand();
