@@ -15,7 +15,8 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
         }
-        return null;
+
+        throw new UniflowException("Invalid command");
     }
 
     private static Command parseInsertCommand(String command) throws UniflowException {
