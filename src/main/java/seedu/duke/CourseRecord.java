@@ -16,4 +16,8 @@ public class CourseRecord {
     public boolean isEmpty() {
         return courses.isEmpty();
     }
+
+    public int  getSize() {
+        return courses.size();
+    }
 }
