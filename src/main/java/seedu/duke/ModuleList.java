@@ -27,7 +27,8 @@ public class ModuleList {
 
     public Module getModule(int index) throws UniflowException {
         if (index < 0 || index >= modules.size()) {
-            throw new UniflowException("OOPS!!! Task number " + (index + 1) + " does not exist. Please check your task list.");
+            throw new UniflowException("OOPS!!! Task number " + (index + 1)
+                    + " does not exist. Please check your task list.");
         }
         return modules.get(index);
     }
@@ -37,7 +38,9 @@ public class ModuleList {
         modules.remove(index - 1);
         return module;
     }
-    public boolean isEmpty(){ return modules.isEmpty(); }
+    public boolean isEmpty() {
+        return modules.isEmpty();
+    }
 
     public int getSize() {
         return modules.size();
