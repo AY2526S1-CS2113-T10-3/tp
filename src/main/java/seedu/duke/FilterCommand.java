@@ -66,4 +66,9 @@ public class FilterCommand extends Command {
                 throw new UniflowException("Unknown filter type: " + filterType);
         }
     }
+
+    @Override
+    public boolean isExit() {
+        return false;
+    }
 }
