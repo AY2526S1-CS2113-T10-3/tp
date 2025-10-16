@@ -7,6 +7,7 @@ public class Parser {
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADDGRADE = "addgrade";
     private static final String COMMAND_GPA = "gpa";
+    private static final String COMMAND_FILTER = "filter";
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -21,6 +22,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_LIST)) {
             return parseListCommand();
+        }
+        if (trimmedCommand.startsWith(COMMAND_FILTER)) {
+            return parseFilterCommand(trimmedCommand);
         }
 
         if (trimmedCommand.startsWith(COMMAND_SCORE)) {
@@ -70,6 +74,7 @@ public class Parser {
             String day = null;
             String startTime = null;
             String endTime = null;
+            String sessionType = null;
 
             for (String part : parts) {
                 if (part.startsWith(("i/"))) {
@@ -82,14 +87,16 @@ public class Parser {
                     startTime = part.substring(2);
                 } else if (part.startsWith(("t/"))) {
                     endTime = part.substring(2);
+                } else if (part.startsWith(("s/"))) {
+                    sessionType = part.substring(2);
                 }
             }
 
             if (id == null || moduleName == null || day == null || startTime == null || endTime == null) {
                 throw new UniflowException("Missing fields in insert command.");
             }
-            return new InsertCommand(id, moduleName, day, startTime, endTime);
-        } catch (Exception e) {
+            return new InsertCommand(id, moduleName, day, startTime, endTime, sessionType);
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             throw new UniflowException("Failed to parse insert command: " + e.getMessage());
         }
     }
@@ -105,5 +112,38 @@ public class Parser {
 
     private static Command parseListCommand() throws UniflowException {
         return new ListCommand();
+    }
+
+    private static Command parseFilterCommand(String command) throws UniflowException {
+        String trimmedCommand = command.substring(6).trim(); // Remove "filter" prefix
+
+        if (trimmedCommand.isEmpty()) {
+            throw new UniflowException("Filter command requires parameters. " +
+                    "Usage: filter type/VALUE, filter hastutorial, filter notutorial, " +
+                    "filter day/VALUE, filter id/VALUE, filter name/VALUE");
+        }
+
+        // Check for boolean filters first
+        if (trimmedCommand.equalsIgnoreCase("hastutorial")) {
+            return new FilterCommand("hastutorial", null);
+        }
+        if (trimmedCommand.equalsIgnoreCase("notutorial")) {
+            return new FilterCommand("notutorial", null);
+        }
+
+        // Parse filters with values
+        String[] parts = trimmedCommand.split("/", 2);
+        if (parts.length != 2) {
+            throw new UniflowException("Invalid filter format. Use: filter FILTERTYPE/VALUE");
+        }
+
+        String filterType = parts[0].trim();
+        String filterValue = parts[1].trim();
+
+        if (filterValue.isEmpty()) {
+            throw new UniflowException("Filter value cannot be empty.");
+        }
+
+        return new FilterCommand(filterType, filterValue);
     }
 }

@@ -6,13 +6,15 @@ public class Module {
     private final String day;
     private final String startTime;
     private final String endTime;
+    private final String sessionType; // lecture, tutorial, lab, etc.
 
-    public Module(String id, String name, String day, String startTime, String endTime) {
+    public Module(String id, String name, String day, String startTime, String endTime, String sessionType) {
         this.id = id;
         this.name = name;
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.sessionType = sessionType != null ? sessionType.toLowerCase() : "lecture";
     }
 
     public String getId() {
@@ -23,8 +25,29 @@ public class Module {
         return name;
     }
 
+    public String getDay() {
+        return day;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public String getSessionType() {
+        return sessionType;
+    }
+
+    public boolean hasTutorial() {
+        return sessionType.equalsIgnoreCase("tutorial");
+    }
+
     @Override
     public String toString() {
-        return String.format("Module[ID=%s, Name=%s]", id, name);
+        return String.format("Module[ID=%s, Name=%s, Type=%s, Day=%s, Time=%s-%s]",
+                id, name, sessionType, day, startTime, endTime);
     }
 }
