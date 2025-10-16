@@ -5,6 +5,8 @@ public class Parser {
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_SCORE = "score";
     private static final String COMMAND_LIST = "list";
+    private static final String COMMAND_ADDGRADE = "addgrade";
+    private static final String COMMAND_GPA = "gpa";
     private static final String COMMAND_FILTER = "filter";
 
     public static Command parse(String fullCommand) throws UniflowException {
@@ -29,7 +31,38 @@ public class Parser {
             return parseScoreCommand(trimmedCommand);
         }
 
+        if (trimmedCommand.startsWith(COMMAND_ADDGRADE)) {
+            return parseAddGradeCommand(trimmedCommand);
+        }
+
+        if (trimmedCommand.equals(COMMAND_GPA)) {
+            return new ComputeGpaCommand(Uniflow.getCourseRecord());
+        }
+
         throw new UniflowException("Invalid command");
+    }
+
+    private static Command parseAddGradeCommand(String command) throws UniflowException {
+        String[] parts = command.substring(COMMAND_ADDGRADE.length()).trim().split(" ");
+        String code = null;
+        int credits = 0;
+        String grade = null;
+
+        for (String part : parts) {
+            if (part.startsWith("c/")) { //for course code
+                code = part.substring(2);
+            } else if (part.startsWith("cr/")) { //for credit
+                credits = Integer.parseInt(part.substring(3));
+            } else if (part.startsWith("g/")) { //for grade
+                grade = part.substring(2);
+            }
+        }
+
+        if (code == null || grade == null || credits == 0) {
+            throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE cr/CREDITS g/GRADE");
+        }
+
+        return new AddGradeCommand(code, credits, grade, Uniflow.getCourseRecord());
     }
 
     private static Command parseInsertCommand(String command) throws UniflowException {
