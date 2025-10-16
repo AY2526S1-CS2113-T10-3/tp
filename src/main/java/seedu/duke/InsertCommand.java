@@ -3,13 +3,15 @@ package seedu.duke;
 public class InsertCommand extends Command {
     private final Module module;
 
-    InsertCommand(String id, String moduleName, String day, String startTime, String endTime) {
-        this.module = new Module(id, moduleName, day, startTime, endTime);
+    InsertCommand(String id, String moduleName, String day, String startTime, String endTime, String sessionType) {
+        this.module = new Module(id, moduleName, day, startTime, endTime, sessionType);
     }
+
     @Override
     public void execute(UI ui, ModuleList modules) throws UniflowException {
-        // empty for now
         modules.addModule(module);
+        ui.showMessage("Got it! I've added this module:\n  " + module.toString() +
+                "\nNow you have " + modules.getSize() + " module(s) in the list.");
     }
 
     /**
