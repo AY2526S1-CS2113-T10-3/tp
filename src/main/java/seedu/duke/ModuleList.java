@@ -34,9 +34,19 @@ public class ModuleList {
         return modules.get(index);
     }
 
+    public Module deleteModuleById(String moduleId) throws UniflowException {
+        for (int i = 0; i < modules.size(); i++) {
+            Module m = modules.get(i);
+            if (m.getId().equalsIgnoreCase(moduleId)) {
+                return deleteModule(i);
+            }
+        }
+        throw new UniflowException("No module found with ID: " + moduleId);
+    }
+
     public Module deleteModule(int index) throws UniflowException {
-        Module module = getModule(index - 1);
-        modules.remove(index - 1);
+        Module module = getModule(index);
+        modules.remove(index);
         return module;
     }
 
