@@ -8,6 +8,8 @@ public class Parser {
     private static final String COMMAND_ADDGRADE = "addgrade";
     private static final String COMMAND_GPA = "gpa";
     private static final String COMMAND_FILTER = "filter";
+    private static final String COMMAND_SHOW_TIMETABLE = "show timetable";
+    private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -37,6 +39,13 @@ public class Parser {
 
         if (trimmedCommand.equals(COMMAND_GPA)) {
             return new ComputeGpaCommand(Uniflow.getCourseRecord());
+        }
+
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_SHOW_TIMETABLE)) {
+            return new ShowTimetableCommand();
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_TIMETABLE)) {
+            return new ResetTimetableCommand();
         }
 
         throw new UniflowException("Invalid command");

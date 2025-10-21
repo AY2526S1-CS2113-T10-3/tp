@@ -126,6 +126,11 @@ public class UI {
         showMessage("Error loading Modules from file. Starting with an empty Module list.");
     }
 
+    public void showClashWarning(Module newModule, Module existingModule) {
+        showMessage("Warning: " + newModule.getId() + " clashes with " + existingModule.getId()
+                + " on " + newModule.getDay() + " (" + newModule.getStartTime() + "–" + newModule.getEndTime() + ")");
+    }
+
     /**
      * Closes the scanner and releases system resources.
      */
