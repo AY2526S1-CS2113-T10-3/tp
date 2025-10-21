@@ -23,6 +23,8 @@ public class ReviewCommand extends Command {
             return;
         }
         ui.showMessage("Reviews for " + course + ":");
-        for (String r : list) System.out.println(" - " + r);
+        for (String r : list) {
+            System.out.println(" - " + r);
+        }
     }
 }

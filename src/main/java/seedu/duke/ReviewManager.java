@@ -1,6 +1,7 @@
 package seedu.duke;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ReviewManager {
     private final Map<String, List<String>> reviews;
