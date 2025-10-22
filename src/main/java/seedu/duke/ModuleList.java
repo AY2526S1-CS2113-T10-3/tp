@@ -2,6 +2,7 @@ package seedu.duke;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ModuleList {
@@ -32,6 +33,25 @@ public class ModuleList {
                     + " does not exist. Please check your task list.");
         }
         return modules.get(index);
+    }
+
+    public Module getModuleByID(String moduleID) throws UniflowException {
+        for (Module module : modules) {
+            if (module.getId().equals(moduleID))  {
+                return module;
+            }
+        }
+        throw new UniflowException("This module does not exist.");
+    }
+
+    public boolean doesExist(String moduleID) {
+        for (Module module : modules) {
+            //System.out.println(module.getId() + " VS " + moduleID);
+            if (module.getId().equals(moduleID))  {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Module deleteModule(int index) throws UniflowException {
