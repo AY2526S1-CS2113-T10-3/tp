@@ -8,7 +8,7 @@ public class InsertCommand extends Command {
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         modules.addModule(module);
         ui.showMessage("Got it! I've added this module:\n  " + module.toString() +
                 "\nNow you have " + modules.getSize() + " module(s) in the list.");
