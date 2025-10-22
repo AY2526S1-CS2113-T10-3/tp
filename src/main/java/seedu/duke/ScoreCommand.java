@@ -15,7 +15,7 @@ public class ScoreCommand extends Command {
     @Override
     public void execute(UI ui, ModuleList modules) throws UniflowException {
         if (!modules.doesExist(moduleID)) {
-           throw new UniflowException("Module does not exist");
+            throw new UniflowException("Module does not exist");
         }
         
         if (breakdown == null || breakdown.trim().isEmpty()) {
