@@ -118,7 +118,7 @@ public class Parser {
             }
 
             String moduleId = args.substring(2).trim();
-            if (moduleId.isEmpty()) {;
+            if (moduleId.isEmpty()) {
                 throw new UniflowException("Missing module ID. Example: delete i/CS2110");
             }
             return new DeleteCommand(moduleId);
@@ -132,7 +132,7 @@ public class Parser {
 
         if (remainder.isEmpty()) {
             throw new UniflowException("Usage: score <MODULE_ID> name1:val1, name2:val2..");
-            }
+        }
 
         String[] parts = remainder.split("\\s+", 2); //splits on any amount of whitespace - only splits once
         System.out.println("Parts: " + Arrays.toString(parts));
