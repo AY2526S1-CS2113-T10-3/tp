@@ -52,6 +52,7 @@ public class ModuleList {
             }
         }
         return false;
+    }
 
     public Module deleteModuleById(String moduleId) throws UniflowException {
         for (int i = 0; i < modules.size(); i++) {
