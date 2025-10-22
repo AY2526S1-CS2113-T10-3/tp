@@ -45,8 +45,10 @@ public class Parser {
     private static Command parseAddGradeCommand(String command) throws UniflowException {
         String[] parts = command.substring(COMMAND_ADDGRADE.length()).trim().split(" ");
         String code = null;
-        int credits = 0;
+        int credits = -1;
         String grade = null;
+        //default is not major course if not specified
+        boolean isMajor = false;
 
         for (String part : parts) {
             if (part.startsWith("c/")) { //for course code
@@ -55,14 +57,16 @@ public class Parser {
                 credits = Integer.parseInt(part.substring(3));
             } else if (part.startsWith("g/")) { //for grade
                 grade = part.substring(2);
+            } else if (part.startsWith("m/")) { //for major course indication
+                isMajor = Boolean.parseBoolean(part.substring(2));
             }
         }
 
-        if (code == null || grade == null || credits == 0) {
-            throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE cr/CREDITS g/GRADE");
+        if (code == null || grade == null || credits == -1) {
+            throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE cr/CREDITS g/GRADE m/ISMAJOR");
         }
 
-        return new AddGradeCommand(code, credits, grade);
+        return new AddGradeCommand(code, credits, grade, isMajor);
     }
 
     private static Command parseInsertCommand(String command) throws UniflowException {
