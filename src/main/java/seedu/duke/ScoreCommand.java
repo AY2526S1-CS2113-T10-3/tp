@@ -14,12 +14,14 @@ public class ScoreCommand extends Command {
 
     @Override
     public void execute(UI ui, ModuleList modules) throws UniflowException {
-       if (!modules.doesExist(moduleID)) {
+        if (!modules.doesExist(moduleID)) {
            throw new UniflowException("Module does not exist");
-       }
-
+        }
+        
         if (breakdown == null || breakdown.trim().isEmpty()) {
-            throw new UniflowException("Please provide scores in name:value format, e.g; participation:10 exam:50...");
+            throw new UniflowException(
+                "Please provide scores in name:value format, e.g; participation:10 exam:50..."
+            );
         }
 
         Map<String, Integer> map = new HashMap<>();
@@ -32,7 +34,9 @@ public class ScoreCommand extends Command {
             try {
                 value = Integer.parseInt(valueStr);
             } catch (NumberFormatException e) {
-                throw new UniflowException("Please provide breakdown in the following format: exam:50 participation:10 ...");
+                throw new UniflowException(
+                    "Please provide breakdown in the following format: exam:50 participation:10 ..."
+                );
             }
             if (value < 0) {
                 throw new UniflowException("Value must be a positive integer");
