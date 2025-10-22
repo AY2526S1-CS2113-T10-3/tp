@@ -3,11 +3,13 @@ package seedu.duke;
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
+    private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADDGRADE = "addgrade";
     private static final String COMMAND_GPA = "gpa";
     private static final String COMMAND_FILTER = "filter";
+
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -19,6 +21,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_DELETE)) {
+            return parseDeleteCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_LIST)) {
             return parseListCommand();
@@ -98,6 +103,25 @@ public class Parser {
             return new InsertCommand(id, moduleName, day, startTime, endTime, sessionType);
         } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             throw new UniflowException("Failed to parse insert command: " + e.getMessage());
+        }
+    }
+
+    private static Command parseDeleteCommand(String command) throws UniflowException {
+        try {
+            // Remove "delete"
+            String args = command.substring(6).trim();
+
+            if (!args.startsWith("i/")) {
+                throw new UniflowException("Invalid format. Please use: delete i/<module_id>");
+            }
+
+            String moduleId = args.substring(2).trim();
+            if (moduleId.isEmpty()) {;
+                throw new UniflowException("Missing module ID. Example: delete i/CS2110");
+            }
+            return new DeleteCommand(moduleId);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new UniflowException("Invalid delete command syntax. Use: delete n/<module_id>");
         }
     }
 
