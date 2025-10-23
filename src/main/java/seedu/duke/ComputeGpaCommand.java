@@ -11,18 +11,37 @@ public class ComputeGpaCommand extends Command {
 
         double totalGradePoints = 0;
         int totalCredits = 0;
+        double gpa = 0;
+        double totalMajorCourseGradePoints = 0;
+        int totalMajorCourseCredits = 0;
+        double majorGpa = 0;
 
+        //compute gpa for all courses
         for (Course course : courseRecord.getCourseRecord()) {
             double gradePoint = convertGradePoint(course.getGrade());
             totalGradePoints += gradePoint * course.getCredits();
             totalCredits += course.getCredits();
         }
 
-        double gpa = totalGradePoints / totalCredits;
+        gpa = totalGradePoints / totalCredits;
+
+        //compute major gpa for major courses
+        for (Course course : courseRecord.getMajorCourses()) {
+            double gradePoint = convertGradePoint(course.getGrade());
+            totalMajorCourseGradePoints += gradePoint * course.getCredits();
+            totalMajorCourseCredits += course.getCredits();
+        }
+
+        majorGpa = totalMajorCourseGradePoints / totalMajorCourseCredits;
+
         ui.showMessage("You have studied " + courseRecord.getSize() + " courses.\n"
-                + "Your total grade points are " + totalGradePoints + "\n"
-                + "Number of credits you have studied: " + totalCredits + "\n"
-                + String.format("Your GPA is: %.2f", gpa));
+                + " Your total grade points are " + totalGradePoints + "\n"
+                + " Number of credits you have studied: " + totalCredits + "\n"
+                + String.format(" Your GPA is: %.2f", gpa) +"\n"
+                + " You have studied " + courseRecord.getMajorSize() + " major courses.\n"
+                + " Your total major course grade points are " + totalMajorCourseGradePoints + "\n"
+                + " Number of credits you have studied: " + totalMajorCourseCredits + "\n"
+                + String.format(" Your major GPA is: %.2f", majorGpa));
     }
 
     /**

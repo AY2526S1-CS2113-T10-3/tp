@@ -3,8 +3,8 @@ package seedu.duke;
 public class AddGradeCommand extends Command {
     private final Course course;
 
-    public AddGradeCommand(String code, int credits, String grade) {
-        this.course = new Course(code, credits, grade);
+    public AddGradeCommand(String code, int credits, String grade, boolean isMajor) {
+        this.course = new Course(code, credits, grade, isMajor);
     }
 
     @Override
