@@ -13,7 +13,7 @@ public class ScoreCommandTest {
         modules.addModule(new Module("CS1010", "Programming", "Mon", "10:00", "12:00", "Lecture"));
         UI ui = new UI();
 
-        new ScoreCommand("CS1010", "exam:50 project:40").execute(ui, modules);
+        new ScoreCommand("CS1010", "exam:50 project:40").execute(ui, modules, Uniflow.getCourseRecord());
 
         Module module = modules.getModuleByID("CS1010");
         assertEquals(2, module.getScoreBreakdown().size());
@@ -28,7 +28,7 @@ public class ScoreCommandTest {
         UI ui = new UI();
 
         try {
-            new ScoreCommand("CS1234", "exam:abc").execute(ui, modules);
+            new ScoreCommand("CS1234", "exam:abc").execute(ui, modules,  Uniflow.getCourseRecord());
             fail("Expected UniflowException to be thrown");
         } catch (UniflowException e) {
             //test passes
@@ -41,7 +41,7 @@ public class ScoreCommandTest {
         UI ui = new UI();
 
         try {
-            new ScoreCommand("CS9999", "exam:50").execute(ui, modules);
+            new ScoreCommand("CS9999", "exam:50").execute(ui, modules, Uniflow.getCourseRecord());
             fail("Expected UniflowException to be thrown");
         } catch (UniflowException e) {
             //test passes
