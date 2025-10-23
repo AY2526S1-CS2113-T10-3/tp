@@ -25,7 +25,11 @@ public class CourseRecord {
         return courses.isEmpty();
     }
 
-    public int  getSize() {
+    public int getSize() {
         return courses.size();
+    }
+
+    public int getMajorSize() {
+        return majorCourses.size();
     }
 }
