@@ -8,7 +8,7 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         Module deletedModule = modules.deleteModuleById(moduleId);
         ui.showMessage("Noted. I've removed this module:\n  " + deletedModule.toString() +
                 "\nNow you have " + modules.getSize() + " module(s) left in the list.");
