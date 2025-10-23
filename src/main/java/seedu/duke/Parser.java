@@ -1,13 +1,17 @@
 package seedu.duke;
 
+import java.util.Arrays;
+
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
+    private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADDGRADE = "addgrade";
     private static final String COMMAND_GPA = "gpa";
     private static final String COMMAND_FILTER = "filter";
+
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -19,6 +23,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_DELETE)) {
+            return parseDeleteCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_LIST)) {
             return parseListCommand();
@@ -36,7 +43,7 @@ public class Parser {
         }
 
         if (trimmedCommand.equals(COMMAND_GPA)) {
-            return new ComputeGpaCommand(Uniflow.getCourseRecord());
+            return new ComputeGpaCommand();
         }
 
         throw new UniflowException("Invalid command");
@@ -62,7 +69,7 @@ public class Parser {
             throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE cr/CREDITS g/GRADE");
         }
 
-        return new AddGradeCommand(code, credits, grade, Uniflow.getCourseRecord());
+        return new AddGradeCommand(code, credits, grade);
     }
 
     private static Command parseInsertCommand(String command) throws UniflowException {
@@ -101,13 +108,46 @@ public class Parser {
         }
     }
 
-    private static Command parseScoreCommand(String command) throws UniflowException {
-        String args = command.substring(COMMAND_SCORE.length()).trim();
-        //score 10/10 15/20 ... denominators must add up to 100
-        if (args.isEmpty()) {
-            throw new UniflowException("Usage: score x1/y1 x2/y2 ...");
+    private static Command parseDeleteCommand(String command) throws UniflowException {
+        try {
+            // Remove "delete"
+            String args = command.substring(6).trim();
+
+            if (!args.startsWith("i/")) {
+                throw new UniflowException("Invalid format. Please use: delete i/<module_id>");
+            }
+
+            String moduleId = args.substring(2).trim();
+            if (moduleId.isEmpty()) {
+                throw new UniflowException("Missing module ID. Example: delete i/CS2110");
+            }
+            return new DeleteCommand(moduleId);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new UniflowException("Invalid delete command syntax. Use: delete n/<module_id>");
         }
-        return new ScoreCommand(args);
+    }
+
+    private static Command parseScoreCommand(String command) throws UniflowException {
+        String remainder = command.substring(COMMAND_SCORE.length()).trim();
+
+        if (remainder.isEmpty()) {
+            throw new UniflowException("Usage: score <MODULE_ID> name1:val1, name2:val2..");
+        }
+
+        String[] parts = remainder.split("\\s+", 2); //splits on any amount of whitespace - only splits once
+        System.out.println("Parts: " + Arrays.toString(parts));
+        String id = parts[0].trim();
+        if (id.isEmpty()) {
+            throw new UniflowException("Invalid Module ID");
+        }
+
+        String breakdown = (parts.length > 1) ? parts[1].trim() : "";
+        System.out.println("Breakdown: " + Arrays.toString(breakdown.toCharArray()));
+        if (breakdown.isEmpty()) {
+            throw new UniflowException("Please provide score breakdown in a name:value format");
+        }
+
+        return new ScoreCommand(id, breakdown);
     }
 
     private static Command parseListCommand() throws UniflowException {

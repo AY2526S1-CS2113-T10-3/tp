@@ -1,7 +1,7 @@
 package seedu.duke;
 
 public abstract class Command {
-    public abstract void execute(UI ui, ModuleList modules) throws UniflowException;
+    public abstract void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException;
     /**
      * Returns whether this command should cause the application to exit.
      *
