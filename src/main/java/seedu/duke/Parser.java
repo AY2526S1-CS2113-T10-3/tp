@@ -27,7 +27,7 @@ public class Parser {
             return parseInsertCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_LIST)) {
-            return new ListCommand();
+            return parseListCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
@@ -55,6 +55,10 @@ public class Parser {
         }
 
         throw new UniflowException("Invalid command");
+    }
+
+    private static Command parseListCommand(String command) throws UniflowException {
+        return new ListCommand();
     }
 
     private static Command parseAddGradeCommand(String command) throws UniflowException {
