@@ -1,5 +1,7 @@
 package seedu.duke;
 
+import java.util.Arrays;
+
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
@@ -116,7 +118,7 @@ public class Parser {
             }
 
             String moduleId = args.substring(2).trim();
-            if (moduleId.isEmpty()) {;
+            if (moduleId.isEmpty()) {
                 throw new UniflowException("Missing module ID. Example: delete i/CS2110");
             }
             return new DeleteCommand(moduleId);
@@ -126,12 +128,26 @@ public class Parser {
     }
 
     private static Command parseScoreCommand(String command) throws UniflowException {
-        String args = command.substring(COMMAND_SCORE.length()).trim();
-        //score 10/10 15/20 ... denominators must add up to 100
-        if (args.isEmpty()) {
-            throw new UniflowException("Usage: score x1/y1 x2/y2 ...");
+        String remainder = command.substring(COMMAND_SCORE.length()).trim();
+
+        if (remainder.isEmpty()) {
+            throw new UniflowException("Usage: score <MODULE_ID> name1:val1, name2:val2..");
         }
-        return new ScoreCommand(args);
+
+        String[] parts = remainder.split("\\s+", 2); //splits on any amount of whitespace - only splits once
+        System.out.println("Parts: " + Arrays.toString(parts));
+        String id = parts[0].trim();
+        if (id.isEmpty()) {
+            throw new UniflowException("Invalid Module ID");
+        }
+
+        String breakdown = (parts.length > 1) ? parts[1].trim() : "";
+        System.out.println("Breakdown: " + Arrays.toString(breakdown.toCharArray()));
+        if (breakdown.isEmpty()) {
+            throw new UniflowException("Please provide score breakdown in a name:value format");
+        }
+
+        return new ScoreCommand(id, breakdown);
     }
 
     private static Command parseListCommand() throws UniflowException {

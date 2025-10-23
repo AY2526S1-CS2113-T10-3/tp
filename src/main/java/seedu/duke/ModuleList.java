@@ -34,6 +34,25 @@ public class ModuleList {
         return modules.get(index);
     }
 
+    public Module getModuleByID(String moduleID) throws UniflowException {
+        for (Module module : modules) {
+            if (module.getId().equals(moduleID))  {
+                return module;
+            }
+        }
+        throw new UniflowException("This module does not exist.");
+    }
+
+    public boolean doesExist(String moduleID) {
+        for (Module module : modules) {
+            //System.out.println(module.getId() + " VS " + moduleID);
+            if (module.getId().equals(moduleID))  {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Module deleteModuleById(String moduleId) throws UniflowException {
         for (int i = 0; i < modules.size(); i++) {
             Module m = modules.get(i);
