@@ -20,7 +20,7 @@ public class ScoreCommand extends Command {
         
         if (!modules.doesExist(moduleID)) {
             throw new UniflowException("Module does not exist");
-          
+        }
         if (breakdown == null || breakdown.trim().isEmpty()) {
             throw new UniflowException(
                 "Please provide scores in name:value format, e.g; participation:10 exam:50..."
