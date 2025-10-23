@@ -41,7 +41,7 @@ public class Parser {
         }
 
         if (trimmedCommand.equals(COMMAND_GPA)) {
-            return new ComputeGpaCommand(Uniflow.getCourseRecord());
+            return new ComputeGpaCommand();
         }
 
         throw new UniflowException("Invalid command");
@@ -67,7 +67,7 @@ public class Parser {
             throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE cr/CREDITS g/GRADE");
         }
 
-        return new AddGradeCommand(code, credits, grade, Uniflow.getCourseRecord());
+        return new AddGradeCommand(code, credits, grade);
     }
 
     private static Command parseInsertCommand(String command) throws UniflowException {

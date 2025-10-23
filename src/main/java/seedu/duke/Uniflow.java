@@ -42,7 +42,7 @@ public class Uniflow {
                 ui.showLine(); // show the divider line ("_______")
                 Command c = Parser.parse(fullCommand);
                 // c.execute(tasks, ui, storage);
-                c.execute(ui, modules);
+                c.execute(ui, modules, courseRecord);
                 isExit = c.isExit();
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());

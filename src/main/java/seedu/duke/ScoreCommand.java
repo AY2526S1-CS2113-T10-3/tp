@@ -8,7 +8,7 @@ public class ScoreCommand extends Command {
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         if (input == null || input.trim().isEmpty()) {
             throw new UniflowException("Please provide scores in a/b format, e.g., 10/10 15/20 25/30 30/40");
         }

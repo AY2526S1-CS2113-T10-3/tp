@@ -1,14 +1,9 @@
 package seedu.duke;
 
 public class ComputeGpaCommand extends Command {
-    private final CourseRecord courseRecord;
-
-    public ComputeGpaCommand(CourseRecord courseRecord) {
-        this.courseRecord = courseRecord;
-    }
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         if (courseRecord.isEmpty()) {
             ui.showError("No courses were added in the record!");
             return;
