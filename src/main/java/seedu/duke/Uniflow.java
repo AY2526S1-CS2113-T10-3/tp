@@ -38,7 +38,8 @@ public class Uniflow {
                 String fullCommand = ui.readCommand();
                 ui.showLine();
                 Command c = Parser.parse(fullCommand);
-                c.execute(ui, modules);
+                // c.execute(tasks, ui, storage);
+                c.execute(ui, modules, courseRecord);
                 isExit = c.isExit();
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());

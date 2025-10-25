@@ -3,7 +3,7 @@ package seedu.duke;
 public class ShowTimetableCommand extends Command {
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         if (modules.isEmpty()) {
             ui.showMessage("Your timetable is empty!");
             return;

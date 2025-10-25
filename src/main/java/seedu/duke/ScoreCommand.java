@@ -1,57 +1,53 @@
 package seedu.duke;
 
-public class ScoreCommand extends Command {
-    private final String input;
+import java.util.HashMap;
+import java.util.Map;
 
-    public ScoreCommand(String input) {
-        this.input = input;
+public class ScoreCommand extends Command {
+    private final String moduleID;
+    private final String breakdown;
+
+    public ScoreCommand(String moduleId, String breakdown) {
+        this.moduleID = moduleId;
+        this.breakdown = breakdown;
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
-        if (input == null || input.trim().isEmpty()) {
-            throw new UniflowException("Please provide scores in a/b format, e.g., 10/10 15/20 25/30 30/40");
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
+        
+        if (!modules.doesExist(moduleID)) {
+            throw new UniflowException("Module does not exist");
+        }
+        if (breakdown == null || breakdown.trim().isEmpty()) {
+            throw new UniflowException(
+                "Please provide scores in name:value format, e.g; participation:10 exam:50..."
+            );
         }
 
-        String[] tokens = input.trim().split(" ");
-        if (tokens.length == 0) {
-            throw new UniflowException("No scores provided");
-        }
+        Map<String, Integer> map = new HashMap<>();
+        String[] pairs = breakdown.split(" ");
+        for (String pair: pairs) {
+            String name = pair.split(":")[0]; //"participation"
+            String valueStr = pair.split(":")[1]; //"20"
 
-        int earnedScore = 0;
-        int possibleScore = 0;
-
-        for (String token : tokens) {
-            if (token.isBlank()) {
-                continue;
-            }
-            String[] pair = token.split("/");
-            if (pair.length != 2) {
-                throw new UniflowException("Invalid token: \"" + token + "\" (use a/b format)");
-            }
-
+            int value;
             try {
-                int userScore = Integer.parseInt(pair[0]);
-                int maxScore = Integer.parseInt(pair[1]);
-
-                if (userScore < 0 || maxScore <= 0 || userScore > maxScore) {
-                    throw new UniflowException("Each a/b must satisfy 0 ≤ a ≤ b and b > 0. "
-                            + "Offender: \"" + token + "\"");
-                }
-
-                earnedScore += userScore;
-                possibleScore += maxScore;
+                value = Integer.parseInt(valueStr);
             } catch (NumberFormatException e) {
-                throw new UniflowException("Scores must be integers: \"" + token + "\"");
+                throw new UniflowException(
+                    "Please provide breakdown in the following format: exam:50 participation:10 ..."
+                );
             }
+            if (value < 0) {
+                throw new UniflowException("Value must be a positive integer");
+            }
+            map.put(name, value);
         }
 
+        Module module = modules.getModuleByID(moduleID);
+        module.setScoreBreakdown(map);
 
-        if (possibleScore != 100) {
-            throw new UniflowException("Total possible score must add up to 100 (got " + possibleScore + ").");
-        }
-
-        double percentScore = earnedScore;
-        ui.showMessage(String.format("Total: %.2f%% (%d/100)", percentScore, earnedScore));
+        ui.showMessage("Saved score breakdown for {" + moduleID + ":" + map + "}");
     }
+
 }

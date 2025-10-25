@@ -12,7 +12,7 @@ public class ReviewCommand extends Command {
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules) {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) {
         if (!reviewManager.hasCourse(course)) {
             ui.showMessage("No reviews found for " + course + ".");
             return;

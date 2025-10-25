@@ -8,7 +8,7 @@ public class InsertCommand extends Command {
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         Module clash = modules.findClash(module);
         if (clash != null && clash != module) {
             ui.showMessage("Warning: " + module.getId() + " clashes with " + clash.getId()
