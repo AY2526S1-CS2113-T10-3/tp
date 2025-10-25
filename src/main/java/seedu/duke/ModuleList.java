@@ -150,4 +150,33 @@ public class ModuleList {
     public ModuleList findByName(String name) {
         return filter(module -> module.getName().toLowerCase().contains(name.toLowerCase()));
     }
+    public Module findClash(Module newModule) {
+        for (Module existing : modules) {
+            if (existing.getDay().equalsIgnoreCase(newModule.getDay())) {
+                boolean overlaps = checkOverlap(existing.getStartTime(), existing.getEndTime(),
+                        newModule.getStartTime(), newModule.getEndTime());
+                if (overlaps) {
+                    return existing;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean checkOverlap(String start1, String end1, String start2, String end2) {
+        try {
+            java.time.LocalTime s1 = java.time.LocalTime.parse(start1);
+            java.time.LocalTime e1 = java.time.LocalTime.parse(end1);
+            java.time.LocalTime s2 = java.time.LocalTime.parse(start2);
+            java.time.LocalTime e2 = java.time.LocalTime.parse(end2);
+
+            return !e1.isBefore(s2) && !e2.isBefore(s1);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void clear() {
+        modules.clear();
+    }
 }
