@@ -1,1 +1,3 @@
+insert i/CS2113 n/OOP d/Monday f/1000 t/1200 s/Tutorial
+delete i/CS2113
 bye
