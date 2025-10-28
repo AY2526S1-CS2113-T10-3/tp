@@ -1,15 +1,38 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
 
-autonumber
+class Module {
+  - id: String
+  - name: String
+  - day: String
+  - startTime: String
+  - endTime: String
+  - sessionType: String
+  - scoreBreakdown: Map<String, Integer>
+  + hasTutorial(): boolean
+}
 
-== Initialization ==
+class ModuleList {
+  - modules: List<Module>
+  + addModule(module)
+  + deleteModuleById(id): Module
+  + filter(predicate): ModuleList
+  + findClash(module): Module
+}
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+class Course {
+  - code: String
+  - credits: int
+  - grade: String
+}
 
-== Repetition ==
+class CourseRecord {
+  - courses: ArrayList<Course>
+  + addCourse(course)
+  + getCourseRecord(): ArrayList<Course>
+}
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+ModuleList "1" *-- "*" Module
+CourseRecord "1" *-- "*" Course
+
 @enduml
