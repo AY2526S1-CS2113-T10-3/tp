@@ -24,6 +24,19 @@ The architecture diagram above shows the high-level design of the application. T
 - **ReviewManager**: Manages course reviews from students
 - **ReviewStorage**: Handles persistence of review data to file
 
+### Command Execution Flow
+
+```
+User Input → Parser → Command Object → execute() → Updates Data → UI Output
+```
+
+1. User enters a command string
+2. Parser analyzes the command and creates appropriate Command object
+3. Command's execute() method is called with UI, ModuleList, and CourseRecord
+4. Command performs its operation (add module, compute GPA, etc.)
+5. UI displays the result or error message
+6. Loop continues until user enters "bye"
+
 #### Main Components
 
 **Uniflow (Main Class)**
@@ -77,19 +90,6 @@ The architecture diagram above shows the high-level design of the application. T
 - Handles loading and saving of course reviews to file
 - Uses pipe-delimited format: COURSE|USER|REVIEW_TEXT
 - Creates data directory if it doesn't exist
-
-### Command Execution Flow
-
-```
-User Input → Parser → Command Object → execute() → Updates Data → UI Output
-```
-
-1. User enters a command string
-2. Parser analyzes the command and creates appropriate Command object
-3. Command's execute() method is called with UI, ModuleList, and CourseRecord
-4. Command performs its operation (add module, compute GPA, etc.)
-5. UI displays the result or error message
-6. Loop continues until user enters "bye"
 
 ### Key Design Patterns
 
