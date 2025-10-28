@@ -53,7 +53,7 @@ The architecture diagram above shows the high-level design of the application. T
 ### Command Execution Flow
 
 ```
-User Input → Parser → Command Object → execute() → Updates Data → UI Output
+User Input → Parser → Command Object → execute() → Updates Data → UI Output → Loop/Exit
 ```
 
 1. User enters a command string
