@@ -286,6 +286,6 @@ public class Parser {
             throw new UniflowException("Score must be between 1 and 5.");
         }
 
-        return new RateCommand(course, score, Uniflow.getRatingManager());
+        return new RateCommand(course, score);
     }
 }
