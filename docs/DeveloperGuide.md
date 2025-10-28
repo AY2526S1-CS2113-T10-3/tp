@@ -199,35 +199,6 @@ When adding a new module, the system checks for scheduling conflicts:
 
 This prevents students from accidentally scheduling multiple classes at the same time.
 
-### Timetable Clash Detection
-
-The application detects scheduling conflicts when adding modules:
-
-1. When InsertCommand executes, it calls `modules.findClash(newModule)`
-2. ModuleList checks all existing modules on the same day
-3. Uses LocalTime parsing to compare time ranges
-4. Returns overlapping module if found
-5. User is prompted to confirm if they still want to add the module
-
-### Score Breakdown Feature
-
-Modules can store assessment component scores:
-
-1. ScoreCommand parses name:value pairs (e.g., "exam:50 participation:10")
-2. Validates that values are positive integers
-3. Stores breakdown in Module's scoreBreakdown Map
-4. Can be retrieved later for reference
-
-### GPA Calculation
-
-The GPA computation follows these steps:
-
-1. Iterates through all courses in CourseRecord
-2. Converts letter grades to grade points (A+ = 5.0, F = 0.0)
-3. Calculates weighted sum: Σ(grade_point × credits)
-4. Divides by total credits to get GPA
-5. Displays result with 2 decimal precision
-
 ## Product scope
 
 ### Target user profile
