@@ -49,6 +49,59 @@ The architecture diagram above shows the high-level design of the application. T
 
 **ReviewStorage**
 - Handles persistence of review data to file using pipe-delimited format
+#### Main Components
+
+**Uniflow (Main Class)**
+- Entry point of the application
+- Initializes core components: UI, ModuleList, CourseRecord, and ReviewManager
+- Runs the main command loop that processes user input
+
+**UI (User Interface)**
+- Handles all interactions with the user
+- Reads user commands via Scanner
+- Displays messages, module lists, filtered results, and error messages
+- Formats output with divider lines for clarity
+
+**Parser**
+- Parses user input strings into Command objects
+- Supports multiple command types: insert, delete, list, filter, score, add grade, gpa, review, add review, show timetable, reset timetable, bye
+- Validates command syntax and extracts parameters
+- Throws UniflowException for invalid commands
+
+**Command (Abstract Class)**
+- Base class for all command types
+- Defines execute() method that all commands must implement
+- Provides isExit() method to determine if application should terminate
+
+**Module**
+- Represents a university module/course session
+- Stores module ID, name, day, start time, end time, and session type
+- Contains score breakdown as a Map for assessment components
+- Provides methods to check for tutorials and retrieve module information
+
+**ModuleList**
+- Manages a collection of Module objects
+- Provides methods to add, delete, retrieve, and filter modules
+- Implements filtering by session type, day, ID, name, and tutorial presence
+- Detects timetable clashes by checking time overlaps
+
+**Course**
+- Represents a completed course with code, credits, and grade
+- Used for GPA calculation
+
+**CourseRecord**
+- Manages a collection of Course objects
+- Tracks completed courses for academic record keeping
+
+**ReviewManager**
+- Manages course reviews from multiple users
+- Stores reviews in a Map with course code as key
+- Integrates with ReviewStorage for persistence
+
+**ReviewStorage**
+- Handles loading and saving of course reviews to file
+- Uses pipe-delimited format: COURSE|USER|REVIEW_TEXT
+- Creates data directory if it doesn't exist
 
 ### Command Execution Flow
 
@@ -69,6 +122,16 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 7. Loop continues until user enters "bye" (when Command.isExit() returns true)
 8. On exit, ReviewManager saves reviews to file via ReviewStorage
 9. Application terminates gracefully
+
+User Input → Parser → Command Object → execute() → Updates Data → UI Output
+```
+
+1. User enters a command string
+2. Parser analyzes the command and creates appropriate Command object
+3. Command's execute() method is called with UI, ModuleList, and CourseRecord
+4. Command performs its operation (add module, compute GPA, etc.)
+5. UI displays the result or error message
+6. Loop continues until user enters "bye"
 
 ### Key Design Patterns
 
@@ -177,6 +240,35 @@ When adding a new module, the system checks for scheduling conflicts:
 5. If an overlap is found, that module is returned as the clashing module
 
 This prevents students from accidentally scheduling multiple classes at the same time.
+
+### Timetable Clash Detection
+
+The application detects scheduling conflicts when adding modules:
+
+1. When InsertCommand executes, it calls `modules.findClash(newModule)`
+2. ModuleList checks all existing modules on the same day
+3. Uses LocalTime parsing to compare time ranges
+4. Returns overlapping module if found
+5. User is prompted to confirm if they still want to add the module
+
+### Score Breakdown Feature
+
+Modules can store assessment component scores:
+
+1. ScoreCommand parses name:value pairs (e.g., "exam:50 participation:10")
+2. Validates that values are positive integers
+3. Stores breakdown in Module's scoreBreakdown Map
+4. Can be retrieved later for reference
+
+### GPA Calculation
+
+The GPA computation follows these steps:
+
+1. Iterates through all courses in CourseRecord
+2. Converts letter grades to grade points (A+ = 5.0, F = 0.0)
+3. Calculates weighted sum: Σ(grade_point × credits)
+4. Divides by total credits to get GPA
+5. Displays result with 2 decimal precision
 
 ## Product scope
 
@@ -411,4 +503,7 @@ Expected: Error about missing fields.
 4. Use `review` command to verify reviews are loaded
 5. Check that `data/reviews.txt` file exists and contains review data in format: COURSE|USER|REVIEW
 
+
 Note: Module and grade data are currently not persisted and will be lost on application restart.
+Note: Module and grade data are currently not persisted and will be lost on application restart.
+

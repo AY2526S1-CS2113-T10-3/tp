@@ -1,0 +1,38 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Module {
+  - id: String
+  - name: String
+  - day: String
+  - startTime: String
+  - endTime: String
+  - sessionType: String
+  - scoreBreakdown: Map<String, Integer>
+  + hasTutorial(): boolean
+}
+
+class ModuleList {
+  - modules: List<Module>
+  + addModule(module)
+  + deleteModuleById(id): Module
+  + filter(predicate): ModuleList
+  + findClash(module): Module
+}
+
+class Course {
+  - code: String
+  - credits: int
+  - grade: String
+}
+
+class CourseRecord {
+  - courses: ArrayList<Course>
+  + addCourse(course)
+  + getCourseRecord(): ArrayList<Course>
+}
+
+ModuleList "1" *-- "*" Module
+CourseRecord "1" *-- "*" Course
+
+@enduml
