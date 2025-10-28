@@ -242,50 +242,30 @@ public class Parser {
     }
 
     private static Command parseRateCommand(String command) throws UniflowException {
-        String args = command.substring(COMMAND_RATE.length()).trim();
+        String args = command.substring("rate".length()).trim();
+
         if (args.isEmpty()) {
-            throw new UniflowException("Usage: rate c/COURSE s/SCORE");
+            throw new UniflowException("Usage: rate <MODULE_CODE> <RATING>");
         }
 
-        String course = null;
-        Integer score = null;
-
-        if (args.contains("c/") || args.contains("s/")) {
-            String[] parts = args.split("\\s+");
-            for (String part : parts) {
-                if (part.startsWith("/c")) {
-                    part.substring(2).trim();
-                } else if (part.startsWith("s/")) {
-                    try {
-                        score = Integer.parseInt(part.substring(2).trim());
-                    } catch (NumberFormatException e) {
-                        throw new UniflowException("Score must be an integer.");
-                    }
-                }
-            }
-            if (course == null || score == null) {
-                throw new UniflowException("Usage: rate c/COURSE s/SCORE");
-            }
-        } else {
-            String[] tokens =  args.split("\\s+");
-            if (tokens.length != 2) {
-                throw new  UniflowException("Usage: rate c/COURSE s/SCORE");
-            }
-            course = tokens[0].trim();
-            try {
-                score = Integer.parseInt(tokens[1].trim());
-            } catch (NumberFormatException e) {
-                throw new UniflowException("Score must be an integer.");
-            }
+        String[] parts = args.split("\\s+");
+        if (parts.length != 2) {
+            throw new UniflowException("Usage: rate <MODULE_CODE> <RATING>");
         }
 
-        if (course.isEmpty()) {
-            throw new UniflowException("Course cannot be empty.");
+        String moduleCode = parts[0].trim().toUpperCase();
+        int score;
+
+        try {
+            score = Integer.parseInt(parts[1].trim());
+        } catch (NumberFormatException e) {
+            throw new UniflowException("Rating must be a number between 1 and 5.");
         }
+
         if (score < 1 || score > 5) {
-            throw new UniflowException("Score must be between 1 and 5.");
+            throw new UniflowException("Rating must be between 1 and 5.");
         }
 
-        return new RateCommand(course, score);
+        return new RateCommand(moduleCode, score);
     }
 }

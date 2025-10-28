@@ -10,7 +10,7 @@ package seedu.duke;
 public class Uniflow {
     private static CourseRecord courseRecord;
     private static ReviewManager reviewManager;
-    private static RatingManager ratingManager;
+    private static final RatingManager ratingManager = new  RatingManager();
 
     private UI ui;
     private ModuleList modules;
