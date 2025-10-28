@@ -12,6 +12,18 @@
 
 Uniflow is a command-line application designed to help students manage their university modules, timetables, grades, and course reviews. The application follows an object-oriented design with clear separation of concerns.
 
+![Architecture Overview](diagrams/ArchitectureOverview.png)
+
+The architecture diagram above shows the high-level design of the application. The main components and their interactions are:
+
+- **UI**: Handles all user interactions, reading commands and displaying results
+- **Parser**: Parses user input strings and creates appropriate Command objects
+- **Command**: Executes the requested operations on the data models
+- **ModuleList**: Manages the collection of modules in the timetable
+- **CourseRecord**: Manages completed courses for GPA calculation
+- **ReviewManager**: Manages course reviews from students
+- **ReviewStorage**: Handles persistence of review data to file
+
 #### Main Components
 
 **Uniflow (Main Class)**
