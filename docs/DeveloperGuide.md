@@ -130,6 +130,75 @@ The use of composition relationships allows ModuleList and CourseRecord to fully
 
 The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
 
+### Implementation Details
+
+#### Insert Module Feature
+
+The insert module feature allows users to add modules to their timetable with automatic clash detection.
+
+![Insert Command Sequence](diagrams/InsertCommandSequence.png)
+
+How the insert feature works:
+
+1. Parser creates an InsertCommand with a new Module object
+2. InsertCommand checks for timetable clashes by calling `findClash()`
+3. If a clash is detected, the user is warned and asked for confirmation
+4. If no clash exists or the user confirms, the module is added to ModuleList
+5. A success message is displayed showing the updated module count
+
+The clash detection algorithm compares time ranges on the same day using Java's LocalTime class to determine if any overlap exists.
+
+#### Filter Module Feature
+
+The filter feature allows users to search modules using various criteria.
+
+![Filter Command Sequence](diagrams/FilterCommandSequence.png)
+
+How filtering works:
+
+1. Parser creates a FilterCommand with the filter type and value
+2. FilterCommand calls the appropriate filter method on ModuleList
+3. ModuleList uses predicate-based filtering to create a new filtered list
+4. The filtered results are displayed to the user
+
+The application supports filtering by: day, session type, module ID, module name, and tutorial presence. The predicate-based approach allows for flexible and extensible filtering logic.
+
+#### GPA Calculation Feature
+
+The GPA calculation feature computes the cumulative GPA based on completed courses.
+
+![Compute GPA Sequence](diagrams/ComputeGpaSequence.png)
+
+How GPA calculation works:
+
+1. ComputeGpaCommand retrieves all courses from CourseRecord
+2. For each course, the letter grade is converted to a grade point (A+ = 5.0, F = 0.0)
+3. The weighted sum is calculated: Σ(grade_point × credits)
+4. GPA = total_grade_points / total_credits
+5. The result is displayed with summary statistics
+
+The grade point conversion follows the standard NUS grading scale.
+
+#### Score Breakdown Feature
+
+Modules can store assessment component scores for tracking purposes. The ScoreCommand parses input in the format `name:value` (e.g., "exam:50 participation:10") and validates that:
+- Values are positive integers
+- The format is correct (colon-separated pairs)
+
+The breakdown is stored in the Module's scoreBreakdown Map for future reference.
+
+#### Timetable Clash Detection
+
+When adding a new module, the system checks for scheduling conflicts:
+
+1. ModuleList iterates through all existing modules on the same day
+2. For each module, it compares time ranges using `checkOverlap()`
+3. Time strings are parsed into LocalTime objects for accurate comparison
+4. Two time ranges overlap if: `!(end1 < start2) AND !(end2 < start1)`
+5. If an overlap is found, that module is returned as the clashing module
+
+This prevents students from accidentally scheduling multiple classes at the same time.
+
 ### Timetable Clash Detection
 
 The application detects scheduling conflicts when adding modules:
