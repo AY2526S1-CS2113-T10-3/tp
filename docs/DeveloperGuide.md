@@ -14,15 +14,41 @@ Uniflow is a command-line application designed to help students manage their uni
 
 ![Architecture Overview](diagrams/ArchitectureOverview.png)
 
-The architecture diagram above shows the high-level design of the application. The main components and their interactions are:
+The architecture diagram above shows the high-level design of the application. The main components are:
 
-- **UI**: Handles all user interactions, reading commands and displaying results
-- **Parser**: Parses user input strings and creates appropriate Command objects
-- **Command**: Executes the requested operations on the data models
-- **ModuleList**: Manages the collection of modules in the timetable
-- **CourseRecord**: Manages completed courses for GPA calculation
-- **ReviewManager**: Manages course reviews from students
-- **ReviewStorage**: Handles persistence of review data to file
+**Uniflow (Main Class)**
+- Entry point that initializes core components and runs the main command loop
+
+**UI (User Interface)**
+- Handles all user interactions, reading commands via Scanner and displaying formatted results
+
+**Parser**
+- Parses user input strings into Command objects
+- Validates command syntax and throws UniflowException for invalid commands
+
+**Command (Abstract Class)**
+- Base class for all command types using the Command Pattern
+- Defines execute() method and isExit() to control application flow
+
+**Module**
+- Represents a course session with ID, name, timing, session type, and score breakdown
+- Provides methods to check for tutorials and retrieve module information
+
+**ModuleList**
+- Manages the collection of modules in the timetable
+- Provides add, delete, filter operations and detects timetable clashes
+
+**Course**
+- Represents a completed course with code, credits, and grade for GPA calculation
+
+**CourseRecord**
+- Manages completed courses for academic record keeping
+
+**ReviewManager**
+- Manages course reviews from students, storing reviews in a Map by course code
+
+**ReviewStorage**
+- Handles persistence of review data to file using pipe-delimited format
 
 ### Command Execution Flow
 
