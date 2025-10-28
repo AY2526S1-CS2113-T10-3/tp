@@ -1,6 +1,11 @@
 package seedu.duke;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +25,9 @@ public class RatingStorage {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
-                if (parts.length != 3) continue;
-
+                if (parts.length != 3) {
+                    continue;
+                }
                 String module = parts[0].trim().toUpperCase();
                 try {
                     int sum = Integer.parseInt(parts[1].trim());
