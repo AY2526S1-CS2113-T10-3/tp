@@ -24,11 +24,16 @@ public class RatingStorage {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
-                if (parts.length == 3) {
-                    String module = parts[0].trim().toUpperCase();
+                if (parts.length != 3) {
+                    continue;
+                }
+                String module = parts[0].trim().toUpperCase();
+                try {
                     int sum = Integer.parseInt(parts[1]);
                     int count = Integer.parseInt(parts[2]);
                     ratings.put(module, new RatingStats(sum, count));
+                } catch (NumberFormatException e) {
+                    //ignore
                 }
             }
         } catch (IOException e) {
