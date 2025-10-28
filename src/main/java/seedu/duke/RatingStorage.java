@@ -9,11 +9,14 @@ import java.util.Map;
 public class RatingStorage {
     private static final String FILE_PATH = "data/ratings.txt";
 
-    public Map<String, List<Integer>> load() {
-        Map<String, List<Integer>> ratings = new HashMap<>();
+    public Map<String, RatingStats> load() {
+        Map<String, RatingStats> ratings = new HashMap<>();
         File file = new File(FILE_PATH);
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
+            File parent = file.getParentFile();
+            if (parent != null) {
+                parent.mkdirs();
+            }
             return ratings;
         }
 
@@ -22,9 +25,10 @@ public class RatingStorage {
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
                 if (parts.length == 3) {
-                    String course = parts[0];
-                    int score = Integer.parseInt(parts[2]);
-                    ratings.computeIfAbsent(course, k -> new ArrayList<>()).add(score);
+                    String module = parts[0].trim().toUpperCase();
+                    int sum = Integer.parseInt(parts[1]);
+                    int count = Integer.parseInt(parts[2]);
+                    ratings.put(module, new RatingStats(sum, count));
                 }
             }
         } catch (IOException e) {
@@ -33,14 +37,12 @@ public class RatingStorage {
         return ratings;
     }
 
-    public void save(Map<String, List<Integer>> ratings) {
+    public void save(Map<String, RatingStats> ratings) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for  (Map.Entry<String, List<Integer>> entry : ratings.entrySet()) {
+            for  (Map.Entry<String, RatingStats> entry : ratings.entrySet()) {
                 String course = entry.getKey();
-                for (Integer score: entry.getValue()) {
-                    bw.write(course + "|" + score);
-                    bw.newLine();
-                }
+                RatingStats stats = entry.getValue();
+                bw.write(course + "|" + stats.getSum() + "|" + stats.getCount() + "\n");
             }
         } catch(IOException e) {
             System.out.println("Error writing file: " + FILE_PATH);
