@@ -350,4 +350,3 @@ Expected: Error about missing fields.
 5. Check that `data/reviews.txt` file exists and contains review data in format: COURSE|USER|REVIEW
 
 Note: Module and grade data are currently not persisted and will be lost on application restart.
-```
