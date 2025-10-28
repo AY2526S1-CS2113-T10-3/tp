@@ -99,6 +99,37 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 
 **Predicate-based Filtering**: ModuleList uses Java Predicate functional interface for flexible filtering operations.
 
+### Design Details
+
+#### Command Component
+
+![Command Class Diagram](diagrams/CommandClassDiagram.png)
+
+The Command component uses the **Command Pattern** to encapsulate each user action as an object. This design allows for:
+- Easy addition of new commands without modifying existing code
+- Consistent interface for all command types
+- Clear separation of command parsing and execution logic
+
+All command classes inherit from the abstract `Command` class and implement the `execute()` method. The placeholder `XYZCommand` represents additional command classes like `ScoreCommand`, `ShowTimetableCommand`, `ResetTimetableCommand`, `ReviewCommand`, `AddReviewCommand`, and `ExitCommand`.
+
+#### Model Component
+
+![Model Class Diagram](diagrams/ModelClassDiagram.png)
+
+The Model component consists of:
+- **Module**: Represents a course session with timing and session type information. Each module can store a score breakdown for different assessment components.
+- **ModuleList**: Manages a collection of modules with operations for adding, deleting, filtering, and clash detection.
+- **Course**: Represents a completed course with a grade, used for GPA calculation.
+- **CourseRecord**: Manages the collection of completed courses.
+
+The use of composition relationships allows ModuleList and CourseRecord to fully manage their respective collections.
+
+#### Review Management Component
+
+![Review Storage Class Diagram](diagrams/ReviewStorageClassDiagram.png)
+
+The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
+
 ### Timetable Clash Detection
 
 The application detects scheduling conflicts when adding modules:
