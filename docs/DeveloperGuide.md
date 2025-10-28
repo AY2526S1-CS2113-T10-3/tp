@@ -12,72 +12,63 @@
 
 Uniflow is a command-line application designed to help students manage their university modules, timetables, grades, and course reviews. The application follows an object-oriented design with clear separation of concerns.
 
-#### Main Components
+![Architecture Overview](diagrams/ArchitectureOverview.png)
+
+The architecture diagram above shows the high-level design of the application. The main components are:
 
 **Uniflow (Main Class)**
-- Entry point of the application
-- Initializes core components: UI, ModuleList, CourseRecord, and ReviewManager
-- Runs the main command loop that processes user input
+- Entry point that initializes core components and runs the main command loop
 
 **UI (User Interface)**
-- Handles all interactions with the user
-- Reads user commands via Scanner
-- Displays messages, module lists, filtered results, and error messages
-- Formats output with divider lines for clarity
+- Handles all user interactions, reading commands via Scanner and displaying formatted results
 
 **Parser**
 - Parses user input strings into Command objects
-- Supports multiple command types: insert, delete, list, filter, score, add grade, gpa, review, add review, show timetable, reset timetable, bye
-- Validates command syntax and extracts parameters
-- Throws UniflowException for invalid commands
+- Validates command syntax and throws UniflowException for invalid commands
 
 **Command (Abstract Class)**
-- Base class for all command types
-- Defines execute() method that all commands must implement
-- Provides isExit() method to determine if application should terminate
+- Base class for all command types using the Command Pattern
+- Defines execute() method and isExit() to control application flow
 
 **Module**
-- Represents a university module/course session
-- Stores module ID, name, day, start time, end time, and session type
-- Contains score breakdown as a Map for assessment components
+- Represents a course session with ID, name, timing, session type, and score breakdown
 - Provides methods to check for tutorials and retrieve module information
 
 **ModuleList**
-- Manages a collection of Module objects
-- Provides methods to add, delete, retrieve, and filter modules
-- Implements filtering by session type, day, ID, name, and tutorial presence
-- Detects timetable clashes by checking time overlaps
+- Manages the collection of modules in the timetable
+- Provides add, delete, filter operations and detects timetable clashes
 
 **Course**
-- Represents a completed course with code, credits, and grade
-- Used for GPA calculation
+- Represents a completed course with code, credits, and grade for GPA calculation
 
 **CourseRecord**
-- Manages a collection of Course objects
-- Tracks completed courses for academic record keeping
+- Manages completed courses for academic record keeping
 
 **ReviewManager**
-- Manages course reviews from multiple users
-- Stores reviews in a Map with course code as key
-- Integrates with ReviewStorage for persistence
+- Manages course reviews from students, storing reviews in a Map by course code
 
 **ReviewStorage**
-- Handles loading and saving of course reviews to file
-- Uses pipe-delimited format: COURSE|USER|REVIEW_TEXT
-- Creates data directory if it doesn't exist
+- Handles persistence of review data to file using pipe-delimited format
 
 ### Command Execution Flow
 
 ```
-User Input → Parser → Command Object → execute() → Updates Data → UI Output
+User Input → Parser → Command Object → execute() → Updates Data → UI Output → Loop/Exit
 ```
 
-1. User enters a command string
-2. Parser analyzes the command and creates appropriate Command object
-3. Command's execute() method is called with UI, ModuleList, and CourseRecord
-4. Command performs its operation (add module, compute GPA, etc.)
-5. UI displays the result or error message
-6. Loop continues until user enters "bye"
+1. User enters a command string through the UI Scanner
+2. Parser analyzes the command and creates the appropriate Command object
+3. Command's execute() method is called with UI, ModuleList, CourseRecord, and ReviewManager
+4. Command performs its operation:
+    - ModuleList operations: insert, delete, list, filter modules, detect clashes
+    - CourseRecord operations: add grades, compute GPA
+    - ReviewManager operations: add and retrieve course reviews
+    - Timetable operations: show, reset
+5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
+6. UI displays the result, filtered list, GPA calculation, reviews, or error message
+7. Loop continues until user enters "bye" (when Command.isExit() returns true)
+8. On exit, ReviewManager saves reviews to file via ReviewStorage
+9. Application terminates gracefully
 
 ### Key Design Patterns
 
@@ -87,34 +78,105 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 
 **Predicate-based Filtering**: ModuleList uses Java Predicate functional interface for flexible filtering operations.
 
-### Timetable Clash Detection
+### Design Details
 
-The application detects scheduling conflicts when adding modules:
+#### Command Component
 
-1. When InsertCommand executes, it calls `modules.findClash(newModule)`
-2. ModuleList checks all existing modules on the same day
-3. Uses LocalTime parsing to compare time ranges
-4. Returns overlapping module if found
-5. User is prompted to confirm if they still want to add the module
+![Command Class Diagram](diagrams/CommandClassDiagram.png)
 
-### Score Breakdown Feature
+The Command component uses the **Command Pattern** to encapsulate each user action as an object. This design allows for:
+- Easy addition of new commands without modifying existing code
+- Consistent interface for all command types
+- Clear separation of command parsing and execution logic
 
-Modules can store assessment component scores:
+All command classes inherit from the abstract `Command` class and implement the `execute()` method. The placeholder `XYZCommand` represents additional command classes like `ScoreCommand`, `ShowTimetableCommand`, `ResetTimetableCommand`, `ReviewCommand`, `AddReviewCommand`, and `ExitCommand`.
 
-1. ScoreCommand parses name:value pairs (e.g., "exam:50 participation:10")
-2. Validates that values are positive integers
-3. Stores breakdown in Module's scoreBreakdown Map
-4. Can be retrieved later for reference
+#### Model Component
 
-### GPA Calculation
+![Model Class Diagram](diagrams/ModelClassDiagram.png)
 
-The GPA computation follows these steps:
+The Model component consists of:
+- **Module**: Represents a course session with timing and session type information. Each module can store a score breakdown for different assessment components.
+- **ModuleList**: Manages a collection of modules with operations for adding, deleting, filtering, and clash detection.
+- **Course**: Represents a completed course with a grade, used for GPA calculation.
+- **CourseRecord**: Manages the collection of completed courses.
 
-1. Iterates through all courses in CourseRecord
-2. Converts letter grades to grade points (A+ = 5.0, F = 0.0)
-3. Calculates weighted sum: Σ(grade_point × credits)
-4. Divides by total credits to get GPA
-5. Displays result with 2 decimal precision
+The use of composition relationships allows ModuleList and CourseRecord to fully manage their respective collections.
+
+#### Review Management Component
+
+![Review Storage Class Diagram](diagrams/ReviewStorageClassDiagram.png)
+
+The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
+
+### Implementation Details
+
+#### Insert Module Feature
+
+The insert module feature allows users to add modules to their timetable with automatic clash detection.
+
+![Insert Command Sequence](diagrams/InsertCommandSequence.png)
+
+How the insert feature works:
+
+1. Parser creates an InsertCommand with a new Module object
+2. InsertCommand checks for timetable clashes by calling `findClash()`
+3. If a clash is detected, the user is warned and asked for confirmation
+4. If no clash exists or the user confirms, the module is added to ModuleList
+5. A success message is displayed showing the updated module count
+
+The clash detection algorithm compares time ranges on the same day using Java's LocalTime class to determine if any overlap exists.
+
+#### Filter Module Feature
+
+The filter feature allows users to search modules using various criteria.
+
+![Filter Command Sequence](diagrams/FilterCommandSequence.png)
+
+How filtering works:
+
+1. Parser creates a FilterCommand with the filter type and value
+2. FilterCommand calls the appropriate filter method on ModuleList
+3. ModuleList uses predicate-based filtering to create a new filtered list
+4. The filtered results are displayed to the user
+
+The application supports filtering by: day, session type, module ID, module name, and tutorial presence. The predicate-based approach allows for flexible and extensible filtering logic.
+
+#### GPA Calculation Feature
+
+The GPA calculation feature computes the cumulative GPA based on completed courses.
+
+![Compute GPA Sequence](diagrams/ComputeGpaSequence.png)
+
+How GPA calculation works:
+
+1. ComputeGpaCommand retrieves all courses from CourseRecord
+2. For each course, the letter grade is converted to a grade point (A+ = 5.0, F = 0.0)
+3. The weighted sum is calculated: Σ(grade_point × credits)
+4. GPA = total_grade_points / total_credits
+5. The result is displayed with summary statistics
+
+The grade point conversion follows the standard NUS grading scale.
+
+#### Score Breakdown Feature
+
+Modules can store assessment component scores for tracking purposes. The ScoreCommand parses input in the format `name:value` (e.g., "exam:50 participation:10") and validates that:
+- Values are positive integers
+- The format is correct (colon-separated pairs)
+
+The breakdown is stored in the Module's scoreBreakdown Map for future reference.
+
+#### Timetable Clash Detection
+
+When adding a new module, the system checks for scheduling conflicts:
+
+1. ModuleList iterates through all existing modules on the same day
+2. For each module, it compares time ranges using `checkOverlap()`
+3. Time strings are parsed into LocalTime objects for accurate comparison
+4. Two time ranges overlap if: `!(end1 < start2) AND !(end2 < start1)`
+5. If an overlap is found, that module is returned as the clashing module
+
+This prevents students from accidentally scheduling multiple classes at the same time.
 
 ## Product scope
 
