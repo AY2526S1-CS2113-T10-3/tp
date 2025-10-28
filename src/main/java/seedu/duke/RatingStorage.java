@@ -17,7 +17,9 @@ public class RatingStorage {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
             File parent = file.getParentFile();
-            if (parent != null) parent.mkdirs();
+            if (parent != null) {
+                parent.mkdirs();
+            }
             return ratings;
         }
 
