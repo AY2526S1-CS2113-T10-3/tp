@@ -1,9 +1,6 @@
 package seedu.duke;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,5 +31,19 @@ public class RatingStorage {
             System.out.println("Error reading file: " + FILE_PATH);
         }
         return ratings;
+    }
+
+    public void save(Map<String, List<Integer>> ratings) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for  (Map.Entry<String, List<Integer>> entry : ratings.entrySet()) {
+                String course = entry.getKey();
+                for (Integer score: entry.getValue()) {
+                    bw.write(course + "|" + score);
+                    bw.newLine();
+                }
+            }
+        } catch(IOException e) {
+            System.out.println("Error writing file: " + FILE_PATH);
+        }
     }
 }
