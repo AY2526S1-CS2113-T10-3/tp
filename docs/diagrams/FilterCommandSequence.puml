@@ -1,15 +1,45 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+actor User
+participant ":UI" as UI
+participant ":Parser" as Parser
+participant ":FilterCommand" as FilterCmd
+participant ":ModuleList" as ModuleList
 
-autonumber
+User -> UI: filter day/Monday
+activate UI
 
-== Initialization ==
+UI -> Parser: parse(fullCommand)
+activate Parser
+Parser -> FilterCmd: create("day", "Monday")
+activate FilterCmd
+FilterCmd --> Parser
+deactivate FilterCmd
+Parser --> UI
+deactivate Parser
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+UI -> FilterCmd: execute(ui, modules, courseRecord)
+activate FilterCmd
 
-== Repetition ==
+FilterCmd -> ModuleList: findByDay("Monday")
+activate ModuleList
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+ModuleList -> ModuleList: filter(predicate)
+activate ModuleList
+ModuleList --> ModuleList: filteredModules
+deactivate ModuleList
+
+ModuleList --> FilterCmd: ModuleList
+deactivate ModuleList
+
+FilterCmd -> UI: showFilteredModules(...)
+activate UI
+UI --> FilterCmd
+deactivate UI
+
+FilterCmd --> UI
+deactivate FilterCmd
+
+UI --> User
+deactivate UI
+
 @enduml
