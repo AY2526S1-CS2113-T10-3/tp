@@ -56,12 +56,19 @@ The architecture diagram above shows the high-level design of the application. T
 User Input → Parser → Command Object → execute() → Updates Data → UI Output → Loop/Exit
 ```
 
-1. User enters a command string
-2. Parser analyzes the command and creates appropriate Command object
-3. Command's execute() method is called with UI, ModuleList, and CourseRecord
-4. Command performs its operation (add module, compute GPA, etc.)
-5. UI displays the result or error message
-6. Loop continues until user enters "bye"
+1. User enters a command string through the UI Scanner
+2. Parser analyzes the command and creates the appropriate Command object
+3. Command's execute() method is called with UI, ModuleList, CourseRecord, and ReviewManager
+4. Command performs its operation:
+    - ModuleList operations: insert, delete, list, filter modules, detect clashes
+    - CourseRecord operations: add grades, compute GPA
+    - ReviewManager operations: add and retrieve course reviews
+    - Timetable operations: show, reset
+5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
+6. UI displays the result, filtered list, GPA calculation, reviews, or error message
+7. Loop continues until user enters "bye" (when Command.isExit() returns true)
+8. On exit, ReviewManager saves reviews to file via ReviewStorage
+9. Application terminates gracefully
 
 ### Key Design Patterns
 
