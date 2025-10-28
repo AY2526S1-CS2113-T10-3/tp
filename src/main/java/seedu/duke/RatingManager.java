@@ -13,17 +13,18 @@ public class RatingManager {
     }
 
     public void addRating(String moduleCode, int score) {
-        moduleRatings.computeIfAbsent(moduleCode.toLowerCase(), c -> new RatingStats()).add(score);
+        String key = moduleCode.trim().toUpperCase();
+        moduleRatings.computeIfAbsent(key, c -> new RatingStats()).add(score);
         storage.save(moduleRatings);
     }
 
     public int getCount(String moduleCode) {
-        RatingStats stat = moduleRatings.get(moduleCode.toLowerCase());
+        RatingStats stat = moduleRatings.get(moduleCode.trim().toUpperCase());
         return stat == null ? 0 : stat.getCount();
     }
 
     public Double getAverage(String moduleCode) {
-        RatingStats stat = moduleRatings.get(moduleCode.toLowerCase());
+        RatingStats stat = moduleRatings.get(moduleCode.trim().toUpperCase());
         return stat == null ? 0.0 : stat.average();
     }
 
