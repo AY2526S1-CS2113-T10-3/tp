@@ -1,0 +1,60 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+abstract class Command {
+  + execute(ui, modules, courseRecord)
+  + isExit(): boolean
+}
+
+class InsertCommand {
+  - module: Module
+  + execute(...)
+}
+
+class DeleteCommand {
+  - moduleId: String
+  + execute(...)
+}
+
+class ListCommand {
+  + execute(...)
+}
+
+class FilterCommand {
+  - filterType: String
+  - filterValue: String
+  + execute(...)
+}
+
+class AddGradeCommand {
+  - course: Course
+  + execute(...)
+}
+
+class ComputeGpaCommand {
+  + execute(...)
+}
+
+class XYZCommand {
+  ...
+}
+
+Command <|-- InsertCommand
+Command <|-- DeleteCommand
+Command <|-- ListCommand
+Command <|-- FilterCommand
+Command <|-- AddGradeCommand
+Command <|-- ComputeGpaCommand
+Command <|-- XYZCommand
+
+note right of XYZCommand
+  Represents other command classes:
+  - ScoreCommand
+  - ShowTimetableCommand
+  - ResetTimetableCommand
+  - ReviewCommand
+  - AddReviewCommand
+  - ExitCommand
+end note
+
+@enduml
