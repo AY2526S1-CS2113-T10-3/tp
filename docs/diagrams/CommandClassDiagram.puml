@@ -1,15 +1,60 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
 
-autonumber
+abstract class Command {
+  + execute(ui, modules, courseRecord)
+  + isExit(): boolean
+}
 
-== Initialization ==
+class InsertCommand {
+  - module: Module
+  + execute(...)
+}
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+class DeleteCommand {
+  - moduleId: String
+  + execute(...)
+}
 
-== Repetition ==
+class ListCommand {
+  + execute(...)
+}
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+class FilterCommand {
+  - filterType: String
+  - filterValue: String
+  + execute(...)
+}
+
+class AddGradeCommand {
+  - course: Course
+  + execute(...)
+}
+
+class ComputeGpaCommand {
+  + execute(...)
+}
+
+class XYZCommand {
+  ...
+}
+
+Command <|-- InsertCommand
+Command <|-- DeleteCommand
+Command <|-- ListCommand
+Command <|-- FilterCommand
+Command <|-- AddGradeCommand
+Command <|-- ComputeGpaCommand
+Command <|-- XYZCommand
+
+note right of XYZCommand
+  Represents other command classes:
+  - ScoreCommand
+  - ShowTimetableCommand
+  - ResetTimetableCommand
+  - ReviewCommand
+  - AddReviewCommand
+  - ExitCommand
+end note
+
 @enduml
