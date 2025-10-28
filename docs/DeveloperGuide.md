@@ -63,60 +63,6 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 5. UI displays the result or error message
 6. Loop continues until user enters "bye"
 
-#### Main Components
-
-**Uniflow (Main Class)**
-- Entry point of the application
-- Initializes core components: UI, ModuleList, CourseRecord, and ReviewManager
-- Runs the main command loop that processes user input
-
-**UI (User Interface)**
-- Handles all interactions with the user
-- Reads user commands via Scanner
-- Displays messages, module lists, filtered results, and error messages
-- Formats output with divider lines for clarity
-
-**Parser**
-- Parses user input strings into Command objects
-- Supports multiple command types: insert, delete, list, filter, score, add grade, gpa, review, add review, show timetable, reset timetable, bye
-- Validates command syntax and extracts parameters
-- Throws UniflowException for invalid commands
-
-**Command (Abstract Class)**
-- Base class for all command types
-- Defines execute() method that all commands must implement
-- Provides isExit() method to determine if application should terminate
-
-**Module**
-- Represents a university module/course session
-- Stores module ID, name, day, start time, end time, and session type
-- Contains score breakdown as a Map for assessment components
-- Provides methods to check for tutorials and retrieve module information
-
-**ModuleList**
-- Manages a collection of Module objects
-- Provides methods to add, delete, retrieve, and filter modules
-- Implements filtering by session type, day, ID, name, and tutorial presence
-- Detects timetable clashes by checking time overlaps
-
-**Course**
-- Represents a completed course with code, credits, and grade
-- Used for GPA calculation
-
-**CourseRecord**
-- Manages a collection of Course objects
-- Tracks completed courses for academic record keeping
-
-**ReviewManager**
-- Manages course reviews from multiple users
-- Stores reviews in a Map with course code as key
-- Integrates with ReviewStorage for persistence
-
-**ReviewStorage**
-- Handles loading and saving of course reviews to file
-- Uses pipe-delimited format: COURSE|USER|REVIEW_TEXT
-- Creates data directory if it doesn't exist
-
 ### Key Design Patterns
 
 **Command Pattern**: Each user action is encapsulated as a Command object (InsertCommand, DeleteCommand, FilterCommand, etc.), allowing for easy extension and modification.
