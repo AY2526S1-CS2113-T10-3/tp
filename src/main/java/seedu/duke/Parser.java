@@ -16,6 +16,7 @@ public class Parser {
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
     private static final String COMMAND_REVIEW = "review";
     private static final String COMMAND_ADD_REVIEW = "addreview";
+    private static final String COMMAND_RATE = "rate";
 
 
     public static Command parse(String fullCommand) throws UniflowException {
@@ -59,6 +60,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_RATE)) {
+            return parseRateCommand(trimmedCommand);
         }
 
         throw new UniflowException("Invalid command");
@@ -235,5 +239,53 @@ public class Parser {
                 text,
                 Uniflow.getReviewManager()
         );
+    }
+
+    private static Command parseRateCommand(String command) throws UniflowException {
+        String args = command.substring(COMMAND_RATE.length()).trim();
+        if (args.isEmpty()) {
+            throw new UniflowException("Usage: rate c/COURSE s/SCORE");
+        }
+
+        String course = null;
+        Integer score = null;
+
+        if (args.contains("c/") || args.contains("s/")) {
+            String[] parts = args.split("\\s+");
+            for (String part : parts) {
+                if (part.startsWith("/c")) {
+                    part.substring(2).trim();
+                } else if (part.startsWith("s/")) {
+                    try {
+                        score = Integer.parseInt(part.substring(2).trim());
+                    } catch (NumberFormatException e) {
+                        throw new UniflowException("Score must be an integer.");
+                    }
+                }
+            }
+            if (course == null || score == null) {
+                throw new UniflowException("Usage: rate c/COURSE s/SCORE");
+            }
+        } else {
+            String[] tokens =  args.split("\\s+");
+            if (tokens.length != 2) {
+                throw new  UniflowException("Usage: rate c/COURSE s/SCORE");
+            }
+            course = tokens[0].trim();
+            try {
+                score = Integer.parseInt(tokens[1].trim());
+            } catch (NumberFormatException e) {
+                throw new UniflowException("Score must be an integer.");
+            }
+        }
+
+        if (course.isEmpty()) {
+            throw new UniflowException("Course cannot be empty.");
+        }
+        if (score < 1 || score > 5) {
+            throw new UniflowException("Score must be between 1 and 5.");
+        }
+
+        return new RateCommand(course, score, Uniflow.getRatingManager());
     }
 }
