@@ -1,15 +1,19 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
 
-autonumber
+class ReviewManager {
+  - reviews: Map<String, List<String>>
+  - storage: ReviewStorage
+  + addReview(course, user, text)
+  + getReviews(course): List<String>
+}
 
-== Initialization ==
+class ReviewStorage {
+  - FILE_PATH: String
+  + load(): Map<String, List<String>>
+  + save(reviews)
+}
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+ReviewManager "1" --> "1" ReviewStorage : uses
 
-== Repetition ==
-
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
 @enduml
