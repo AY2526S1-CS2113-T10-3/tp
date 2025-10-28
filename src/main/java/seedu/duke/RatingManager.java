@@ -4,15 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RatingManager {
-    private RatingStorage storage = new  RatingStorage();
+    private final RatingStorage storage = new  RatingStorage();
     private Map<String, RatingStats> moduleRatings = new HashMap<>();
 
     public RatingManager() {
-        this(new RatingStorage());
-    }
-
-    public RatingManager(RatingStorage storage) {
-        this.storage = storage;
         Map<String, RatingStats> loaded = storage.load();
         this.moduleRatings = (loaded != null) ? loaded : new HashMap<>();
     }
