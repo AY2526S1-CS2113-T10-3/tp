@@ -35,4 +35,8 @@ public class Course {
         return code + " (" + credits + " credits" + ", Grade: " + grade + ")" + major;
     }
 
+    public String toStorage() {
+        return code + " | " + credits +  " | " + grade +  " | " + (isMajor ? 1 : 0);
+    }
+
 }
