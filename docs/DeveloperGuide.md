@@ -277,6 +277,7 @@ Uniflow solves several problems for university students:
 * **Score Breakdown** - Individual assessment components and their weightings for a module
 * **Course Record** - Collection of completed courses with grades for GPA calculation
 * **Review** - Student feedback and experiences shared about a specific course
+* **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students
 
 ## Instructions for manual testing
 
@@ -397,6 +398,21 @@ Expected: Both reviews displayed with usernames.
 review CS9999
 ```
 Expected: Message indicating no reviews found.
+
+### Testing Rating System
+
+**Adding a rating**
+```commandline
+rate CS2113 4
+```
+Expected: ```Added Rating: 4 to CS2113```
+Saves the rating to data/ratings.txt
+**Viewing Average Rating**
+```commandline
+rate CS2113
+```
+Expected: Displays the average rating and number of ratings per course, e.g.
+```CS2113 Rating: 4.5 (2 ratings)```
 
 ### Testing Timetable Commands
 
