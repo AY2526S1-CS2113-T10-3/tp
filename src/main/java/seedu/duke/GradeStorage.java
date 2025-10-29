@@ -44,7 +44,7 @@ public class GradeStorage {
             }
             //create a new file if it doesn't exist yet
             if (file.createNewFile()) {
-                System.out.println("Grade record file has been created.");
+                //System.out.println("Grade record file has been created.");
             }
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
