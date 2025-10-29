@@ -16,6 +16,7 @@ public class Parser {
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
     private static final String COMMAND_REVIEW = "review";
     private static final String COMMAND_ADD_REVIEW = "addreview";
+    private static final String COMMAND_RATE = "rate";
 
 
     public static Command parse(String fullCommand) throws UniflowException {
@@ -59,6 +60,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_RATE)) {
+            return parseRateCommand(trimmedCommand);
         }
 
         throw new UniflowException("Invalid command");
@@ -235,5 +239,33 @@ public class Parser {
                 text,
                 Uniflow.getReviewManager()
         );
+    }
+
+    private static Command parseRateCommand(String command) throws UniflowException {
+        String args = command.substring("rate".length()).trim();
+
+        if (args.isEmpty()) {
+            throw new UniflowException("Usage: rate <MODULE_CODE> <RATING>");
+        }
+
+        String[] parts = args.split("\\s+");
+        if (parts.length != 2) {
+            throw new UniflowException("Usage: rate <MODULE_CODE> <RATING>");
+        }
+
+        String moduleCode = parts[0].trim().toUpperCase();
+        int score;
+
+        try {
+            score = Integer.parseInt(parts[1].trim());
+        } catch (NumberFormatException e) {
+            throw new UniflowException("Rating must be a number between 1 and 5.");
+        }
+
+        if (score < 1 || score > 5) {
+            throw new UniflowException("Rating must be between 1 and 5.");
+        }
+
+        return new RateCommand(moduleCode, score);
     }
 }
