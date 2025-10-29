@@ -41,6 +41,7 @@ public class CourseRecord {
             }
         }
         return false;
+    }
 
     public int getMajorSize() {
         return majorCourses.size();
