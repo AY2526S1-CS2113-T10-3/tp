@@ -26,7 +26,7 @@ public class Course {
         return grade;
     }
 
-    public boolean getIsMajor() {
+    public boolean isMajor() {
         return isMajor;
     }
 
