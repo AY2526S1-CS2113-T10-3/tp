@@ -1,0 +1,67 @@
+@startuml
+actor User
+participant ":UI" as UI
+participant ":Parser" as Parser
+participant ":InsertCommand" as InsertCmd
+participant ":ModuleList" as ModuleList
+participant ":Module" as Module
+
+User -> UI: insert i/CS2113 n/SE d/Monday f/14:00 t/16:00 s/lecture
+activate UI
+
+UI -> Parser: parse(fullCommand)
+activate Parser
+
+Parser -> InsertCmd: create(id, name, day, ...)
+activate InsertCmd
+InsertCmd -> Module: create Module
+activate Module
+Module --> InsertCmd
+deactivate Module
+InsertCmd --> Parser
+deactivate InsertCmd
+
+Parser --> UI: InsertCommand
+deactivate Parser
+
+UI -> InsertCmd: execute(ui, modules, courseRecord)
+activate InsertCmd
+
+InsertCmd -> ModuleList: findClash(module)
+activate ModuleList
+ModuleList --> InsertCmd: null or clashing Module
+deactivate ModuleList
+
+alt no clash
+    InsertCmd -> ModuleList: addModule(module)
+    activate ModuleList
+    ModuleList --> InsertCmd
+    deactivate ModuleList
+    InsertCmd -> UI: showMessage("Module added...")
+    activate UI
+    UI --> InsertCmd
+    deactivate UI
+else clash detected
+    InsertCmd -> UI: showMessage("Warning: clash...")
+    activate UI
+    UI --> InsertCmd
+    deactivate UI
+    InsertCmd -> UI: readCommand()
+    activate UI
+    UI --> InsertCmd: user response
+    deactivate UI
+    alt user confirms
+        InsertCmd -> ModuleList: addModule(module)
+        activate ModuleList
+        ModuleList --> InsertCmd
+        deactivate ModuleList
+    end
+end
+
+InsertCmd --> UI
+deactivate InsertCmd
+
+UI --> User
+deactivate UI
+
+@enduml
