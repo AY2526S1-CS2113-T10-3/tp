@@ -25,7 +25,7 @@ public class RateCommand extends Command {
             if (count == 0) {
                 ui.showMessage("No ratings found for " + courseCode.toUpperCase());
             } else {
-                ui.showMessage(courseCode + " Rating: " + avg + " (" + count + " ratings)");
+                ui.showMessage(courseCode + " Rating: " + avg + " (" + count + " rating(s))");
             }
             return;
         }
