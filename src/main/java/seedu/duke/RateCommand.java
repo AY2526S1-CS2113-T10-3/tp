@@ -1,9 +1,9 @@
 package seedu.duke;
 
 public class RateCommand extends Command {
+    private static final int RATING_QUERY_MODE = -1;
     private final String courseCode;
     private final int score;
-    private static final int RATING_QUERY_MODE = -1;
 
     public RateCommand(String courseCode, int score) {
         this.courseCode = courseCode;
