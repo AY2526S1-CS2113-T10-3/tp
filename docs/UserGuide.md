@@ -2,32 +2,78 @@
 
 ## Introduction
 
-{Give a product intro}
+Uniflow is a command-line university module management assistant designed for students.
+It helps you organize your timetable, track grades and GPA, add and view reviews, and rate courses — all through simple text-based commands.
 
 ## Quick Start
-
-{Give steps to get started quickly}
-
-1. Ensure that you have Java 17 or above installed.
-1. Down the latest version of `Duke` from [here](http://link.to/duke).
+1. Ensure you have **Java 17 or above** installed on your computer.
+2. Download the latest version of **Uniflow.jar** from your release page.
+3. Open a terminal and navigate to the folder containing the JAR file.
+4. Run the application with:
+```commandline
+java -jar Uniflow.jar
+```
+5. Start entering commands (see the Command Summary below for examples).
 
 ## Features 
 
 {Give detailed description of each feature}
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+### Adding a Module: `insert`
+Adds a new module to your timetable.
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+Format:
+```commandline
+insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE
+```
+Example:
+```commandline
+insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
+```
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+### Deleting a Module - `delete`
+Removes module by ID.
+Format:
+```commandline
+delete i/MODULE_CODE
+```
+Example:
+```commandline
+delete i/CS2113
+```
 
-Example of usage: 
+### List All Module - `list`
+Displays all modules in your timetable.
+Format:
+```commandline
+list
+```
 
-`todo n/Write the rest of the User Guide d/next week`
+### Filter Modules - `filter`
+Filters modules by day, session, type, or tutorial presence.
+Example:
+```commandline
+filter day/Monday
+filter type/tutorial
+filter hastutorial
+```
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+### Rate a Course - `rate`
+Allows users to add or view numerical ratings for a course.
+Rating Format:
+```commandline
+rate COURSE_CODE RATING
+```
+Example:
+```commandline
+rate CS2113 4
+```
+View Average Rating Format:
+```commandline
+rate CS2113
+```
+
+
 
 ## FAQ
 
