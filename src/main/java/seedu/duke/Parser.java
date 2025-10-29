@@ -253,7 +253,7 @@ public class Parser {
         String moduleCode = parts[0].trim().toUpperCase();
 
         if (parts.length == 1) {
-            return new RateCommand(moduleCode, -1); //-1 = query
+            return new RateCommand(moduleCode, RATING_QUERY_MODE);
         }
 
         if (parts.length == 2) {

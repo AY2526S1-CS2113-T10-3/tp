@@ -3,6 +3,7 @@ package seedu.duke;
 public class RateCommand extends Command {
     private final String courseCode;
     private final int score;
+    private static final int RATING_QUERY_MODE = 1;
 
     public RateCommand(String courseCode, int score) {
         this.courseCode = courseCode;
@@ -17,7 +18,7 @@ public class RateCommand extends Command {
         if (!courseRecord.hasCourse(courseCode)) {
             throw new UniflowException("Course not found");
         }
-        if (score < 0) {
+        if (score == RATING_QUERY_MODE) {
             RatingManager rm = Uniflow.getRatingManager();
             int count = rm.getCount(courseCode);
             double avg = rm.getAverage(courseCode);
