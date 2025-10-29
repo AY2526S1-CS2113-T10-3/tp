@@ -50,6 +50,15 @@ The architecture diagram above shows the high-level design of the application. T
 **ReviewStorage**
 - Handles persistence of review data to file using pipe-delimited format
 
+**RatingManager**
+- Manages course ratings from students, storing ratings in a map by course code.
+
+**RatingStats**
+- Represents the aggregate statistics (sum, count, average) for a specific course's ratings.
+
+**RatingStorage**
+- Handles persistence of rating data to the local file system using pipe-delimited format.
+
 ### Command Execution Flow
 
 ```
@@ -63,11 +72,12 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
     - ModuleList operations: insert, delete, list, filter modules, detect clashes
     - CourseRecord operations: add grades, compute GPA
     - ReviewManager operations: add and retrieve course reviews
+    - RatingManager operations: add or display course ratings
     - Timetable operations: show, reset
 5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
 6. UI displays the result, filtered list, GPA calculation, reviews, or error message
 7. Loop continues until user enters "bye" (when Command.isExit() returns true)
-8. On exit, ReviewManager saves reviews to file via ReviewStorage
+8. On exit, ReviewManager saves reviews to file via ReviewStorage, and RatingManager saves ratings via RatingStorage
 9. Application terminates gracefully
 
 ### Key Design Patterns
@@ -165,6 +175,20 @@ Modules can store assessment component scores for tracking purposes. The ScoreCo
 - The format is correct (colon-separated pairs)
 
 The breakdown is stored in the Module's scoreBreakdown Map for future reference.
+
+#### Rating Feature
+The rating feature allows users to rate modules they've taken and view the average rating for each module.
+
+How it works:
+1. Parser creates a ```RateCommand``` when the user enters ```rate <MODULE_CODE> [RATING]```
+2. If rating value (1-5) is provided:
+    - ```RateCommand``` validates that the course exists in ```CourseRecord```
+    - The rating is then passed to ```RatingManager```, which updates the total and count
+    - ```RatingStorage``` saves the updated data to a file (```data/ratings.txt```)
+3. If no rating is provided:
+    - ```RateCommand``` retrieves the average rating and rating count from ```RatingManager```
+    - Displays the average if ratings exist, or a message if none are found
+4. The UI displays a confirmation or the average rating result to the user
 
 #### Timetable Clash Detection
 
