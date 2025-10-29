@@ -212,6 +212,7 @@ Uniflow is designed for university students who:
 * Prefer command-line interfaces for quick data entry
 * Need to avoid timetable clashes when planning their schedule
 * Want to access and share course reviews with peers
+* Want to rate courses and see average ratings to inform module selection
 * Are comfortable with typing commands and structured input formats
 
 ### Value proposition
@@ -226,26 +227,30 @@ Uniflow solves several problems for university students:
 
 **Peer Reviews**: The review system enables students to share and read course experiences, helping with module selection decisions.
 
+**Course Ratings**: A lightweight rating system that lets students rate modules and view average ratings, providing a quick and quantitative signal alongside reviews. 
+
 **Efficiency**: Command-line interface allows for faster data entry compared to GUI applications, ideal for students who need to quickly update their schedules between classes.
 
 ## User Stories
 
-| Version | As a ... | I want to ...                       | So that I can ...                                        |
-|---------|----------|-------------------------------------|----------------------------------------------------------|
-| v1.0    | new user | see usage instructions              | refer to them when I forget how to use the application   |
-| v1.0    | student  | add modules to my timetable         | keep track of all my classes                             |
-| v1.0    | student  | delete modules from my timetable    | remove classes I've dropped                              |
-| v1.0    | student  | list all my modules                 | see my complete schedule at a glance                     |
-| v1.0    | student  | check for timetable clashes         | avoid scheduling conflicts                               |
-| v2.0    | student  | filter modules by day               | see what classes I have on specific days                 |
-| v2.0    | student  | filter modules by session type      | quickly find all my tutorials or labs                    |
-| v2.0    | student  | search modules by code or name      | locate specific modules without scanning the entire list |
+| Version | As a ... | I want to ...                      | So that I can ...                                        |
+|---------|----------|------------------------------------|----------------------------------------------------------|
+| v1.0    | new user | see usage instructions             | refer to them when I forget how to use the application   |
+| v1.0    | student  | add modules to my timetable        | keep track of all my classes                             |
+| v1.0    | student  | delete modules from my timetable   | remove classes I've dropped                              |
+| v1.0    | student  | list all my modules                | see my complete schedule at a glance                     |
+| v1.0    | student  | check for timetable clashes        | avoid scheduling conflicts                               |
+| v2.0    | student  | filter modules by day              | see what classes I have on specific days                 |
+| v2.0    | student  | filter modules by session type     | quickly find all my tutorials or labs                    |
+| v2.0    | student  | search modules by code or name     | locate specific modules without scanning the entire list |
 | v2.0    | student  | add my grades for completed courses | maintain an academic record                              |
-| v2.0    | student  | calculate my GPA automatically      | track my academic performance                            |
-| v2.0    | student  | store score breakdowns for modules  | track individual assessment components                   |
-| v2.0    | student  | add reviews for courses             | share my experiences with other students                 |
-| v2.0    | student  | read reviews for courses            | make informed decisions about module selection           |
-| v2.0    | student  | reset my timetable                  | start fresh for a new semester                           |
+| v2.0    | student  | calculate my GPA automatically     | track my academic performance                            |
+| v2.0    | student  | store score breakdowns for modules | track individual assessment components                   |
+| v2.0    | student  | add reviews for courses            | share my experiences with other students                 |
+| v2.0    | student  | read reviews for courses           | make informed decisions about module selection           |
+| v2.0    | student  | reset my timetable                 | start fresh for a new semester                           |
+| v2.0    | student  | rate a course                      | share simple feedback on module quality                  |
+ 
 
 ## Non-Functional Requirements
 
