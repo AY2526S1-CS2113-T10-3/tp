@@ -20,4 +20,17 @@ public class CourseRecord {
     public int  getSize() {
         return courses.size();
     }
+
+    public boolean hasCourse(String code) {
+        if (code == null) {
+            return false;
+        }
+        String target = code.trim().toUpperCase();
+        for (Course c : courses) {
+            if (c.getCode() != null && c.getCode().trim().toUpperCase().equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
