@@ -28,7 +28,7 @@ public class ComputeGpaCommand extends Command {
         if (courseRecord.getMajorSize()==0) {
             ui.showMessage("You have not studied any major required courses yet.");
         } else {
-            ui.showMessage(" You have studied " + courseRecord.getMajorSize() + " major courses.\n"
+            ui.showMessage("You have studied " + courseRecord.getMajorSize() + " major courses.\n"
                     + " Your total major course grade points are " + courseRecord.getMajorTotalGradePoints() + "\n"
                     + " Number of credits you have studied: " + courseRecord.getMajorTotalCredits() + "\n"
                     + String.format(" Your major GPA is: %.2f", courseRecord.computeMajorGpa()));
