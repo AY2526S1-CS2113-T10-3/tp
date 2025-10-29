@@ -50,6 +50,15 @@ The architecture diagram above shows the high-level design of the application. T
 **ReviewStorage**
 - Handles persistence of review data to file using pipe-delimited format
 
+**RatingManager**
+- Manages course ratings from students, storing ratings in a map by course code.
+
+**RatingStats**
+- Represents the aggregate statistics (sum, count, average) for a specific course's ratings.
+
+**RatingStorage**
+- Handles persistence of rating data to the local file system using pipe-delimited format.
+
 ### Command Execution Flow
 
 ```
@@ -63,11 +72,12 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
     - ModuleList operations: insert, delete, list, filter modules, detect clashes
     - CourseRecord operations: add grades, compute GPA
     - ReviewManager operations: add and retrieve course reviews
+    - RatingManager operations: add or display course ratings
     - Timetable operations: show, reset
 5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
 6. UI displays the result, filtered list, GPA calculation, reviews, or error message
 7. Loop continues until user enters "bye" (when Command.isExit() returns true)
-8. On exit, ReviewManager saves reviews to file via ReviewStorage
+8. On exit, ReviewManager saves reviews to file via ReviewStorage, and RatingManager saves ratings via RatingStorage
 9. Application terminates gracefully
 
 ### Key Design Patterns
@@ -166,6 +176,20 @@ Modules can store assessment component scores for tracking purposes. The ScoreCo
 
 The breakdown is stored in the Module's scoreBreakdown Map for future reference.
 
+#### Rating Feature
+The rating feature allows users to rate modules they've taken and view the average rating for each module.
+
+How it works:
+1. Parser creates a ```RateCommand``` when the user enters ```rate <MODULE_CODE> [RATING]```
+2. If rating value (1-5) is provided:
+    - ```RateCommand``` validates that the course exists in ```CourseRecord```
+    - The rating is then passed to ```RatingManager```, which updates the total and count
+    - ```RatingStorage``` saves the updated data to a file (```data/ratings.txt```)
+3. If no rating is provided:
+    - ```RateCommand``` retrieves the average rating and rating count from ```RatingManager```
+    - Displays the average if ratings exist, or a message if none are found
+4. The UI displays a confirmation or the average rating result to the user
+
 #### Timetable Clash Detection
 
 When adding a new module, the system checks for scheduling conflicts:
@@ -188,6 +212,7 @@ Uniflow is designed for university students who:
 * Prefer command-line interfaces for quick data entry
 * Need to avoid timetable clashes when planning their schedule
 * Want to access and share course reviews with peers
+* Want to rate courses and see average ratings to inform module selection
 * Are comfortable with typing commands and structured input formats
 
 ### Value proposition
@@ -202,26 +227,30 @@ Uniflow solves several problems for university students:
 
 **Peer Reviews**: The review system enables students to share and read course experiences, helping with module selection decisions.
 
+**Course Ratings**: A lightweight rating system that lets students rate modules and view average ratings, providing a quick and quantitative signal alongside reviews. 
+
 **Efficiency**: Command-line interface allows for faster data entry compared to GUI applications, ideal for students who need to quickly update their schedules between classes.
 
 ## User Stories
 
-| Version | As a ... | I want to ...                       | So that I can ...                                        |
-|---------|----------|-------------------------------------|----------------------------------------------------------|
-| v1.0    | new user | see usage instructions              | refer to them when I forget how to use the application   |
-| v1.0    | student  | add modules to my timetable         | keep track of all my classes                             |
-| v1.0    | student  | delete modules from my timetable    | remove classes I've dropped                              |
-| v1.0    | student  | list all my modules                 | see my complete schedule at a glance                     |
-| v1.0    | student  | check for timetable clashes         | avoid scheduling conflicts                               |
-| v2.0    | student  | filter modules by day               | see what classes I have on specific days                 |
-| v2.0    | student  | filter modules by session type      | quickly find all my tutorials or labs                    |
-| v2.0    | student  | search modules by code or name      | locate specific modules without scanning the entire list |
+| Version | As a ... | I want to ...                      | So that I can ...                                        |
+|---------|----------|------------------------------------|----------------------------------------------------------|
+| v1.0    | new user | see usage instructions             | refer to them when I forget how to use the application   |
+| v1.0    | student  | add modules to my timetable        | keep track of all my classes                             |
+| v1.0    | student  | delete modules from my timetable   | remove classes I've dropped                              |
+| v1.0    | student  | list all my modules                | see my complete schedule at a glance                     |
+| v1.0    | student  | check for timetable clashes        | avoid scheduling conflicts                               |
+| v2.0    | student  | filter modules by day              | see what classes I have on specific days                 |
+| v2.0    | student  | filter modules by session type     | quickly find all my tutorials or labs                    |
+| v2.0    | student  | search modules by code or name     | locate specific modules without scanning the entire list |
 | v2.0    | student  | add my grades for completed courses | maintain an academic record                              |
-| v2.0    | student  | calculate my GPA automatically      | track my academic performance                            |
-| v2.0    | student  | store score breakdowns for modules  | track individual assessment components                   |
-| v2.0    | student  | add reviews for courses             | share my experiences with other students                 |
-| v2.0    | student  | read reviews for courses            | make informed decisions about module selection           |
-| v2.0    | student  | reset my timetable                  | start fresh for a new semester                           |
+| v2.0    | student  | calculate my GPA automatically     | track my academic performance                            |
+| v2.0    | student  | store score breakdowns for modules | track individual assessment components                   |
+| v2.0    | student  | add reviews for courses            | share my experiences with other students                 |
+| v2.0    | student  | read reviews for courses           | make informed decisions about module selection           |
+| v2.0    | student  | reset my timetable                 | start fresh for a new semester                           |
+| v2.0    | student  | rate a course                      | share simple feedback on module quality                  |
+ 
 
 ## Non-Functional Requirements
 
@@ -248,6 +277,7 @@ Uniflow solves several problems for university students:
 * **Score Breakdown** - Individual assessment components and their weightings for a module
 * **Course Record** - Collection of completed courses with grades for GPA calculation
 * **Review** - Student feedback and experiences shared about a specific course
+* **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students
 
 ## Instructions for manual testing
 
@@ -368,6 +398,21 @@ Expected: Both reviews displayed with usernames.
 review CS9999
 ```
 Expected: Message indicating no reviews found.
+
+### Testing Rating System
+
+**Adding a rating**
+```commandline
+rate CS2113 4
+```
+Expected: ```Added Rating: 4 to CS2113```
+Saves the rating to data/ratings.txt
+**Viewing Average Rating**
+```commandline
+rate CS2113
+```
+Expected: Displays the average rating and number of ratings per course, e.g.
+```CS2113 Rating: 4.5 (2 ratings)```
 
 ### Testing Timetable Commands
 
