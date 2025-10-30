@@ -3,7 +3,6 @@ package seedu.duke;
 import java.util.Arrays;
 
 public class Parser {
-
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
@@ -16,8 +15,8 @@ public class Parser {
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
     private static final String COMMAND_REVIEW = "review";
     private static final String COMMAND_ADD_REVIEW = "addreview";
+    private static final String COMMAND_EDIT_REVIEW = "editreview";
     private static final String COMMAND_RATE = "rate";
-
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -55,11 +54,14 @@ public class Parser {
         if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_TIMETABLE)) {
             return new ResetTimetableCommand();
         }
-        if (trimmedCommand.startsWith(COMMAND_REVIEW)) {
-            return parseReviewCommand(trimmedCommand);
+        if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
+            return parseEditReviewCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_REVIEW)) {
+            return parseReviewCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_RATE)) {
             return parseRateCommand(trimmedCommand);
@@ -153,6 +155,7 @@ public class Parser {
             throw new UniflowException("Invalid delete command syntax. Use: delete n/<module_id>");
         }
     }
+    
     private static Command parseScoreCommand(String command) throws UniflowException {
         String remainder = command.substring(COMMAND_SCORE.length()).trim();
 
@@ -228,6 +231,20 @@ public class Parser {
         }
 
         return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
+    }
+
+    private static Command parseEditReviewCommand(String command) throws UniflowException {
+        String input = command.substring(COMMAND_EDIT_REVIEW.length()).trim();
+
+        String course = extractParameter(input, "c/");
+        String user = extractParameter(input, "u/");
+        String newText = extractParameter(input, "r/");
+
+        if (course == null || user == null || newText == null) {
+            throw new UniflowException("Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+        }
+
+        return new EditReviewCommand(course, user, newText, Uniflow.getReviewManager());
     }
 
     private static String extractParameter(String input, String prefix) {
