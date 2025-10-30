@@ -1,7 +1,5 @@
 package seedu.duke;
 
-import java.util.Arrays;
-
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
