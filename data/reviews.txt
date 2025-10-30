@@ -1,3 +1,0 @@
-MA1521|tom|Challenging
-CS2113|marek|Very
-CS2113|ania|A

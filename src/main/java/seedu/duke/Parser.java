@@ -217,31 +217,44 @@ public class Parser {
     }
 
     private static Command parseAddReviewCommand(String command) throws UniflowException {
-        String[] parts = command.substring(COMMAND_ADD_REVIEW.length()).trim().split(" ");
-        String course = null;
-        String user = null;
-        String text = null;
+        String input = command.substring(COMMAND_ADD_REVIEW.length()).trim();
 
-        for (String part : parts) {
-            if (part.startsWith("c/")) {
-                course = part.substring(2);
-            } else if (part.startsWith("u/")) {
-                user = part.substring(2);
-            } else if (part.startsWith("r/")) {
-                text = part.substring(2);
-            }
-        }
+        String course = extractParameter(input, "c/");
+        String user = extractParameter(input, "u/");
+        String text = extractParameter(input, "r/");
 
         if (course == null || user == null || text == null) {
             throw new UniflowException("Usage: addreview c/COURSE u/USER r/REVIEW");
         }
 
-        return new AddReviewCommand(
-                course,
-                user,
-                text,
-                Uniflow.getReviewManager()
-        );
+        return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
+    }
+
+    private static String extractParameter(String input, String prefix) {
+        int startIdx = input.indexOf(prefix);
+        if (startIdx == -1) {
+            return null;
+        }
+
+        startIdx += prefix.length(); // Move past the prefix
+
+        // Find the next prefix (c/, u/, or r/)
+        int endIdx = input.length();
+        int nextC = input.indexOf(" c/", startIdx);
+        int nextU = input.indexOf(" u/", startIdx);
+        int nextR = input.indexOf(" r/", startIdx);
+
+        if (nextC != -1 && nextC < endIdx) {
+            endIdx = nextC;
+        }
+        if (nextU != -1 && nextU < endIdx) {
+            endIdx = nextU;
+        }
+        if (nextR != -1 && nextR < endIdx) {
+            endIdx = nextR;
+        }
+
+        return input.substring(startIdx, endIdx).trim();
     }
 
     private static Command parseRateCommand(String command) throws UniflowException {
