@@ -24,4 +24,29 @@ public class ReviewManager {
     public boolean hasCourse(String course) {
         return reviews.containsKey(course);
     }
+
+    /**
+     * Edits a user's review for a specific course.
+     *
+     * @param course the course code
+     * @param user the username
+     * @param newText the new review text
+     * @return true if the review was found and edited, false otherwise
+     */
+    public boolean editReview(String course, String user, String newText) {
+        if (!reviews.containsKey(course)) {
+            return false;
+        }
+
+        List<String> courseReviews = reviews.get(course);
+        for (int i = 0; i < courseReviews.size(); i++) {
+            String review = courseReviews.get(i);
+            if (review.startsWith(user + ": ")) {
+                courseReviews.set(i, user + ": " + newText);
+                storage.save(reviews);
+                return true;
+            }
+        }
+        return false;
+    }
 }
