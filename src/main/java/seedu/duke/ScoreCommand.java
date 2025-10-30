@@ -74,26 +74,45 @@ public class ScoreCommand extends Command {
         }
 
         Map<String, Integer> map = new HashMap<>();
-        String[] pairs = breakdown.split(" ");
-        for (String pair: pairs) {
-            String name = pair.split(":")[0]; //"participation"
-            String valueStr = pair.split(":")[1]; //"20"
+        String[] pairs = breakdown.trim().split("\\s+");
+        for (String pair : pairs) {
+            if (pair.isEmpty()) {
+                continue;
+            }
 
-            int value;
-            try {
-                value = Integer.parseInt(valueStr);
-            } catch (NumberFormatException e) {
-                throw new UniflowException(
-                    "Please provide breakdown in the following format: exam:50 participation:10 ..."
-                );
+            String[] parts = pair.split(":", 2);
+            if (parts.length != 2) {
+                throw new UniflowException("Invalid format. Use name:value pairs separated by spaces, e.g., exam:50 project:30");
             }
-            if (value < 0) {
-                throw new UniflowException("Value must be a positive integer");
-            }
+
+            String name = parts[0].trim();
+            final int value = getValue(parts, name);
+
             map.put(name, value);
         }
         course.setScoreBreakdown(map);
         ui.showMessage("Saved score breakdown for {" + courseID + ":" + map + "}");
+
+    }
+
+    private static int getValue(String[] parts, String name) throws UniflowException {
+        String valueStr = parts[1].trim();
+
+        if (name.isEmpty() || valueStr.isEmpty()) {
+            throw new UniflowException("Invalid format. Component name and value must be non-empty (e.g., exam:50).");
+        }
+
+        final int value;
+        try {
+            value = Integer.parseInt(valueStr);
+        } catch (NumberFormatException e) {
+            throw new UniflowException("Please provide numeric values. Example: exam:50 participation:10");
+        }
+
+        if (value < 0) {
+            throw new UniflowException("Value must be a positive integer");
+        }
+        return value;
     }
 
 }
