@@ -11,19 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RatingManagerTest {
-    private RatingManager ratingManager;
-    private static final String TEST_FILE = "data/ratings.txt";
+    private static final String TEST_FILE = "data/ratings.txt"; // Static first
+
+    private RatingManager ratingManager; // Instance second
 
     @BeforeEach
     public void setUp() {
-        // Delete the ratings file before each test to ensure isolation
         deleteTestFile();
         ratingManager = new RatingManager();
     }
 
     @AfterEach
     public void tearDown() {
-        // Clean up after each test
         deleteTestFile();
     }
 
