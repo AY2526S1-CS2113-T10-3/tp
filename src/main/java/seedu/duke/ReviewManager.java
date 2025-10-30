@@ -70,4 +70,28 @@ public class ReviewManager {
         }
         return false;
     }
+
+    /**
+     * Deletes a user's review for a specific course.
+     *
+     * @param course the course code
+     * @param user the username
+     * @return true if the review was found and deleted, false otherwise
+     */
+    public boolean deleteReview(String course, String user) {
+        if (!reviews.containsKey(course)) {
+            return false;
+        }
+
+        List<String> courseReviews = reviews.get(course);
+        for (int i = 0; i < courseReviews.size(); i++) {
+            String review = courseReviews.get(i);
+            if (review.startsWith(user + ": ")) {
+                courseReviews.remove(i);
+                storage.save(reviews);
+                return true;
+            }
+        }
+        return false;
+    }
 }
