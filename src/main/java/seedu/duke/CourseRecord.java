@@ -2,6 +2,9 @@ package seedu.duke;
 
 import java.util.ArrayList;
 
+/**
+ * An array list that is used to store the completed courses and respective grades.
+ */
 public class CourseRecord {
     private final ArrayList<Course> courses = new ArrayList<>();
     private final ArrayList<Course> majorCourses = new ArrayList<>();
@@ -20,7 +23,7 @@ public class CourseRecord {
     }
 
     /**
-     * Returns the total number of credits of all courses he studied.
+     * Returns the total number of credits of all courses the user studied.
      */
     public int getTotalCredits() {
         int totalCredits = 0;
@@ -31,7 +34,7 @@ public class CourseRecord {
     }
 
     /**
-     * Returns the users' total grade points of all courses.
+     * Returns the user's total grade points of all courses.
      */
     public double getTotalGradePoints() throws UniflowException {
         double totalGradePoints = 0;
@@ -45,7 +48,7 @@ public class CourseRecord {
     }
 
     /**
-     * Returns the total number of credits of major courses he studied.
+     * Returns the total number of credits of major courses the user studied.
      */
     public int getMajorTotalCredits() {
         int totalMajorCredits = 0;
@@ -56,7 +59,7 @@ public class CourseRecord {
     }
 
     /**
-     * Returns the users' total grade points of major courses.
+     * Returns the user's total grade points of major courses.
      */
     public double getMajorTotalGradePoints() throws UniflowException {
         double totalMajorGradePoints = 0;
@@ -70,7 +73,7 @@ public class CourseRecord {
     }
 
     /**
-     * Computes and returns the users' cumulative gpa.
+     * Computes and returns the user's cumulative GPA.
      */
     public double computeGpa() throws UniflowException {
         if (courses.isEmpty()) {
