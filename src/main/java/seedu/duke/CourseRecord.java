@@ -151,6 +151,15 @@ public class CourseRecord {
         return false;
     }
 
+    public Course getCourse(String code) {
+        for (Course c : courses) {
+            if (c.getCode() != null && c.getCode().trim().toUpperCase().equals(code.trim().toUpperCase())) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public int getMajorSize() {
         return majorCourses.size();
     }
