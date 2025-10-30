@@ -88,11 +88,30 @@ addgrade c/CS2113 cr/4 g/A m/true
 ```
 In this example, you added the course CS2113 to the record. It is a 4-credit course. You got an A in the course. It is a major required course. 
 
+### Add a Course's Predicted Grade - `addtestgrade`
+Allows users to add a predicted grade of a specific course they are (or will be) studying.  
+It will only be stored in a temporary record and will not be saved.  
+The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
+  
+*It is used for testing their projected GPA.*  
+  
+Format:
+```commandline
+addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR
+```
+Example:
+```commandline
+addtestgrade c/CS2113 cr/4 g/A m/true
+```
+In this example, you added the course CS2113 to the temporary record. It is a 4-credit course. You assume that you get an A in the course. It is a major required course. 
+
 ### Compute Cumulative GPA - `gpa`
 Allows users to get a summary of their academic performance based on the current course record.   
 It will show the cumulative GPA and major GPA, respectively.  
   
-Note: Major GPA indicates the cumulative GPA for their major-required courses. 
+Note: Major GPA indicates the cumulative GPA for their major-required courses.  
+*- Many universities include this as a graduation requirement*  
+*- Even the user's school does not count their major GPA separately. Major GPA here allows users to have an idea of their performance in the required courses of their major.*
   
 Format:
 ```commandline
@@ -121,6 +140,35 @@ ____________________________________________________________
 ____________________________________________________________  
 ____________________________________________________________
 ```
+
+### Compute a projected GPA - `projectgpa`
+Allows users to compute their **predicted** GPA and major course GPA, based on their predicted grades of courses they are studying. 
+    
+Format:
+```commandline
+projectgpa
+```
+Example:  
+  
+Suppose you have two courses in your saved records:  
+*CS2113, 5 credits, grade: B, major course*  
+*EC3322, 5 credits, grade: A, not a major required course*  
+  
+You are studying a course in the upcoming semester:  
+*EC3303, 5 credits, your prediction for your grade: A, major course*  
+  
+And you added it to the temporary record.  
+
+Expected output:
+```commandline
+____________________________________________________________
+____________________________________________________________
+ Your projected GPA will be: 4.50
+ Your projected major GPA will be: 4.25
+____________________________________________________________
+____________________________________________________________
+```
+*Note: after the computation of the projected gpa, the newly added course will **NOT** be stored in our saved record.*
 
 ## FAQ
 
