@@ -244,9 +244,15 @@ public class Parser {
         int nextU = input.indexOf(" u/", startIdx);
         int nextR = input.indexOf(" r/", startIdx);
 
-        if (nextC != -1 && nextC < endIdx) endIdx = nextC;
-        if (nextU != -1 && nextU < endIdx) endIdx = nextU;
-        if (nextR != -1 && nextR < endIdx) endIdx = nextR;
+        if (nextC != -1 && nextC < endIdx) {
+            endIdx = nextC;
+        }
+        if (nextU != -1 && nextU < endIdx) {
+            endIdx = nextU;
+        }
+        if (nextR != -1 && nextR < endIdx) {
+            endIdx = nextR;
+        }
 
         return input.substring(startIdx, endIdx).trim();
     }
