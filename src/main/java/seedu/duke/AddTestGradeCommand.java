@@ -1,5 +1,9 @@
 package seedu.duke;
 
+/**
+ * It is used to add a predicted course grade to a temporary record.
+ * The temporary record will be used in the computation of projected GPA.
+ */
 public class AddTestGradeCommand extends Command{
     private final Course tempCourse;
     private final CourseRecord tempRecord = Uniflow.getTempRecord();

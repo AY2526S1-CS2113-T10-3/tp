@@ -1,5 +1,8 @@
 package seedu.duke;
 
+/**
+ * It is used to add a course grade to course record.
+ */
 public class AddGradeCommand extends Command {
     private final Course course;
 

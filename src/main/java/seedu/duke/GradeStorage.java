@@ -14,7 +14,7 @@ public class GradeStorage {
     /**
      * Update and save the newest grade information in the course grade record file.
      *
-     * @param record The newest course grade record we will save in our file.
+     * @param record The newest course grade record that is to be saved in the file.
      */
     public void saveGradeRecord(CourseRecord record) {
         try {
@@ -29,7 +29,7 @@ public class GradeStorage {
     }
 
     /**
-     * Load the currently stored grade record from the task list file.
+     * Load the currently stored grade record from the file.
      */
     public CourseRecord loadGradeRecord() {
         CourseRecord record = new CourseRecord();
