@@ -4,7 +4,7 @@ Our project is a comprehensive academic management system designed to help unive
 
 ## Summary of Contributions
 ### Code Contributed
-[https://nus-cs2113-ay2526s1.github.io/tp-dashboard/?search=w1ndb10w&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2025-09-19T00%3A00%3A00&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other&filteredFileName=](RepoSense link)
+[RepoSense link](https://nus-cs2113-ay2526s1.github.io/tp-dashboard/?search=w1ndb10w&breakdown=true&sort=groupTitle%20dsc&sortWithin=title&since=2025-09-19T00%3A00%3A00&timeframe=commit&mergegroup=&groupSelect=groupByRepos&checkedFileTypes=docs~functional-code~test-code~other&filteredFileName=)
 
 ### Enhancements Implemented
 #### 1. Course Search and Filtering Feature (Issue #11)
