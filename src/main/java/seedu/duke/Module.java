@@ -1,8 +1,5 @@
 package seedu.duke;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Module {
     private final String id;
     private final String name;
