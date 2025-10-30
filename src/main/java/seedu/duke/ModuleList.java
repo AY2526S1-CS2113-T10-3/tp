@@ -170,7 +170,10 @@ public class ModuleList {
             java.time.LocalTime s2 = java.time.LocalTime.parse(start2);
             java.time.LocalTime e2 = java.time.LocalTime.parse(end2);
 
-            return !e1.isBefore(s2) && !e2.isBefore(s1);
+            // Two time ranges overlap if:
+            // start1 < end2 AND start2 < end1
+            // Note: using isBefore means equal times (touching boundaries) don't overlap
+            return s1.isBefore(e2) && s2.isBefore(e1);
         } catch (Exception e) {
             return false;
         }

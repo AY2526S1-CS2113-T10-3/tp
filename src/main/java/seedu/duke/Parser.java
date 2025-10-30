@@ -201,21 +201,29 @@ public class Parser {
             throw new UniflowException("Usage: score <MODULE_ID> name1:val1, name2:val2..");
         }
 
-        String[] parts = remainder.split("\\s+", 2); //splits on any amount of whitespace - only splits once
+        String[] parts = remainder.split("\\s+", 2);
         String id = parts[0].trim();
         if (id.isEmpty()) {
             throw new UniflowException("Invalid Module ID");
         }
 
+        // If no breakdown provided, it's query mode
         if (parts.length == 1) {
             return new ScoreCommand(id, SCORE_QUERY_MODE);
         }
 
         String breakdown = parts[1].trim();
+
+        // **IMPORTANT: Check for query mode FIRST, before validating format**
+        if (breakdown.equals(SCORE_QUERY_MODE) || breakdown.equals("-1")) {
+            return new ScoreCommand(id, SCORE_QUERY_MODE);
+        }
+
         if (breakdown.isEmpty()) {
             throw new UniflowException("Please provide score breakdown in a name:value format");
         }
 
+        // Now check format (only if not query mode)
         String normalized = breakdown.replace(',', ' ').replaceAll("\\s+", " ").trim();
 
         if (!normalized.contains(":")) {
