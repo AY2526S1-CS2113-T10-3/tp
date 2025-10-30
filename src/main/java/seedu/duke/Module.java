@@ -9,6 +9,12 @@ public class Module {
     private final String sessionType; // lecture, tutorial, lab, etc.
 
     public Module(String id, String name, String day, String startTime, String endTime, String sessionType) {
+        assert id != null && !id.trim().isEmpty() : "Module ID cannot be null or empty";
+        assert name != null && !name.trim().isEmpty() : "Module name cannot be null or empty";
+        assert day != null && !day.trim().isEmpty() : "Day cannot be null or empty";
+        assert startTime != null && !startTime.trim().isEmpty() : "Start time cannot be null or empty";
+        assert endTime != null && !endTime.trim().isEmpty() : "End time cannot be null or empty";
+
         this.id = id;
         this.name = name;
         this.day = day;
