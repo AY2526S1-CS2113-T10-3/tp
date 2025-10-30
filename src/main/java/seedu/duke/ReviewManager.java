@@ -49,4 +49,25 @@ public class ReviewManager {
         }
         return false;
     }
+
+    /**
+     * Checks if a user has already posted a review for a course.
+     *
+     * @param course the course code
+     * @param user the username
+     * @return true if the user has a review for the course, false otherwise
+     */
+    public boolean hasUserReview(String course, String user) {
+        if (!reviews.containsKey(course)) {
+            return false;
+        }
+
+        List<String> courseReviews = reviews.get(course);
+        for (String review : courseReviews) {
+            if (review.startsWith(user + ": ")) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
