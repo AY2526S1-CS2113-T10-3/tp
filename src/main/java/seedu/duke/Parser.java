@@ -169,14 +169,12 @@ public class Parser {
         }
 
         String[] parts = remainder.split("\\s+", 2); //splits on any amount of whitespace - only splits once
-        System.out.println("Parts: " + Arrays.toString(parts));
         String id = parts[0].trim();
         if (id.isEmpty()) {
             throw new UniflowException("Invalid Module ID");
         }
 
         String breakdown = (parts.length > 1) ? parts[1].trim() : "";
-        System.out.println("Breakdown: " + Arrays.toString(breakdown.toCharArray()));
         if (breakdown.isEmpty()) {
             throw new UniflowException("Please provide score breakdown in a name:value format");
         }
