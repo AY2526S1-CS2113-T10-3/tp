@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScoreCommand extends Command {
+    private static final String SCORE_QUERY_MODE = "-1";
     private final String courseID;
     private final String breakdown;
 
@@ -18,11 +19,22 @@ public class ScoreCommand extends Command {
         if (!courseRecord.hasCourse(courseID)) {
             throw new UniflowException("Module does not exist");
         }
+        Course course =  courseRecord.getCourse(courseID);
 
         if (breakdown == null || breakdown.trim().isEmpty()) {
             throw new UniflowException(
                 "Please provide scores in name:value format, e.g; participation:10 exam:50..."
             );
+        }
+
+        if (breakdown.equals(SCORE_QUERY_MODE)) {
+            if (course.hasBreakdown()) {
+                Map<String, Integer> scores = course.getScoreBreakdown();
+                ui.showMessage("Score breakdown for " +  courseID + ": " + scores);
+            } else {
+                ui.showMessage("Score not found for " +  courseID);
+            }
+            return;
         }
 
         Map<String, Integer> map = new HashMap<>();
@@ -44,10 +56,7 @@ public class ScoreCommand extends Command {
             }
             map.put(name, value);
         }
-
-        Course course = courseRecord.getCourse(courseID);
         course.setScoreBreakdown(map);
-
         ui.showMessage("Saved score breakdown for {" + courseID + ":" + map + "}");
     }
 
