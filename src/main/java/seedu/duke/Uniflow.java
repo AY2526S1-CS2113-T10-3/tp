@@ -9,6 +9,7 @@ package seedu.duke;
 
 public class Uniflow {
     private static CourseRecord courseRecord;
+    private static final CourseRecord tempRecord = new CourseRecord();
     private static final GradeStorage gradeStorage = new GradeStorage();
     private static ReviewManager reviewManager;
     private static final RatingManager ratingManager = new  RatingManager();
@@ -69,8 +70,8 @@ public class Uniflow {
         return ratingManager;
     }
 
-    public static CourseRecord getCourseRecord() {
-        return courseRecord;
+    public static CourseRecord getTempRecord() {
+        return tempRecord;
     }
     /**
      * Main entry point for the Uniflow chatbot application.
