@@ -16,6 +16,7 @@ public class Parser {
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
     private static final String COMMAND_REVIEW = "review";
     private static final String COMMAND_ADD_REVIEW = "addreview";
+    private static final String COMMAND_EDIT_REVIEW = "editreview";
     private static final String COMMAND_RATE = "rate";
 
 
@@ -57,6 +58,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_REVIEW)) {
             return parseReviewCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
+            return parseEditReviewCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
