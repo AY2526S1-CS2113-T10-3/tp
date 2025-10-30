@@ -19,6 +19,7 @@ public class Parser {
     private static final String COMMAND_DELETE_REVIEW = "deletereview";
     private static final String COMMAND_RATE = "rate";
     private static final int RATING_QUERY_MODE = -1;
+    private static final String SCORE_QUERY_MODE = "-1";
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -174,7 +175,11 @@ public class Parser {
             throw new UniflowException("Invalid Module ID");
         }
 
-        String breakdown = (parts.length > 1) ? parts[1].trim() : "";
+        if (parts.length == 1) {
+            return new ScoreCommand(id, SCORE_QUERY_MODE);
+        }
+
+        String breakdown = parts[1].trim();
         if (breakdown.isEmpty()) {
             throw new UniflowException("Please provide score breakdown in a name:value format");
         }
