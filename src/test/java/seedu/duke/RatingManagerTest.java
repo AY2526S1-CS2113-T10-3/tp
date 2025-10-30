@@ -1,16 +1,39 @@
 package seedu.duke;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RatingManagerTest {
     private RatingManager ratingManager;
+    private static final String TEST_FILE = "data/ratings.txt";
 
     @BeforeEach
     public void setUp() {
+        // Delete the ratings file before each test to ensure isolation
+        deleteTestFile();
         ratingManager = new RatingManager();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // Clean up after each test
+        deleteTestFile();
+    }
+
+    private void deleteTestFile() {
+        try {
+            Path path = Paths.get(TEST_FILE);
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            // Ignore - file might not exist
+        }
     }
 
     @Test
