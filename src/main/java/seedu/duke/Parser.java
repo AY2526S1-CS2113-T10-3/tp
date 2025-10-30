@@ -3,7 +3,6 @@ package seedu.duke;
 import java.util.Arrays;
 
 public class Parser {
-
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
@@ -18,7 +17,6 @@ public class Parser {
     private static final String COMMAND_ADD_REVIEW = "addreview";
     private static final String COMMAND_EDIT_REVIEW = "editreview";
     private static final String COMMAND_RATE = "rate";
-
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -157,6 +155,7 @@ public class Parser {
             throw new UniflowException("Invalid delete command syntax. Use: delete n/<module_id>");
         }
     }
+    
     private static Command parseScoreCommand(String command) throws UniflowException {
         String remainder = command.substring(COMMAND_SCORE.length()).trim();
 
