@@ -16,6 +16,7 @@ public class Parser {
     private static final String COMMAND_REVIEW = "review";
     private static final String COMMAND_ADD_REVIEW = "addreview";
     private static final String COMMAND_EDIT_REVIEW = "editreview";
+    private static final String COMMAND_DELETE_REVIEW = "deletereview";
     private static final String COMMAND_RATE = "rate";
 
     public static Command parse(String fullCommand) throws UniflowException {
@@ -29,6 +30,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_DELETE_REVIEW)) {
+            return parseDeleteReviewCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
@@ -245,6 +249,19 @@ public class Parser {
         }
 
         return new EditReviewCommand(course, user, newText, Uniflow.getReviewManager());
+    }
+
+    private static Command parseDeleteReviewCommand(String command) throws UniflowException {
+        String input = command.substring(COMMAND_DELETE_REVIEW.length()).trim();
+
+        String course = extractParameter(input, "c/");
+        String user = extractParameter(input, "u/");
+
+        if (course == null || user == null) {
+            throw new UniflowException("Usage: deletereview c/COURSE u/USER");
+        }
+
+        return new DeleteReviewCommand(course, user, Uniflow.getReviewManager());
     }
 
     private static String extractParameter(String input, String prefix) {
