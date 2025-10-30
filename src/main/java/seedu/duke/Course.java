@@ -51,11 +51,10 @@ public class Course {
     }
 
     public Map<String, Integer> getScoreBreakdown() {
-        return scoreBreakdown;
+        return new HashMap<>(scoreBreakdown);
     }
 
     public boolean hasBreakdown() {
         return !scoreBreakdown.isEmpty();
     }
-
 }
