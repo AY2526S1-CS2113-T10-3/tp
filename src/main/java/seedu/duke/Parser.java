@@ -6,8 +6,10 @@ public class Parser {
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
     private static final String COMMAND_LIST = "list";
-    private static final String COMMAND_ADDGRADE = "addgrade";
+    private static final String COMMAND_ADD_GRADE = "addgrade";
+    private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
     private static final String COMMAND_GPA = "gpa";
+    private static final String COMMAND_PROJECT_GPA = "projectgpa";
     private static final String COMMAND_FILTER = "filter";
     private static final String COMMAND_SHOW_TIMETABLE = "show timetable";
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
@@ -46,11 +48,17 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_SCORE)) {
             return parseScoreCommand(trimmedCommand);
         }
-        if (trimmedCommand.startsWith(COMMAND_ADDGRADE)) {
-            return parseAddGradeCommand(trimmedCommand);
+        if (trimmedCommand.startsWith(COMMAND_ADD_GRADE)) {
+            return parseAddGradeCommand(trimmedCommand, true);
+        }
+        if (trimmedCommand.startsWith(COMMAND_ADD_TEST_GRADE)) {
+            return parseAddGradeCommand(trimmedCommand, false);
         }
         if (trimmedCommand.equals(COMMAND_GPA)) {
             return new ComputeGpaCommand();
+        }
+        if (trimmedCommand.equals(COMMAND_PROJECT_GPA)) {
+            return new ProjectGpaCommand();
         }
         if (trimmedCommand.equalsIgnoreCase(COMMAND_SHOW_TIMETABLE)) {
             return new ShowTimetableCommand();
@@ -78,8 +86,24 @@ public class Parser {
         return new ListCommand();
     }
 
-    private static Command parseAddGradeCommand(String command) throws UniflowException {
-        String[] parts = command.substring(COMMAND_ADDGRADE.length()).trim().split(" ");
+    private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
+        String[] parts;
+        if (save) {
+            parts = command.substring(COMMAND_ADD_GRADE.length()).trim().split(" ");
+        } else {
+            parts = command.substring(COMMAND_ADD_TEST_GRADE.length()).trim().split(" ");
+        }
+
+        if (parts.length != 4) {
+            if (save) {
+                throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE"
+                        + " cr/CREDITS g/GRADE m/ISMAJOR");
+            } else {
+                throw new UniflowException("Please follow the format: addtestgrade c/COURSE_CODE"
+                        + " cr/CREDITS g/GRADE m/ISMAJOR");
+            }
+        }
+
         String code = null;
         int credits = -1;
         String grade = null;
@@ -99,10 +123,20 @@ public class Parser {
         }
 
         if (code == null || grade == null || credits == -1) {
-            throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE cr/CREDITS g/GRADE m/ISMAJOR");
+            if (save) {
+                throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE"
+                        + " cr/CREDITS g/GRADE m/ISMAJOR");
+            } else {
+                throw new UniflowException("Please follow the format: addtestgrade c/COURSE_CODE"
+                        + " cr/CREDITS g/GRADE m/ISMAJOR");
+            }
         }
 
-        return new AddGradeCommand(code, credits, grade, isMajor);
+        if (save) {
+            return new AddGradeCommand(code, credits, grade, isMajor);
+        } else {
+            return new AddTestGradeCommand(code, credits, grade, isMajor);
+        }
     }
 
     private static Command parseInsertCommand(String command) throws UniflowException {

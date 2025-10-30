@@ -91,6 +91,34 @@ public class CourseRecord {
     }
 
     /**
+     * Combined two course lists' information to calculate the gpa of the courses in the two lists
+     *
+     * @param tempRecord A temporary course list the user has created.
+     */
+    public double computeCombinedGpa(CourseRecord tempRecord) throws UniflowException {
+        double combinedGradePoints = getTotalGradePoints() + tempRecord.getTotalGradePoints();
+        int combinedCredits = getTotalCredits() + tempRecord.getTotalCredits();
+        if (combinedCredits == 0) {
+            throw new UniflowException("No courses found to compute GPA!");
+        }
+        return combinedGradePoints / combinedCredits;
+    }
+
+    /**
+     * Combined two course lists' information to calculate the major course gpa of the courses in the two lists
+     *
+     * @param tempRecord A temporary course list the user has created.
+     */
+    public double computeCombinedMajorGpa(CourseRecord tempRecord) throws UniflowException {
+        double combinedMajorGradePoints = getMajorTotalGradePoints() + tempRecord.getMajorTotalGradePoints();
+        int combinedMajorCredits = getMajorTotalCredits() + tempRecord.getMajorTotalCredits();
+        if (combinedMajorCredits == 0) {
+            throw new UniflowException("No courses found to compute GPA!");
+        }
+        return combinedMajorGradePoints / combinedMajorCredits;
+    }
+
+    /**
      * Converts the letter grade to its respective grade point.
      */
     private double convertGradePoint(String grade) throws UniflowException {
