@@ -72,8 +72,55 @@ View Average Rating Format:
 ```commandline
 rate CS2113
 ```
+### Add a Course's Grade Information - `addgrade`
+Allows users to add the grade of a specific course. It will be stored in the course record (or grade record).  
+The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
+  
+**IS_MAJOR**: true if the course is a major required course, false if not.  
+  
+Format:
+```commandline
+addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR
+```
+Example:
+```commandline
+addgrade c/CS2113 cr/4 g/A m/true
+```
+In this example, you added the course CS2113 to the record. It is a 4-credit course. You got an A in the course. It is a major required course. 
 
-
+### Compute Cumulative GPA - `gpa`
+Allows users to get a summary of their academic performance based on the current course record.   
+It will show the cumulative GPA and major GPA, respectively.  
+  
+Note: Major GPA indicates the cumulative GPA for their major-required courses. 
+  
+Format:
+```commandline
+gpa
+```
+Example:  
+  
+Suppose you have added two courses:  
+*CS2113, 5 credits, grade: B, major course*  
+*EC3322, 5 credits, grade: A, not a major required course*
+  
+Expected output:
+```commandline
+____________________________________________________________  
+____________________________________________________________  
+ You have studied 2 courses.  
+ Your total grade points are 42.5  
+ Number of credits you have studied: 10  
+ Your GPA is: 4.25  
+____________________________________________________________  
+____________________________________________________________  
+ You have studied 1 major courses.  
+ Your total major course grade points are 17.5  
+ Number of credits you have studied: 5  
+ Your major GPA is: 3.50  
+____________________________________________________________  
+____________________________________________________________
+```
 
 ## FAQ
 

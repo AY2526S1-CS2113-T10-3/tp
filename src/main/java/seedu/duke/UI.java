@@ -126,6 +126,13 @@ public class UI {
         showMessage("Error loading Modules from file. Starting with an empty Module list.");
     }
 
+    /**
+     * Displays a message indicating that there was an error loading Grades from file.
+     */
+    public void showGradeLoadingError() {
+        showMessage("Error loading Grades from file. Starting with an empty grade record.");
+    }
+
     public void showClashWarning(Module newModule, Module existingModule) {
         showMessage("Warning: " + newModule.getId() + " clashes with " + existingModule.getId()
                 + " on " + newModule.getDay() + " (" + newModule.getStartTime() + "–" + newModule.getEndTime() + ")");

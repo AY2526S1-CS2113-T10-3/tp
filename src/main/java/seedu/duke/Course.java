@@ -26,13 +26,17 @@ public class Course {
         return grade;
     }
 
-    public boolean getIsMajor() {
+    public boolean isMajor() {
         return isMajor;
     }
 
     public String toString() {
         String major = isMajor ? " (Major course)" : "";
         return code + " (" + credits + " credits" + ", Grade: " + grade + ")" + major;
+    }
+
+    public String toStorage() {
+        return code + " | " + credits +  " | " + grade +  " | " + (isMajor ? 1 : 0);
     }
 
 }

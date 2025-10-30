@@ -9,6 +9,7 @@ package seedu.duke;
 
 public class Uniflow {
     private static CourseRecord courseRecord;
+    private static final GradeStorage gradeStorage = new GradeStorage();
     private static ReviewManager reviewManager;
     private static final RatingManager ratingManager = new  RatingManager();
 
@@ -16,7 +17,7 @@ public class Uniflow {
     private ModuleList modules;
 
     /**
-     * Constructs a new Uniflow chatbot instance.
+     * Constructs a new Uniflow chatbot instance
      *
      * @param filePath the path to the file where tasks are stored
      */
@@ -24,8 +25,15 @@ public class Uniflow {
     public Uniflow(String filePath) {
         ui = new UI();
         modules = new ModuleList();
-        courseRecord = new CourseRecord();
         reviewManager = new ReviewManager();
+
+        try {
+            courseRecord = gradeStorage.loadGradeRecord();
+            //ui.showMessage("Loaded " + courseRecord.getSize() + " saved course(s) from record.");
+        } catch (Exception e) {
+            ui.showGradeLoadingError();
+            courseRecord = new CourseRecord();
+        }
     }
     /**
      * Runs the main chatbot loop, processing user commands until exit.
@@ -41,6 +49,9 @@ public class Uniflow {
                 Command c = Parser.parse(fullCommand);
                 // c.execute(tasks, ui, storage);
                 c.execute(ui, modules, courseRecord);
+                if (c instanceof AddGradeCommand) {
+                    gradeStorage.saveGradeRecord(courseRecord);
+                }
                 isExit = c.isExit();
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());
