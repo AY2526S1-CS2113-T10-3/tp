@@ -10,7 +10,6 @@ public class Module {
     private final String startTime;
     private final String endTime;
     private final String sessionType; // lecture, tutorial, lab, etc.
-    private final Map<String, Integer> scoreBreakdown;
 
     public Module(String id, String name, String day, String startTime, String endTime, String sessionType) {
         this.id = id;
@@ -19,7 +18,6 @@ public class Module {
         this.startTime = startTime;
         this.endTime = endTime;
         this.sessionType = sessionType != null ? sessionType.toLowerCase() : "lecture";
-        this.scoreBreakdown = new HashMap<>();
     }
 
     public String getId() {
@@ -48,21 +46,6 @@ public class Module {
 
     public boolean hasTutorial() {
         return sessionType.equalsIgnoreCase("tutorial");
-    }
-
-    public Map<String, Integer> getScoreBreakdown() {
-        return scoreBreakdown;
-    }
-
-    public void setScoreBreakdown(Map<String, Integer> newBreakdown) {
-        scoreBreakdown.clear();
-        if (newBreakdown != null) {
-            scoreBreakdown.putAll(newBreakdown);
-        }
-    }
-
-    public boolean hasBreakdown() {
-        return !scoreBreakdown.isEmpty();
     }
 
     @Override
