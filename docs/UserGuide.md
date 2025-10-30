@@ -58,6 +58,98 @@ filter type/tutorial
 filter hastutorial
 ```
 
+
+### Showing Your Timetable: `show timetable`
+Displays all modules in your timetable with their full details.
+Format:
+```commandline
+show timetable
+```
+
+### Resetting Your Timetable: `reset timetable`
+Clears all modules from your timetable.
+Format:
+```commandline
+reset timetable
+```
+Note: This action cannot be undone. The system will confirm if your timetable is already empty.
+
+### Filter Modules: `filter`
+Filters modules by various criteria including day, session type, module ID, module name, or tutorial presence.
+Format:
+```commandline
+filter day/DAY
+filter type/SESSION_TYPE
+filter id/MODULE_ID
+filter name/MODULE_NAME
+filter hastutorial
+filter notutorial
+```
+
+Examples:
+```commandline
+filter day/Monday
+filter type/tutorial
+filter hastutorial
+filter notutorial
+filter id/CS2113
+filter name/Software
+```
+
+### Record Component Scores: `score`
+Allows users to record or view score breakdowns for a specific course (e.g., exam scores, project scores, participation).
+
+Add Score Breakdown Format:
+```commandline
+score MODULE_CODE component1:value1 component2:value2
+```
+
+Example:
+```commandline
+score CS2113 exam:50 project:30 participation:20
+```
+
+View Score Breakdown Format:
+```commandline
+score MODULE_CODE -1
+```
+
+Example:
+```commandline
+score CS2113 -1
+```
+Note: The course must already exist in your grade record before you can add scores.
+
+### Adding a Review: `addreview`
+Allows users to add a text review for a course.
+Format:
+`addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT`
+Example:
+`addreview c/CS2113 u/John r/Great course with practical projects!`
+
+### Viewing Reviews: `review`
+Displays all reviews for a specific course.
+Format:
+`review COURSE_CODE`
+Example:
+`review CS2113`
+
+### Editing a Review: `editreview`
+Allows users to edit their existing review for a course.
+Format:
+`editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT`
+Example:
+`editreview c/CS2113 u/John r/Excellent course with hands-on learning!`
+Note: You can only edit your own review. The username must match the one used when adding the review.
+
+### Deleting a Review: `deletereview`
+Allows users to delete their review for a course.
+Format:
+`deletereview c/COURSE_CODE u/USERNAME`
+Example:
+`deletereview c/CS2113 u/John`
+Note: You can only delete your own review.
+
 ### Rate a Course - `rate`
 Allows users to add or view numerical ratings for a course.
 Rating Format:
@@ -72,6 +164,7 @@ View Average Rating Format:
 ```commandline
 rate CS2113
 ```
+
 ### Add a Course's Grade Information - `addgrade`
 Allows users to add the grade of a specific course. It will be stored in the course record (or grade record).  
 The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
