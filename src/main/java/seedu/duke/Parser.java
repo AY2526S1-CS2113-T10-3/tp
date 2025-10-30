@@ -31,6 +31,9 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
         }
+        if (trimmedCommand.startsWith(COMMAND_DELETE_REVIEW)) {
+            return parseDeleteReviewCommand(trimmedCommand);
+        }
         if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
         }
@@ -57,9 +60,6 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
             return parseEditReviewCommand(trimmedCommand);
-        }
-        if (trimmedCommand.startsWith(COMMAND_DELETE_REVIEW)) {
-            return parseDeleteReviewCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
@@ -263,7 +263,7 @@ public class Parser {
 
         return new DeleteReviewCommand(course, user, Uniflow.getReviewManager());
     }
-    
+
     private static String extractParameter(String input, String prefix) {
         int startIdx = input.indexOf(prefix);
         if (startIdx == -1) {
