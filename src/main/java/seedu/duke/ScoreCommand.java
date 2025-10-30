@@ -4,20 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScoreCommand extends Command {
-    private final String moduleID;
+    private final String courseID;
     private final String breakdown;
 
-    public ScoreCommand(String moduleId, String breakdown) {
-        this.moduleID = moduleId;
+    public ScoreCommand(String courseID, String breakdown) {
+        this.courseID = courseID;
         this.breakdown = breakdown;
     }
 
     @Override
     public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
-        
-        if (!modules.doesExist(moduleID)) {
+
+        if (!courseRecord.hasCourse(courseID)) {
             throw new UniflowException("Module does not exist");
         }
+
         if (breakdown == null || breakdown.trim().isEmpty()) {
             throw new UniflowException(
                 "Please provide scores in name:value format, e.g; participation:10 exam:50..."
@@ -44,10 +45,10 @@ public class ScoreCommand extends Command {
             map.put(name, value);
         }
 
-        Module module = modules.getModuleByID(moduleID);
-        module.setScoreBreakdown(map);
+        Course course = courseRecord.getCourse(courseID);
+        course.setScoreBreakdown(map);
 
-        ui.showMessage("Saved score breakdown for {" + moduleID + ":" + map + "}");
+        ui.showMessage("Saved score breakdown for {" + courseID + ":" + map + "}");
     }
 
 }
