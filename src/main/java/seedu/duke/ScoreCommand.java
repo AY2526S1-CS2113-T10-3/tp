@@ -82,7 +82,9 @@ public class ScoreCommand extends Command {
 
             String[] parts = pair.split(":", 2);
             if (parts.length != 2) {
-                throw new UniflowException("Invalid format. Use name:value pairs separated by spaces, e.g., exam:50 project:30");
+                throw new UniflowException(
+                        "Invalid format. Use name:value pairs separated by spaces, e.g., exam:50 project:30"
+                );
             }
 
             String name = parts[0].trim();
