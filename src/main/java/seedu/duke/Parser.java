@@ -159,7 +159,7 @@ public class Parser {
             throw new UniflowException("Invalid delete command syntax. Use: delete n/<module_id>");
         }
     }
-    
+
     private static Command parseScoreCommand(String command) throws UniflowException {
         String remainder = command.substring(COMMAND_SCORE.length()).trim();
 
@@ -180,6 +180,12 @@ public class Parser {
         String breakdown = parts[1].trim();
         if (breakdown.isEmpty()) {
             throw new UniflowException("Please provide score breakdown in a name:value format");
+        }
+
+        String normalized = breakdown.replace(',', ' ').replaceAll("\\s+", " ").trim();
+
+        if (!normalized.contains(":")) {
+            throw new UniflowException("Invalid format. Use name:value pairs, e.g., exam:50 project:30");
         }
 
         return new ScoreCommand(id, breakdown);
