@@ -10,7 +10,7 @@ activate UI
 
 UI -> Parser: parse("gpa")
 activate Parser
-Parser -> GpaCmd: create()
+Parser -> GpaCmd: create ComputeGpaCommand()
 activate GpaCmd
 GpaCmd --> Parser
 deactivate GpaCmd
@@ -20,26 +20,18 @@ deactivate Parser
 UI -> GpaCmd: execute(ui, modules, courseRecord)
 activate GpaCmd
 
-GpaCmd -> CourseRecord: isEmpty()
+GpaCmd -> CourseRecord: computeGpa()  
 activate CourseRecord
-CourseRecord --> GpaCmd: false
+CourseRecord --> GpaCmd: GPA value
 deactivate CourseRecord
 
-loop for each course
-    GpaCmd -> CourseRecord: getCourseRecord()
-    activate CourseRecord
-    CourseRecord --> GpaCmd: courses
-    deactivate CourseRecord
-    GpaCmd -> GpaCmd: convertGradePoint(grade)
-    activate GpaCmd
-    GpaCmd --> GpaCmd: gradePoint
-    deactivate GpaCmd
-    GpaCmd -> GpaCmd: calculate weighted sum
-end
+GpaCmd -> CourseRecord: computeMajorGpa() 
+activate CourseRecord
+CourseRecord --> GpaCmd: Major GPA value
+deactivate CourseRecord
 
-GpaCmd -> GpaCmd: gpa = totalGradePoints / totalCredits
+GpaCmd -> UI: showMessage("Your GPA is ...\\nYour Major GPA is ...")
 
-GpaCmd -> UI: showMessage("Your GPA is: ...")
 activate UI
 UI --> GpaCmd
 deactivate UI
