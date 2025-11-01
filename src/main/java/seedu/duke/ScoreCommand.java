@@ -4,82 +4,80 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a command that allows users to record or view
- * score breakdowns for a specific course.
- * <p>
- * The command accepts input in the format:
- * {@code score <COURSE_ID> exam:50 project:30 participation:20}
- * and stores the component scores as a map within the corresponding course.
- * </p>
- * <p>
- * If the breakdown input equals {@code -1}, the command retrieves and
- * displays the existing score breakdown for the specified course instead.
- * </p>
+ * Command to add or view a score breakdown for a module.
+ * Usage:
+ *   score MODULE_ID              -> view existing breakdown
+ *   score MODULE_ID k1:v1 k2:v2  -> set/replace breakdown
  */
 public class ScoreCommand extends Command {
     private static final String SCORE_QUERY_MODE = "-1";
+
     private final String courseID;
     private final String breakdown;
 
-    /**
-     * Constructs a {@code ScoreCommand} with the specified course ID and score breakdown.
-     *
-     * @param courseID The ID of the course to add or retrieve scores for.
-     * @param breakdown The score breakdown string (e.g. "exam:50 project:30").
-     */
     public ScoreCommand(String courseID, String breakdown) {
-        this.courseID = courseID;
+        this.courseID = courseID == null ? null : courseID.trim().toUpperCase();
         this.breakdown = breakdown;
     }
 
-    /**
-     * Executes the score command.
-     * <p>
-     * This method either:
-     * <ul>
-     *     <li>Displays the current score breakdown for a course (if in query mode), or</li>
-     *     <li>Parses the provided breakdown string, validates it, and stores the scores.</li>
-     * </ul>
-     * </p>
-     *
-     * @param ui The user interface used to display messages.
-     * @param modules The list of modules (not used directly by this command).
-     * @param courseRecord The record containing all completed courses.
-     * @throws UniflowException If the course does not exist, input is invalid,
-     *                          or breakdown values are non-numeric or negative.
-     */
     @Override
     public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
-
-        if (!courseRecord.hasCourse(courseID)) {
+        if (courseID == null || courseID.isEmpty()) {
+            throw new UniflowException("Invalid Module ID");
+        }
+        if (!modules.doesExist(courseID)) {
             throw new UniflowException("Module does not exist");
         }
-        Course course =  courseRecord.getCourse(courseID);
+
+        final Module module = modules.getModuleByID(courseID);
+        if (module == null) {
+            throw new UniflowException("Module does not exist");
+        }
 
         if (breakdown == null || breakdown.trim().isEmpty()) {
             throw new UniflowException(
-                "Please provide scores in name:value format, e.g; participation:10 exam:50..."
+                    "Please provide scores in name:value format, e.g., participation:10 exam:50..."
             );
         }
 
-        //query mode
-        if (breakdown.equals(SCORE_QUERY_MODE)) {
-            if (course.hasBreakdown()) {
-                Map<String, Integer> scores = course.getScoreBreakdown();
-                ui.showMessage("Score breakdown for " +  courseID + ": " + scores);
+        final ScoreManager sm = Uniflow.getScoreManager();
+
+        if (SCORE_QUERY_MODE.equals(breakdown)) {
+            if (module.hasBreakdown()) {
+                ui.showMessage("Score breakdown for " + courseID + ": " + module.getScoreBreakdown());
+                return;
+            }
+            if (sm.hasBreakdown(courseID)) {
+                Map<String, Integer> persisted = sm.getBreakdown(courseID);
+                module.setScoreBreakdown(new HashMap<>(persisted));
+                ui.showMessage("Score breakdown for " + courseID + ": " + persisted);
             } else {
-                ui.showMessage("Score not found for " +  courseID);
+                ui.showMessage("Score not found for " + courseID);
             }
             return;
         }
 
+        Map<String, Integer> map = parseBreakdown(breakdown);
+
+        module.setScoreBreakdown(map);
+        sm.saveBreakdown(courseID, map);
+
+        ui.showMessage("Saved score breakdown for {" + courseID + ":" + map + "}");
+    }
+
+    private static Map<String, Integer> parseBreakdown(String breakdown) throws UniflowException {
         Map<String, Integer> map = new HashMap<>();
-        String[] pairs = breakdown.trim().split("\\s+");
+
+        String normalized = breakdown.trim().replace(',', ' ').replaceAll("\\s+", " ");
+        if (normalized.isEmpty()) {
+            throw new UniflowException("Please provide score breakdown in a name:value format");
+        }
+
+        String[] pairs = normalized.split("\\s+");
         for (String pair : pairs) {
             if (pair.isEmpty()) {
                 continue;
             }
-
             String[] parts = pair.split(":", 2);
             if (parts.length != 2) {
                 throw new UniflowException(
@@ -88,33 +86,27 @@ public class ScoreCommand extends Command {
             }
 
             String name = parts[0].trim();
-            final int value = getValue(parts, name);
-
+            int value = parseValue(parts[1].trim(), name);
             map.put(name, value);
         }
-        course.setScoreBreakdown(map);
-        ui.showMessage("Saved score breakdown for {" + courseID + ":" + map + "}");
-
+        return map;
     }
 
-    private static int getValue(String[] parts, String name) throws UniflowException {
-        String valueStr = parts[1].trim();
-
-        if (name.isEmpty() || valueStr.isEmpty()) {
-            throw new UniflowException("Invalid format. Component name and value must be non-empty (e.g., exam:50).");
+    private static int parseValue(String valueStr, String name) throws UniflowException {
+        if (name == null || name.isEmpty() || valueStr == null || valueStr.isEmpty()) {
+            throw new UniflowException(
+                    "Invalid format. Component name and value must be non-empty (e.g., exam:50)."
+            );
         }
-
         final int value;
         try {
             value = Integer.parseInt(valueStr);
         } catch (NumberFormatException e) {
             throw new UniflowException("Please provide numeric values. Example: exam:50 participation:10");
         }
-
         if (value < 0) {
             throw new UniflowException("Value must be a positive integer");
         }
         return value;
     }
-
 }

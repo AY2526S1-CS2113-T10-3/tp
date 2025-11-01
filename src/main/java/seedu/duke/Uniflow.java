@@ -12,6 +12,7 @@ public class Uniflow {
     private static final CourseRecord tempRecord = new CourseRecord();
     private static ModuleStorage moduleStorage = new ModuleStorage();
     private static final GradeStorage gradeStorage = new GradeStorage();
+    private static final ScoreManager scoreManager = new ScoreManager();
     private static ReviewManager reviewManager;
     private static final RatingManager ratingManager = new  RatingManager();
 
@@ -77,6 +78,10 @@ public class Uniflow {
 
     public static CourseRecord getTempRecord() {
         return tempRecord;
+    }
+
+    public static ScoreManager getScoreManager() {
+        return scoreManager;
     }
     /**
      * Main entry point for the Uniflow chatbot application.

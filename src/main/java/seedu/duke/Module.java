@@ -1,5 +1,8 @@
 package seedu.duke;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Module {
     private final String id;
     private final String name;
@@ -7,6 +10,7 @@ public class Module {
     private final String startTime;
     private final String endTime;
     private final String sessionType; // lecture, tutorial, lab, etc.
+    private final Map<String, Integer> scoreBreakdown;
 
     public Module(String id, String name, String day, String startTime, String endTime, String sessionType) {
         assert id != null && !id.trim().isEmpty() : "Module ID cannot be null or empty";
@@ -21,6 +25,7 @@ public class Module {
         this.startTime = startTime;
         this.endTime = endTime;
         this.sessionType = sessionType != null ? sessionType.toLowerCase() : "lecture";
+        this.scoreBreakdown = new HashMap<>();
     }
 
     public String getId() {
@@ -51,6 +56,21 @@ public class Module {
         return sessionType.equalsIgnoreCase("tutorial");
     }
 
+    public void setScoreBreakdown(Map<String, Integer> newBreakdown) {
+        scoreBreakdown.clear();
+        if (newBreakdown != null) {
+            scoreBreakdown.putAll(newBreakdown);
+        }
+    }
+
+    public Map<String, Integer> getScoreBreakdown() {
+        return new HashMap<>(scoreBreakdown);
+    }
+
+    public boolean hasBreakdown() {
+        return !scoreBreakdown.isEmpty();
+    }
+    
     public String toStorage() {
         return id + " | " +  name + " | " + day + " | " + startTime + " | " + endTime + " | " +  sessionType;
     }
