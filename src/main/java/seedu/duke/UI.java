@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Provides methods for displaying messages, reading user input, and formatting output.
  */
 public class UI {
-    private static final String DIVIDER = "____________________________________________________________";
+    private static final String DIVIDER = "___________________________________________________________________________";
 
     private final Scanner scanner;
 

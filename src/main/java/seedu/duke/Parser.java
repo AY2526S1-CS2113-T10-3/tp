@@ -1,5 +1,5 @@
 package seedu.duke;
-
+import java.util.Set;
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
@@ -20,6 +20,11 @@ public class Parser {
     private static final String COMMAND_RATE = "rate";
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
+
+
+    private static final Set<String> VALID_DAYS = Set.of(
+            "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
+    );
 
     public static Command parse(String fullCommand) throws UniflowException {
         if (fullCommand == null || fullCommand.trim().isEmpty()) {
@@ -139,8 +144,24 @@ public class Parser {
         }
     }
 
+    private static boolean isValidDay(String day) {
+        return VALID_DAYS.contains(day.toUpperCase());
+    }
+
+    private static boolean isValidTime(String time) {
+        // Expect format HH:MM (24-hour)
+        if (time == null || !time.matches("\\d{2}:\\d{2}")) {
+            return false;
+        }
+        String[] parts = time.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
+    }
+
     private static Command parseInsertCommand(String command) throws UniflowException {
         try {
+
             String[] parts = command.substring(7).split(" ");
             String id = null;
             String moduleName = null;
@@ -169,6 +190,28 @@ public class Parser {
                     || startTime == null || endTime == null) {
                 throw new UniflowException("Missing fields in insert command.");
             }
+
+            // Validate day
+            if (!isValidDay(day)) {
+                throw new UniflowException("Invalid day: " + day +
+                        ". Expected one of MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY.");
+            }
+
+            // Validate time formats
+            if (!isValidTime(startTime)) {
+                throw new UniflowException("Invalid start time format: " + startTime +
+                        ". Expected HH:MM in 24-hour format (e.g., 09:30).");
+            }
+            if (!isValidTime(endTime)) {
+                throw new UniflowException("Invalid end time format: " + endTime +
+                        ". Expected HH:MM in 24-hour format (e.g., 11:00).");
+            }
+
+            // Validate chronological order
+            if (startTime.compareTo(endTime) >= 0) {
+                throw new UniflowException("Start time must be earlier than end time.");
+            }
+
             return new InsertCommand(id, moduleName, day, startTime, endTime, sessionType);
         } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             throw new UniflowException("Failed to parse insert command: " + e.getMessage());
