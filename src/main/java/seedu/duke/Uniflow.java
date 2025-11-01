@@ -10,6 +10,7 @@ package seedu.duke;
 public class Uniflow {
     private static CourseRecord courseRecord;
     private static final CourseRecord tempRecord = new CourseRecord();
+    private static ModuleStorage moduleStorage = new ModuleStorage();
     private static final GradeStorage gradeStorage = new GradeStorage();
     private static ReviewManager reviewManager;
     private static final RatingManager ratingManager = new  RatingManager();
@@ -30,6 +31,7 @@ public class Uniflow {
 
         try {
             courseRecord = gradeStorage.loadGradeRecord();
+            //moduleList = moduleStorage.loadModuleRecord();
             //ui.showMessage("Loaded " + courseRecord.getSize() + " saved course(s) from record.");
         } catch (Exception e) {
             ui.showGradeLoadingError();
@@ -52,6 +54,9 @@ public class Uniflow {
                 c.execute(ui, modules, courseRecord);
                 if (c instanceof AddGradeCommand) {
                     gradeStorage.saveGradeRecord(courseRecord);
+                }
+                if (c instanceof InsertCommand) {
+                    moduleStorage.saveModules(modules);
                 }
                 isExit = c.isExit();
             } catch (UniflowException e) {
