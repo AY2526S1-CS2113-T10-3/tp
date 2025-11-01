@@ -55,7 +55,6 @@ public class ModuleList {
 
     public boolean doesExist(String moduleID) {
         for (Module module : modules) {
-            //System.out.println(module.getId() + " VS " + moduleID);
             if (module.getId().equals(moduleID))  {
                 return true;
             }
