@@ -43,9 +43,8 @@ public class ModuleList {
         throw new UniflowException("This module does not exist.");
     }
 
-    public boolean doesExist(String moduleID) {
+    public boolean hasModule(String moduleID) {
         for (Module module : modules) {
-            //System.out.println(module.getId() + " VS " + moduleID);
             if (module.getId().equals(moduleID))  {
                 return true;
             }
