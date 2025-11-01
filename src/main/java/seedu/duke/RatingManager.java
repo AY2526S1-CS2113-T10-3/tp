@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class RatingManager {
     private final RatingStorage storage = new  RatingStorage();
-    private Map<String, RatingStats> moduleRatings = new HashMap<>();
+    private final Map<String, RatingStats> moduleRatings;
 
     public RatingManager() {
         Map<String, RatingStats> loaded = storage.load();
