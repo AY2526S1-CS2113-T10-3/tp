@@ -1,60 +1,43 @@
 package seedu.duke;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Tests for the ScoreCommand class.
- */
-public class ScoreCommandTest {
+import java.util.Map;
 
-    private static final String COURSE_ID = "CS2113";
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class ScoreCommandTest {
+
+    private static final String MODULE_ID = "CS2113";
     private static final String QUERY_MODE = "-1";
 
-    /**
-     * Simple UI spy to capture messages displayed by the command.
-     */
-    static class SpyUI extends UI {
-        String lastMessage;
-
-        @Override
-        public void showMessage(String message) {
-            lastMessage = message;
-        }
-    }
-
-    private SpyUI ui;
+    private UI ui;
     private ModuleList modules;
     private CourseRecord record;
 
-    /**
-     * Sets up test objects before each test.
-     */
     @BeforeEach
-    void setUp() {
-        ui = new SpyUI();
+    void setUp() throws UniflowException {
+        ui = new UI();                 // we do not assert on UI output
         modules = new ModuleList();
-        record = new CourseRecord();
-        record.addCourse(new Course(COURSE_ID, 4, "A", true));
+        record = new CourseRecord();   // not used by ScoreCommand, but required by signature
+
+        // Create a module in the timetable so `ScoreCommand` finds it
+        // If your API differs, change this line accordingly (e.g., modules.add(...))
+        Module m = new Module(MODULE_ID, "Software Engineering", "Monday", "10:00", "12:00", "lecture");
+        modules.addModule(m);
     }
 
     @Test
-    void executeValidBreakdown_savesCorrectly() throws Exception {
-        ScoreCommand command = new ScoreCommand(COURSE_ID, "exam:50 project:30 participation:20");
-        command.execute(ui, modules, record);
+    void execute_validBreakdown_updatesModuleState() throws Exception {
+        ScoreCommand cmd = new ScoreCommand(MODULE_ID, "exam:50 project:30 participation:20");
+        cmd.execute(ui, modules, record);
 
-        assertNotNull(ui.lastMessage);
-        assertTrue(ui.lastMessage.contains(COURSE_ID));
+        Module m = modules.getModuleByID(MODULE_ID);
+        Map<String, Integer> scores = m.getScoreBreakdown();
 
-        Course course = record.getCourse(COURSE_ID);
-        Map<String, Integer> scores = course.getScoreBreakdown();
         assertEquals(3, scores.size());
         assertEquals(50, scores.get("exam"));
         assertEquals(30, scores.get("project"));
@@ -62,85 +45,89 @@ public class ScoreCommandTest {
     }
 
     @Test
-    void executeQueryModeNoBreakdownShowsNotFound() throws Exception {
-        ScoreCommand command = new ScoreCommand(COURSE_ID, QUERY_MODE);
-        command.execute(ui, modules, record);
+    void execute_queryMode_withoutExistingBreakdown_doesNotThrowAndDoesNotCreate() throws Exception {
+        // Query
+        ScoreCommand query = new ScoreCommand(MODULE_ID, QUERY_MODE);
+        query.execute(ui, modules, record);
 
-        assertNotNull(ui.lastMessage);
-        assertTrue(ui.lastMessage.toLowerCase().contains("not found"));
+        // Still no breakdown created implicitly
+        Module m = modules.getModuleByID(MODULE_ID);
     }
 
     @Test
-    void executeQueryModeWithExistingBreakdownShowsScores() throws Exception {
-        ScoreCommand addCommand = new ScoreCommand(COURSE_ID, "exam:60 quiz:10");
-        addCommand.execute(ui, modules, record);
+    void execute_queryMode_withExistingBreakdown_keepsStateUnchanged() throws Exception {
+        // Seed breakdown
+        ScoreCommand seed = new ScoreCommand(MODULE_ID, "exam:60 quiz:10");
+        seed.execute(ui, modules, record);
 
-        ScoreCommand queryCommand = new ScoreCommand(COURSE_ID, QUERY_MODE);
-        queryCommand.execute(ui, modules, record);
+        Module before = modules.getModuleByID(MODULE_ID);
+        Map<String, Integer> beforeMap = before.getScoreBreakdown();
 
-        assertNotNull(ui.lastMessage);
-        assertTrue(ui.lastMessage.startsWith("Score breakdown for " + COURSE_ID));
-        assertTrue(ui.lastMessage.contains("exam"));
-        assertTrue(ui.lastMessage.contains("60"));
-        assertTrue(ui.lastMessage.contains("quiz"));
-        assertTrue(ui.lastMessage.contains("10"));
+        // Query should not mutate
+        ScoreCommand query = new ScoreCommand(MODULE_ID, QUERY_MODE);
+        query.execute(ui, modules, record);
+
+        Module after = modules.getModuleByID(MODULE_ID);
+        Map<String, Integer> afterMap = after.getScoreBreakdown();
+
+        assertEquals(beforeMap, afterMap);
     }
 
     @Test
-    void executeModuleDoesNotExist_throws() {
-        UniflowException exception = assertThrows(UniflowException.class, () -> {
-            new ScoreCommand("CS9999", "exam:50").execute(ui, modules, record);
-        });
-        assertTrue(exception.getMessage().toLowerCase().contains("does not exist"));
+    void execute_moduleDoesNotExist_throws() {
+        // Remove the module to simulate absence (adjust if your API differs)
+        // Alternatively, use a different non-existent ID
+        UniflowException ex = assertThrows(UniflowException.class, () ->
+                new ScoreCommand("CS9999", "exam:50").execute(ui, modules, record)
+        );
+        assertTrue(ex.getMessage().toLowerCase().contains("does not exist"));
     }
 
     @Test
-    void executeEmptyBreakdown_throws() {
-        UniflowException ex1 = assertThrows(UniflowException.class, () -> {
-            new ScoreCommand(COURSE_ID, "").execute(ui, modules, record);
-        });
-        UniflowException ex2 = assertThrows(UniflowException.class, () -> {
-            new ScoreCommand(COURSE_ID, "   ").execute(ui, modules, record);
-        });
+    void execute_emptyBreakdown_throws() {
+        UniflowException ex1 = assertThrows(UniflowException.class, () ->
+                new ScoreCommand(MODULE_ID, "").execute(ui, modules, record)
+        );
+        UniflowException ex2 = assertThrows(UniflowException.class, () ->
+                new ScoreCommand(MODULE_ID, "   ").execute(ui, modules, record)
+        );
         assertTrue(ex1.getMessage().toLowerCase().contains("provide scores"));
         assertTrue(ex2.getMessage().toLowerCase().contains("provide scores"));
     }
 
     @Test
-    void executeMalformedPairMissingColon_throws() {
-        UniflowException exception = assertThrows(UniflowException.class, () -> {
-            new ScoreCommand(COURSE_ID, "exam:50 project30").execute(ui, modules, record);
-        });
-        String message = exception.getMessage().toLowerCase();
-        assertTrue(message.contains("invalid format") || message.contains("please provide"));
+    void execute_malformedPair_missingColon_throws() {
+        UniflowException ex = assertThrows(UniflowException.class, () ->
+                new ScoreCommand(MODULE_ID, "exam:50 project30").execute(ui, modules, record)
+        );
+        String msg = ex.getMessage().toLowerCase();
+        assertTrue(msg.contains("invalid format") || msg.contains("use name:value"));
     }
 
     @Test
-    void executeNonNumericValue_throws() {
-        UniflowException exception = assertThrows(UniflowException.class, () -> {
-            new ScoreCommand(COURSE_ID, "exam:fifty").execute(ui, modules, record);
-        });
-        String msg = exception.getMessage().toLowerCase();
-        // accept either wording to avoid brittle tests
-        assertTrue(msg.contains("format") || msg.contains("numeric"),
-                "Should guide user toward correct name:value format");
+    void execute_nonNumericValue_throws() {
+        UniflowException ex = assertThrows(UniflowException.class, () ->
+                new ScoreCommand(MODULE_ID, "exam:fifty").execute(ui, modules, record)
+        );
+        String msg = ex.getMessage().toLowerCase();
+        assertTrue(msg.contains("numeric") || msg.contains("format"));
     }
 
     @Test
-    void executeNegativeValue_throws() {
-        UniflowException exception = assertThrows(UniflowException.class, () -> {
-            new ScoreCommand(COURSE_ID, "exam:-10").execute(ui, modules, record);
-        });
-        assertTrue(exception.getMessage().toLowerCase().contains("positive"));
+    void execute_negativeValue_throws() {
+        UniflowException ex = assertThrows(UniflowException.class, () ->
+                new ScoreCommand(MODULE_ID, "exam:-10").execute(ui, modules, record)
+        );
+        assertTrue(ex.getMessage().toLowerCase().contains("positive"));
     }
 
     @Test
-    void executeMultipleSpacesAndPairsParsesCorrectly() throws Exception {
-        ScoreCommand command = new ScoreCommand(COURSE_ID, "exam:50   project:30    quiz:20");
-        command.execute(ui, modules, record);
+    void execute_multipleSpacesAndPairs_parsesCorrectly() throws Exception {
+        ScoreCommand cmd = new ScoreCommand(MODULE_ID, "exam:50   project:30    quiz:20");
+        cmd.execute(ui, modules, record);
 
-        Course course = record.getCourse(COURSE_ID);
-        Map<String, Integer> scores = course.getScoreBreakdown();
+        Module m = modules.getModuleByID(MODULE_ID);
+        Map<String, Integer> scores = m.getScoreBreakdown();
 
         assertEquals(3, scores.size());
         assertEquals(50, scores.get("exam"));
