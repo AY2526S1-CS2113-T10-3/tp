@@ -10,14 +10,14 @@ What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
  Got it! I've added this module:
-  Module[ID=CS2113, Name=OOP, Type=tutorial, Day=Monday, Time=1000-1200]
+  Module[ID=CS2113, Name=OOP, Type=tutorial, Day=Monday, Time=10:00-12:00]
 Now you have 1 module(s) in the list.
 ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
  Noted. I've removed this module:
-  Module[ID=CS2113, Name=OOP, Type=tutorial, Day=Monday, Time=1000-1200]
+  Module[ID=CS2113, Name=OOP, Type=tutorial, Day=Monday, Time=10:00-12:00]
 Now you have 0 module(s) left in the list.
 ____________________________________________________________
 ____________________________________________________________
