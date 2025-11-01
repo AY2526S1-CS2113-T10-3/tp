@@ -270,14 +270,12 @@ public class Parser {
             throw new UniflowException("Invalid Module ID");
         }
 
-        // If no breakdown provided, it's query mode
         if (parts.length == 1) {
             return new ScoreCommand(id, SCORE_QUERY_MODE);
         }
 
         String breakdown = parts[1].trim();
 
-        // **IMPORTANT: Check for query mode FIRST, before validating format**
         if (breakdown.equals(SCORE_QUERY_MODE) || breakdown.equals("-1")) {
             return new ScoreCommand(id, SCORE_QUERY_MODE);
         }
@@ -286,7 +284,6 @@ public class Parser {
             throw new UniflowException("Please provide score breakdown in a name:value format");
         }
 
-        // Now check format (only if not query mode)
         String normalized = breakdown.replace(',', ' ').replaceAll("\\s+", " ").trim();
 
         if (!normalized.contains(":")) {

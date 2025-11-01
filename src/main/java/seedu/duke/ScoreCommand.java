@@ -51,7 +51,7 @@ public class ScoreCommand extends Command {
     @Override
     public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
 
-        if (!courseRecord.hasCourse(courseID)) {
+        if (!courseRecord.hasCourse(courseID) && !modules.doesExist(courseID)) {
             throw new UniflowException("Module does not exist");
         }
         Course course =  courseRecord.getCourse(courseID);
