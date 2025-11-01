@@ -1,7 +1,9 @@
 package seedu.duke;
 
-import java.io.*;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ModuleStorage {
     private static final String FILE_PATH = "data/modules.txt";
