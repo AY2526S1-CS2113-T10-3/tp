@@ -15,7 +15,7 @@ public class RateCommand extends Command {
         if (courseRecord == null && moduleList == null) {
             throw new UniflowException("No course information available");
         }
-        if (!courseRecord.hasCourse(code) && !(moduleList.hasModule(code))) {
+        if (!courseRecord.hasCourse(code) && !(moduleList.doesExist(code))) {
             throw new UniflowException("Course not found");
         }
         if (score == RATING_QUERY_MODE) {
