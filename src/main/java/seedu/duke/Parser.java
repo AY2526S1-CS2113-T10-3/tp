@@ -261,37 +261,41 @@ public class Parser {
         String remainder = command.substring(COMMAND_SCORE.length()).trim();
 
         if (remainder.isEmpty()) {
-            throw new UniflowException("Usage: score <MODULE_ID> name1:val1, name2:val2..");
+            throw new UniflowException("Usage: score <MODULE_ID> name1:val1 name2:val2 ...");
         }
 
         String[] parts = remainder.split("\\s+", 2);
         String id = parts[0].trim();
         if (id.isEmpty()) {
-            throw new UniflowException("Invalid Module ID");
+            throw new UniflowException("Invalid module ID");
         }
 
+        String normId = id.toUpperCase();
+
         if (parts.length == 1) {
-            return new ScoreCommand(id, SCORE_QUERY_MODE);
+            return new ScoreCommand(normId, SCORE_QUERY_MODE);
         }
 
         String breakdown = parts[1].trim();
-
-        if (breakdown.equals(SCORE_QUERY_MODE) || breakdown.equals("-1")) {
-            return new ScoreCommand(id, SCORE_QUERY_MODE);
-        }
-
         if (breakdown.isEmpty()) {
-            throw new UniflowException("Please provide score breakdown in a name:value format");
+            throw new UniflowException("Please provide score breakdown in name:value format");
         }
 
-        String normalized = breakdown.replace(',', ' ').replaceAll("\\s+", " ").trim();
+        if (SCORE_QUERY_MODE.equals(breakdown)) {
+            return new ScoreCommand(normId, SCORE_QUERY_MODE);
+        }
+
+        String normalized = breakdown.replace(',', ' ')
+                .replaceAll("\\s+", " ")
+                .trim();
 
         if (!normalized.contains(":")) {
             throw new UniflowException("Invalid format. Use name:value pairs, e.g., exam:50 project:30");
         }
 
-        return new ScoreCommand(id, breakdown);
+        return new ScoreCommand(normId, normalized);
     }
+
 
     private static Command parseFilterCommand(String command) throws UniflowException {
         String trimmedCommand = command.substring(6).trim();
