@@ -17,8 +17,6 @@ java -jar Uniflow.jar
 
 ## Features 
 
-{Give detailed description of each feature}
-
 ### Adding a Module: `insert`
 Adds a new module to your timetable.
 
@@ -263,14 +261,19 @@ ____________________________________________________________
 ```
 *Note: after the computation of the projected gpa, the newly added course will **NOT** be stored in our saved record.*
 
-## FAQ
-
-**Q**: How do I transfer my data to another computer? 
-
-**A**: {your answer here}
+### Exitting the program - `bye`
+Users can exit the program.  
+Format:
+```commandline
+bye
+```
 
 ## Command Summary
 
-{Give a 'cheat sheet' of commands here}
-
-* Add todo `todo n/TODO_NAME d/DEADLINE`
+### GPA Calculator
+| **Action** | **Format and Examples** | **Explanation** |
+|-------------|----------------------|-------------|
+| **addgrade** | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true` | Adding course grade information<br>to a record and saving it |
+| **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adding predicted course grade<br>information to a temporary record |
+| **gpa** | `gpa`| Compute cumulative GPA<br>based on saved course record |
+| **projectgpa** | `projectgpa` | Compute projected cumulative GPA<br>after entering predicted grades<br>of some courses |
