@@ -173,7 +173,9 @@ public class Parser {
                 continue;
             }
             int idx = args.indexOf(p, start);
-            if (idx != -1 && idx < end) end = idx;
+            if (idx != -1 && idx < end) {
+                end = idx;
+            }
         }
 
         return args.substring(start, end).trim();
