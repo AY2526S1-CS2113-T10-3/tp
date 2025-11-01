@@ -26,14 +26,12 @@ public class ModuleStorage {
             File file = new File(FILE_PATH);
             File parentDir = file.getParentFile();
 
-            //create a new folder if it doesn't exist yet
             if (!parentDir.exists()) {
                 parentDir.mkdirs();
                 System.out.println("A new folder for grade record has been created.");
             }
-            //create a new file if it doesn't exist yet
             if (file.createNewFile()) {
-                //System.out.println("Grade record file has been created.");
+                //skip
             }
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
