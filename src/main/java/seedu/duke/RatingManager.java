@@ -28,7 +28,7 @@ public class RatingManager {
         return stat == null ? 0.0 : stat.average();
     }
 
-    public Map<String, RatingStats> getModuleRatings() {
+    public Map<String, RatingStats> getmoduleRatings() {
         return moduleRatings;
     }
 }
