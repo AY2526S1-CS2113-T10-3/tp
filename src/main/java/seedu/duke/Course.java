@@ -1,8 +1,5 @@
 package seedu.duke;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Course {
     private final String code;
     private final int credits;
