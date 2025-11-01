@@ -6,8 +6,8 @@ import java.util.Map;
 /**
  * Command to add or view a score breakdown for a module.
  * Usage:
- *   score <MODULE_ID>              -> view existing breakdown
- *   score <MODULE_ID> k1:v1 k2:v2  -> set/replace breakdown
+ *   score MODULE_ID              -> view existing breakdown
+ *   score MODULE_ID k1:v1 k2:v2  -> set/replace breakdown
  */
 public class ScoreCommand extends Command {
     private static final String SCORE_QUERY_MODE = "-1";
