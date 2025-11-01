@@ -51,6 +51,10 @@ public class Module {
         return sessionType.equalsIgnoreCase("tutorial");
     }
 
+    public String toStorage() {
+        return id + " | " +  name + " | " + day + " | " + startTime + " | " + endTime + " | " +  sessionType;
+    }
+
     @Override
     public String toString() {
         return String.format("Module[ID=%s, Name=%s, Type=%s, Day=%s, Time=%s-%s]",
