@@ -19,9 +19,19 @@ public class ModuleList {
         return new ArrayList<>(modules);
     }
 
-    public void addModule(Module module) {
+    public void addModule(Module module) throws UniflowException{
         if (module == null) {
-            throw new IllegalArgumentException("Module cannot be null");
+            throw new UniflowException("Module cannot be null");
+        }
+        for (Module existing : modules) {
+            boolean sameId = existing.getId().equalsIgnoreCase(module.getId());
+            boolean sameDay = existing.getDay().equalsIgnoreCase(module.getDay());
+            boolean sameStart = existing.getStartTime().equals(module.getStartTime());
+            boolean sameEnd = existing.getEndTime().equals(module.getEndTime());
+
+            if (sameId && sameDay && sameStart && sameEnd) {
+                throw new UniflowException("Module insertion failed: Duplicate module detected: " + module.getId());
+            }
         }
         modules.add(module);
     }

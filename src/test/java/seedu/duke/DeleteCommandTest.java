@@ -21,30 +21,30 @@ class DeleteCommandTest {
         mockCourseRecord = mock(CourseRecord.class);
     }
 
-    @Test
     void execute_deletesModuleSuccessfully() throws UniflowException {
         // Arrange
         String moduleId = "CS1010";
+        int moduleIndex = 1; // user-facing index (1-based)
         Module mockModule = new Module(moduleId, "Programming", "Monday", "10:00", "12:00", "Lecture");
 
-        when(mockModuleList.deleteModuleById(moduleId)).thenReturn(mockModule);
+        when(mockModuleList.deleteModule(moduleIndex - 1)).thenReturn(mockModule);
         when(mockModuleList.getSize()).thenReturn(2);
 
-        DeleteCommand cmd = new DeleteCommand(moduleId);
+        DeleteCommand cmd = new DeleteCommand(moduleIndex);
 
         // Act
         cmd.execute(mockUI, mockModuleList, mockCourseRecord);
 
         // Assert
-        verify(mockModuleList).deleteModuleById(moduleId);
+        verify(mockModuleList).deleteModule(moduleIndex - 1);
         verify(mockUI).showMessage(contains("Noted. I've removed this module:"));
-        verify(mockUI).showMessage(contains(moduleId));
+        verify(mockUI).showMessage(contains("CS1010"));
         verify(mockUI).showMessage(contains("2 module(s) left"));
     }
 
     @Test
     void isExit_returnsFalse() {
-        DeleteCommand cmd = new DeleteCommand("CS2040");
+        DeleteCommand cmd = new DeleteCommand(0);
         assert(!cmd.isExit());
     }
 }

@@ -27,7 +27,7 @@ class ParserTest {
 
     @Test
     void parse_deleteCommand() throws UniflowException {
-        Command command = Parser.parse("delete i/CS2113");
+        Command command = Parser.parse("delete index/0");
         assertInstanceOf(DeleteCommand.class, command);
     }
 

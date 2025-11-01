@@ -158,36 +158,44 @@ public class Parser {
         int minute = Integer.parseInt(parts[1]);
         return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
     }
+    private static String getValue(String args, String prefix) {
+        int start = args.indexOf(prefix);
+        if (start == -1) {
+            return null;
+        }
+        start += prefix.length();
+
+        // Find next prefix (any of the known ones)
+        int end = args.length();
+        String[] prefixes = {"i/", "n/", "d/", "f/", "t/", "s/"};
+        for (String p : prefixes) {
+            if (p.equals(prefix)) {
+                continue;
+            }
+            int idx = args.indexOf(p, start);
+            if (idx != -1 && idx < end) {
+                end = idx;
+            }
+        }
+
+        return args.substring(start, end).trim();
+    }
 
     private static Command parseInsertCommand(String command) throws UniflowException {
         try {
-
-            String[] parts = command.substring(7).split(" ");
-            String id = null;
-            String moduleName = null;
-            String day = null;
-            String startTime = null;
-            String endTime = null;
-            String sessionType = null;
-
-            for (String part : parts) {
-                if (part.startsWith("i/")) {
-                    id = part.substring(2);
-                } else if (part.startsWith("n/")) {
-                    moduleName = part.substring(2);
-                } else if (part.startsWith("d/")) {
-                    day = part.substring(2);
-                } else if (part.startsWith("f/")) {
-                    startTime = part.substring(2);
-                } else if (part.startsWith("t/")) {
-                    endTime = part.substring(2);
-                } else if (part.startsWith("s/")) {
-                    sessionType = part.substring(2);
-                }
+            if (command.length() <= COMMAND_INSERT.length()) {
+                throw new UniflowException("Usage: insert i/<ID> n/<Name> d/<Day> f/<Start> t/<End> [s/<Type>]");
             }
 
-            if (id == null || moduleName == null || day == null
-                    || startTime == null || endTime == null) {
+            String args = command.substring(7).trim();
+            String id = getValue(args, "i/");
+            String moduleName = getValue(args, "n/");
+            String day = getValue(args, "d/");
+            String startTime = getValue(args, "f/");
+            String endTime = getValue(args, "t/");
+            String sessionType = getValue(args, "s/");
+
+            if (id == null || moduleName == null || day == null || startTime == null || endTime == null) {
                 throw new UniflowException("Missing fields in insert command.");
             }
 
@@ -220,18 +228,30 @@ public class Parser {
 
     private static Command parseDeleteCommand(String command) throws UniflowException {
         try {
+            if (command.length() <= COMMAND_DELETE.length()) {
+                throw new UniflowException("Usage: delete index/<module_index>");
+            }
             // Remove "delete"
             String args = command.substring(6).trim();
 
-            if (!args.startsWith("i/")) {
-                throw new UniflowException("Invalid format. Please use: delete i/<module_id>");
+            if (!args.startsWith("index/")) {
+                throw new UniflowException("Invalid format. Please use: delete index/<module_index>");
             }
 
-            String moduleId = args.substring(2).trim();
-            if (moduleId.isEmpty()) {
-                throw new UniflowException("Missing module ID. Example: delete i/CS2110");
+            String moduleIdxStr = args.substring(6).trim();
+            if (moduleIdxStr.isEmpty()) {
+                throw new UniflowException("Missing module ID. Example: delete index/2");
             }
-            return new DeleteCommand(moduleId);
+
+            int moduleIndex;
+            try {
+                moduleIndex = Integer.parseInt(moduleIdxStr);
+            } catch (NumberFormatException e) {
+                throw new UniflowException("Invalid module index: " + moduleIdxStr +
+                        ". Please enter a valid number, e.g. delete index/2");
+            }
+
+            return new DeleteCommand(moduleIndex);
         } catch (StringIndexOutOfBoundsException e) {
             throw new UniflowException("Invalid delete command syntax. Use: delete n/<module_id>");
         }

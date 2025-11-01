@@ -25,7 +25,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void addModule_validModule_increasesSize() {
+    public void addModule_validModule_increasesSize() throws UniflowException{
         assertEquals(0, moduleList.getSize());
         moduleList.addModule(testModule1);
         assertEquals(1, moduleList.getSize());
@@ -34,7 +34,7 @@ public class ModuleListTest {
 
     @Test
     public void addModule_nullModule_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> moduleList.addModule(null));
+        assertThrows(UniflowException.class, () -> moduleList.addModule(null));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void getModule_invalidIndex_throwsException() {
+    public void getModule_invalidIndex_throwsException() throws UniflowException{
         moduleList.addModule(testModule1);
         assertThrows(UniflowException.class, () -> moduleList.getModule(5));
     }
@@ -63,19 +63,19 @@ public class ModuleListTest {
     }
 
     @Test
-    public void getModuleByID_nonExistingModule_throwsException() {
+    public void getModuleByID_nonExistingModule_throwsException() throws UniflowException{
         moduleList.addModule(testModule1);
         assertThrows(UniflowException.class, () -> moduleList.getModuleByID("CS9999"));
     }
 
     @Test
-    public void doesExist_existingModule_returnsTrue() {
+    public void doesExist_existingModule_returnsTrue() throws UniflowException {
         moduleList.addModule(testModule1);
         assertTrue(moduleList.doesExist("CS2113"));
     }
 
     @Test
-    public void doesExist_nonExistingModule_returnsFalse() {
+    public void doesExist_nonExistingModule_returnsFalse() throws UniflowException {
         moduleList.addModule(testModule1);
         assertFalse(moduleList.doesExist("CS9999"));
     }
@@ -105,7 +105,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findBySessionType_existingType_returnsFilteredList() {
+    public void findBySessionType_existingType_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(tutorialModule);
 
@@ -114,7 +114,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findWithTutorials_hasTutorials_returnsFilteredList() {
+    public void findWithTutorials_hasTutorials_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(tutorialModule);
 
@@ -123,7 +123,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findWithoutTutorials_hasNonTutorials_returnsFilteredList() {
+    public void findWithoutTutorials_hasNonTutorials_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(tutorialModule);
 
@@ -132,7 +132,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findByDay_existingDay_returnsFilteredList() {
+    public void findByDay_existingDay_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(testModule2);
 
@@ -141,14 +141,14 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findByDay_caseInsensitive_returnsFilteredList() {
+    public void findByDay_caseInsensitive_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         ModuleList filtered = moduleList.findByDay("monday");
         assertEquals(1, filtered.getSize());
     }
 
     @Test
-    public void findById_partialMatch_returnsFilteredList() {
+    public void findById_partialMatch_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(testModule2);
 
@@ -157,7 +157,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findByName_partialMatch_returnsFilteredList() {
+    public void findByName_partialMatch_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(testModule2);
 
@@ -166,7 +166,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findClash_overlappingTime_returnsClashingModule() {
+    public void findClash_overlappingTime_returnsClashingModule() throws UniflowException {
         moduleList.addModule(testModule1); // Monday 14:00-16:00
         Module clash = new Module("CS2110", "Programming", "Monday", "15:00", "17:00", "lecture");
 
@@ -176,7 +176,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findClash_sameStartTime_returnsClashingModule() {
+    public void findClash_sameStartTime_returnsClashingModule() throws UniflowException {
         moduleList.addModule(testModule1); // Monday 14:00-16:00
         Module clash = new Module("CS2110", "Programming", "Monday", "14:00", "15:00", "lecture");
 
@@ -185,7 +185,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findClash_differentDay_returnsNull() {
+    public void findClash_differentDay_returnsNull() throws UniflowException {
         moduleList.addModule(testModule1); // Monday 14:00-16:00
         Module noClash = new Module("CS2110", "Programming", "Tuesday", "14:00", "16:00", "lecture");
 
@@ -194,7 +194,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findClash_noOverlap_returnsNull() {
+    public void findClash_noOverlap_returnsNull() throws UniflowException {
         moduleList.addModule(testModule1); // Monday 14:00-16:00
         Module noClash = new Module("CS2110", "Programming", "Monday", "16:00", "18:00", "lecture");
 
@@ -203,7 +203,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void clear_nonEmptyList_becomesEmpty() {
+    public void clear_nonEmptyList_becomesEmpty() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(testModule2);
 
@@ -214,7 +214,7 @@ public class ModuleListTest {
     }
 
     @Test
-    public void getAllModules_returnsNewList() {
+    public void getAllModules_returnsNewList() throws UniflowException {
         moduleList.addModule(testModule1);
         var modules = moduleList.getAllModules();
 
