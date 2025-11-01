@@ -112,21 +112,52 @@ public class Parser {
         String code = null;
         int credits = -1;
         String grade = null;
-        //default is not major course if not specified
         boolean isMajor = false;
 
         for (String part : parts) {
             if (part.startsWith("c/")) {
-                code = part.substring(2);
+                code = part.substring(2).trim();
+                if (code.isEmpty()) {
+                    throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                }
             } else if (part.startsWith("cr/")) {
-                credits = Integer.parseInt(part.substring(3));
+                try {
+                    String creditsStr = part.substring(3).trim();
+                    if (creditsStr.isEmpty()) {
+                        throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                    }
+                    credits = Integer.parseInt(creditsStr);
+                    if (credits <= 0) {
+                        throw new UniflowException("Please enter a positive integer for credits.");
+                    }
+                } catch (NumberFormatException e) {
+                    throw new UniflowException("Please enter a valid integer for credits.");
+                }
             } else if (part.startsWith("g/")) {
-                grade = part.substring(2);
+                grade = part.substring(2).trim().toUpperCase();
+                if (grade.isEmpty()) {
+                    throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                }
+                if (!isValidGrade(grade)) {
+                    throw new UniflowException("Please enter a valid grade.");
+                }
             } else if (part.startsWith("m/")) { //for major course indication
-                isMajor = Boolean.parseBoolean(part.substring(2));
+                String isMajorStr = part.substring(2).trim().toLowerCase();
+                if (isMajorStr.isEmpty()) {
+                    throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                }
+                //handling the case where input other than true or false is entered
+                //avoiding invalid strings to be parsed as false
+                if (!isMajorStr.equals("true") && !isMajorStr.equals("false")) {
+                    throw new UniflowException("Please enter 'true' or 'false' for major course indication");
+                }
+                isMajor = Boolean.parseBoolean(isMajorStr);
+            } else  {
+                throw new UniflowException("You have entered invalid components.");
             }
         }
 
+        //checks if any components is missing
         if (code == null || grade == null || credits == -1) {
             if (save) {
                 throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE"
@@ -142,6 +173,17 @@ public class Parser {
         } else {
             return new AddTestGradeCommand(code, credits, grade, isMajor);
         }
+    }
+
+    private static boolean isValidGrade(String grade) {
+        String[] validGrades = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F"};
+        for (String g : validGrades) {
+            if (g.equals(grade)) {
+                //input grade is equal to one of the valid grades
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isValidDay(String day) {
