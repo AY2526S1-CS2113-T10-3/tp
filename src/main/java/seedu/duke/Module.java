@@ -69,7 +69,8 @@ public class Module {
 
     public boolean hasBreakdown() {
         return !scoreBreakdown.isEmpty();
-
+    }
+    
     public String toStorage() {
         return id + " | " +  name + " | " + day + " | " + startTime + " | " + endTime + " | " +  sessionType;
     }
