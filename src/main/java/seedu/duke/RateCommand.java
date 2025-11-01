@@ -12,10 +12,10 @@ public class RateCommand extends Command {
 
     @Override
     public void execute(UI ui, ModuleList moduleList, CourseRecord courseRecord ) throws UniflowException {
-        if (courseRecord == null || moduleList == null) {
+        if (courseRecord == null && moduleList == null) {
             throw new UniflowException("No course information available");
         }
-        if (!courseRecord.hasCourse(code) || !(moduleList.hasModule(code))) {
+        if (!courseRecord.hasCourse(code) && !(moduleList.hasModule(code))) {
             throw new UniflowException("Course not found");
         }
         if (score == RATING_QUERY_MODE) {
