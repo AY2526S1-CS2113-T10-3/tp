@@ -160,14 +160,18 @@ public class Parser {
     }
     private static String getValue(String args, String prefix) {
         int start = args.indexOf(prefix);
-        if (start == -1) return null;
+        if (start == -1) {
+            return null;
+        }
         start += prefix.length();
 
         // Find next prefix (any of the known ones)
         int end = args.length();
         String[] prefixes = {"i/", "n/", "d/", "f/", "t/", "s/"};
         for (String p : prefixes) {
-            if (p.equals(prefix)) continue;
+            if (p.equals(prefix)) {
+                continue;
+            }
             int idx = args.indexOf(p, start);
             if (idx != -1 && idx < end) end = idx;
         }
