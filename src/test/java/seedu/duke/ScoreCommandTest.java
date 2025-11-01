@@ -45,7 +45,7 @@ class ScoreCommandTest {
     }
 
     @Test
-    void execute_queryMode_withoutExistingBreakdown_doesNotThrowAndDoesNotCreate() throws Exception {
+    void execute_queryMode_noBreakdown_doesNotThrow() throws Exception {
         // Query
         ScoreCommand query = new ScoreCommand(MODULE_ID, QUERY_MODE);
         query.execute(ui, modules, record);
@@ -55,7 +55,7 @@ class ScoreCommandTest {
     }
 
     @Test
-    void execute_queryMode_withExistingBreakdown_keepsStateUnchanged() throws Exception {
+    void execute_queryMode_existingBreakdown_keepsState() throws Exception {
         // Seed breakdown
         ScoreCommand seed = new ScoreCommand(MODULE_ID, "exam:60 quiz:10");
         seed.execute(ui, modules, record);
@@ -96,7 +96,7 @@ class ScoreCommandTest {
     }
 
     @Test
-    void execute_malformedPair_missingColon_throws() {
+    void execute_malformedPair_throws() {
         UniflowException ex = assertThrows(UniflowException.class, () ->
                 new ScoreCommand(MODULE_ID, "exam:50 project30").execute(ui, modules, record)
         );
