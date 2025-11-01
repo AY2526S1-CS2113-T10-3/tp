@@ -11,6 +11,7 @@ public class Uniflow {
     private static CourseRecord courseRecord;
     private static final CourseRecord tempRecord = new CourseRecord();
     private static final GradeStorage gradeStorage = new GradeStorage();
+    private static final ScoreStorage scoreStorage = new ScoreStorage();
     private static ReviewManager reviewManager;
     private static final RatingManager ratingManager = new  RatingManager();
 

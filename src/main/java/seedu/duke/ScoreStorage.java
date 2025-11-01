@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ScoreStorage {
-    private static final String FILE_PATH = "data/scores.txt";
+    private static final String FILE_PATH = "data/breakdowns.txt";
 
     /**
      * Loads score breakdowns from disk.
