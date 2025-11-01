@@ -183,7 +183,7 @@ public class Parser {
 
     private static Command parseInsertCommand(String command) throws UniflowException {
         try {
-            if (command.length() <= 7) {
+            if (command.length() <= COMMAND_INSERT.length()) {
                 throw new UniflowException("Usage: insert i/<ID> n/<Name> d/<Day> f/<Start> t/<End> [s/<Type>]");
             }
 
@@ -228,7 +228,7 @@ public class Parser {
 
     private static Command parseDeleteCommand(String command) throws UniflowException {
         try {
-            if (command.length() <= 6) {
+            if (command.length() <= COMMAND_DELETE.length()) {
                 throw new UniflowException("Usage: delete index/<module_index>");
             }
             // Remove "delete"
