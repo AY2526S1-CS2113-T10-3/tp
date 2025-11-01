@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class RatingManager {
     private final RatingStorage storage = new  RatingStorage();
-    private Map<String, RatingStats> moduleRatings = new HashMap<>();
+    private final Map<String, RatingStats> moduleRatings;
 
     public RatingManager() {
         Map<String, RatingStats> loaded = storage.load();
@@ -28,7 +28,7 @@ public class RatingManager {
         return stat == null ? 0.0 : stat.average();
     }
 
-    public Map<String, RatingStats> getmoduleRatings() {
+    public Map<String, RatingStats> getModuleRatings() {
         return moduleRatings;
     }
 }
