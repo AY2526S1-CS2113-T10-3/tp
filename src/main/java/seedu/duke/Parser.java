@@ -150,7 +150,9 @@ public class Parser {
 
     private static boolean isValidTime(String time) {
         // Expect format HH:MM (24-hour)
-        if (time == null || !time.matches("\\d{2}:\\d{2}")) return false;
+        if (time == null || !time.matches("\\d{2}:\\d{2}")) {
+            return false;
+        }
         String[] parts = time.split(":");
         int hour = Integer.parseInt(parts[0]);
         int minute = Integer.parseInt(parts[1]);
