@@ -54,7 +54,8 @@ public class ScoreCommand extends Command {
         if (!courseRecord.hasCourse(courseID) && !modules.doesExist(courseID)) {
             throw new UniflowException("Module does not exist");
         }
-        Course course =  courseRecord.getCourse(courseID);
+
+        Module module = modules.getModuleByID(courseID);
 
         if (breakdown == null || breakdown.trim().isEmpty()) {
             throw new UniflowException(
@@ -62,10 +63,9 @@ public class ScoreCommand extends Command {
             );
         }
 
-        //query mode
         if (breakdown.equals(SCORE_QUERY_MODE)) {
-            if (course.hasBreakdown()) {
-                Map<String, Integer> scores = course.getScoreBreakdown();
+            if (module.hasBreakdown()) {
+                Map<String, Integer> scores = module.getScoreBreakdown();
                 ui.showMessage("Score breakdown for " +  courseID + ": " + scores);
             } else {
                 ui.showMessage("Score not found for " +  courseID);
@@ -92,7 +92,7 @@ public class ScoreCommand extends Command {
 
             map.put(name, value);
         }
-        course.setScoreBreakdown(map);
+        module.setScoreBreakdown(map);
         ui.showMessage("Saved score breakdown for {" + courseID + ":" + map + "}");
 
     }
