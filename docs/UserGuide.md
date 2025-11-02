@@ -56,6 +56,15 @@ filter type/tutorial
 filter hastutorial
 ```
 
+### Finding Reviews: `findreview`
+Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
+
+Formats:
+```commandline
+findreview c/COURSE_CODE
+findreview u/USERNAME
+findreview c/COURSE_CODE u/USERNAME
+```
 
 ### Showing Your Timetable: `show timetable`
 Displays all modules in your timetable with their full details.
@@ -277,3 +286,14 @@ bye
 | **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adding predicted course grade<br>information to a temporary record |
 | **gpa** | `gpa`| Compute cumulative GPA<br>based on saved course record |
 | **projectgpa** | `projectgpa` | Compute projected cumulative GPA<br>after entering predicted grades<br>of some courses |
+
+### Review Management
+| **Action** | **Format and Examples** | **Explanation** |
+|---|---|---|   
+| **addreview** | `addreview c/COURSE u/USER r/REVIEW` <br> *Example:* `addreview c/CS2113 u/John r/Good` | Adds a new text review |
+| **review** | `review COURSE_CODE` <br> *Example:* `review CS2113` | Views all reviews for a course |
+| **editreview** | `editreview c/COURSE u/USER r/NEW_REVIEW` <br> *Example:* `editreview c/CS2113 u/John r/Bad` | Edits an existing review |
+| **deletereview** | `deletereview c/COURSE u/USER` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes an existing review |
+| **findreview** | `findreview [c/COURSE] [u/USER]` <br> *Example:* `findreview u/John` | Searches for reviews by user or course |
+| **reloadreviews** | `reloadreviews` | Reloads reviews from file (testing) |
+| **reset all reviews**| `reset all reviews` | Resets reviews to default (testing) |

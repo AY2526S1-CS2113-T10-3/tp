@@ -50,6 +50,13 @@ The architecture diagram above shows the high-level design of the application. T
 **ReviewStorage**
 - Handles persistence of review data to file using pipe-delimited format
 
+**ReviewCleaner**
+- Automatically cleans data file by removing incomplete or corrupted review entries during the save process to maintain data integrity.
+
+**ReviewSyncManager**
+- Manages the automatic saving of data.
+- Implements a shutdown hook to ensure all in-memory review data is flushed to disk via `ReviewStorage` and `ReviewCleaner` upon application exit, preventing data loss.
+
 **RatingManager**
 - Manages course ratings from students, storing ratings in a map by course code.
 
@@ -69,15 +76,15 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 2. Parser analyzes the command and creates the appropriate Command object
 3. Command's execute() method is called with UI, ModuleList, CourseRecord, and ReviewManager
 4. Command performs its operation:
-    - ModuleList operations: insert, delete, list, filter modules, detect clashes
-    - CourseRecord operations: add grades, compute GPA
-    - ReviewManager operations: add and retrieve course reviews
-    - RatingManager operations: add or display course ratings
-    - Timetable operations: show, reset
+   - ModuleList operations: insert, delete, list, filter modules, detect clashes
+   - CourseRecord operations: add grades, compute GPA
+   - ReviewManager operations: add and retrieve course reviews
+   - RatingManager operations: add or display course ratings
+   - Timetable operations: show, reset
 5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
 6. UI displays the result, filtered list, GPA calculation, reviews, or error message
 7. Loop continues until user enters "bye" (when Command.isExit() returns true)
-8. On exit, ReviewManager saves reviews to file via ReviewStorage, and RatingManager saves ratings via RatingStorage
+8. On exit (either via "bye" or abrupt close), the `ReviewSyncManager`'s shutdown hook is triggered, calling `ReviewStorage` and `ReviewCleaner` to save all review data and `RatingStorage` to save all rating data.
 9. Application terminates gracefully
 
 ### Key Design Patterns
@@ -114,12 +121,45 @@ The Model component consists of:
 The use of composition relationships allows ModuleList and CourseRecord to fully manage their respective collections.
 
 #### Review Management Component
+The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
+
+This component also includes:
+![Review Management Class Diagram](diagrams/ReviewManagementClass.png)
+
+- **ReviewSyncManager**: A persistence utility that installs a shutdown hook. This hook ensures that `ReviewManager.flush()` is called automatically just before the application terminates, guaranteeing that all reviews are saved and cleaned.
+- **ReviewCleaner**: A utility used by the `ReviewSyncManager` to remove any corrupted or incomplete lines from the review file during the save process, ensuring data integrity.
 
 ![Review Storage Class Diagram](diagrams/ReviewStorageClassDiagram.png)
-
 The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
 
 ### Implementation Details
+
+#### Find Review Feature
+The find review feature allows users to search the review database using flexible criteria, such as by user, by course, or both.
+
+1. Parser creates a `FindReviewCommand` with predicates for user and/or course code.
+2. `FindReviewCommand` calls `ReviewManager` to filter the list of all reviews.
+3. If no criteria are given (e.g., just `findreview`), it can be set to show all reviews or a specific error.
+4. The filtered review list is passed to the `UI` for display.
+
+This allows users to quickly find all feedback from a specific person or all feedback for a specific course.
+
+#### Review Data Persistence (ReviewSyncManager & ReviewCleaner)
+To prevent data loss from abrupt termination, a robust persistence mechanism is implemented.
+
+1. On application startup, `ReviewSyncManager` installs a JVM shutdown hook.
+2. When the application begins to terminate (either via `bye` command or closing the window), the hook is triggered.
+3. The hook executes the `ReviewManager.flush()` method.
+4. `ReviewManager` passes its data to `ReviewStorage`, which first uses `ReviewCleaner` to sanitize the existing file of corrupted entries.
+5. `ReviewStorage` then writes the current in-memory reviews to the cleaned file.
+
+This design ensures data is always saved correctly without requiring explicit user action.
+
+#### Review Data Management (Reload/Reset)
+Two utility commands were added for testing and data synchronization:
+
+* **`ReloadReviewsCommand`**: This command (`reloadreviews`) manually clears the in-memory `ReviewManager` and reloads all reviews from the `data/reviews.txt` file. This is useful for testing or if the file was modified externally while the application is running.
+* **`ResetReviewsCommand`**: This command (`reset all reviews`) clears the current review data and reloads the *default* set of reviews, effectively resetting the application's review state to its initial configuration for testing.
 
 #### Insert Module Feature
 
@@ -182,12 +222,12 @@ The rating feature allows users to rate modules they've taken and view the avera
 How it works:
 1. Parser creates a ```RateCommand``` when the user enters ```rate <MODULE_CODE> [RATING]```
 2. If rating value (1-5) is provided:
-    - ```RateCommand``` validates that the course exists in ```CourseRecord```
-    - The rating is then passed to ```RatingManager```, which updates the total and count
-    - ```RatingStorage``` saves the updated data to a file (```data/ratings.txt```)
+   - ```RateCommand``` validates that the course exists in ```CourseRecord```
+   - The rating is then passed to ```RatingManager```, which updates the total and count
+   - ```RatingStorage``` saves the updated data to a file (```data/ratings.txt```)
 3. If no rating is provided:
-    - ```RateCommand``` retrieves the average rating and rating count from ```RatingManager```
-    - Displays the average if ratings exist, or a message if none are found
+   - ```RateCommand``` retrieves the average rating and rating count from ```RatingManager```
+   - Displays the average if ratings exist, or a message if none are found
 4. The UI displays a confirmation or the average rating result to the user
 
 #### Timetable Clash Detection
@@ -227,7 +267,7 @@ Uniflow solves several problems for university students:
 
 **Peer Reviews**: The review system enables students to share and read course experiences, helping with module selection decisions.
 
-**Course Ratings**: A lightweight rating system that lets students rate modules and view average ratings, providing a quick and quantitative signal alongside reviews. 
+**Course Ratings**: A lightweight rating system that lets students rate modules and view average ratings, providing a quick and quantitative signal alongside reviews.
 
 **Efficiency**: Command-line interface allows for faster data entry compared to GUI applications, ideal for students who need to quickly update their schedules between classes.
 
@@ -250,7 +290,11 @@ Uniflow solves several problems for university students:
 | v2.0    | student  | read reviews for courses           | make informed decisions about module selection           |
 | v2.0    | student  | reset my timetable                 | start fresh for a new semester                           |
 | v2.0    | student  | rate a course                      | share simple feedback on module quality                  |
- 
+| v2.0    | student  | search for reviews by user         | see all feedback from a specific person                  |
+| v2.0    | student  | search for reviews by user & course| find a specific person's review for a course             |
+| v2.0    | (dev)    | manually reload reviews from file  | test persistence without restarting the app              |
+| v2.0    | (dev)    | reset all reviews to default       | return to a clean state for testing                      |
+
 
 ## Non-Functional Requirements
 
@@ -258,13 +302,13 @@ Uniflow solves several problems for university students:
 
 2. **Performance**: The application should respond to commands instantly (< 100ms) for typical operations with up to 50 modules.
 
-3. **Reliability**: Data persistence for reviews should not fail silently. If file operations fail, users should be notified.
+3. **Reliability**: Data persistence for reviews should not fail silently. The `ReviewSyncManager` shutdown hook ensures data is flushed on exit. If file operations fail, users should be notified.
 
 4. **Portability**: The application should run on any system with Java 11 or higher installed (Windows, macOS, Linux).
 
 5. **Maintainability**: Code should follow object-oriented principles with clear separation of concerns. Each command class should be independent and easily modifiable.
 
-6. **Data Integrity**: Grade point calculations must be accurate. Invalid grades should be rejected with appropriate error messages.
+6. **Data Integrity**: Grade point calculations must be accurate. Invalid grades should be rejected. For review data, the `ReviewCleaner` component ensures corrupted or incomplete entries are automatically removed from the data file to prevent loading invalid data.
 
 7. **Scalability**: The filtering mechanism should handle multiple filter criteria efficiently using predicate-based filtering.
 
@@ -278,7 +322,9 @@ Uniflow solves several problems for university students:
 * **Course Record** - Collection of completed courses with grades for GPA calculation
 * **Review** - Student feedback and experiences shared about a specific course
 * **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students
-
+* **ReviewCleaner** - A utility that removes corrupted/incomplete data from the review storage file.
+* **ReviewSyncManager** - A component that uses a shutdown hook to auto-save review data on application exit.
+* 
 ## Instructions for manual testing
 
 ### Setting up the application
@@ -448,12 +494,37 @@ insert i/CS2113
 ```
 Expected: Error about missing fields.
 
+**Testing Find Review:**
+```
+findreview u/Alice
+```
+Expected: Shows only the review from Alice (`Great course, very practical!`).
+
+```
+findreview u/Bob c/CS2113
+```
+Expected: Shows only Bob's review for CS2113.
+
+```
+findreview u/NonExistentUser
+```
+Expected: Message indicating no reviews found for this user.
+
+**Testing Review Data Management (Reload/Reset):**
+```
+reset all reviews
+```
+Expected: Confirmation that reviews are reset. `review CS2113` should now show default data (or nothing).
+
+```
+reloadreviews
+```
+Expected: Confirmation that reviews are reloaded from file.
+
 ### Data Persistence Testing
 
 1. Add several reviews using `addreview` commands
 2. Exit the application with `bye`
 3. Restart the application
 4. Use `review` command to verify reviews are loaded
-5. Check that `data/reviews.txt` file exists and contains review data in format: COURSE|USER|REVIEW
-
-Note: Module and grade data are currently not persisted and will be lost on application restart.
+5. Check that `data/reviews.txt` file exists and contains review data in format: course|user|review

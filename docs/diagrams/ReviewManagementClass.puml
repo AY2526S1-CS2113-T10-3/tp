@@ -1,0 +1,96 @@
+@startuml
+title Review System Enhancements - Class Diagram
+
+' --- Settings ---
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+' --- Abstract Command Class ---
+abstract class Command {
+    {abstract} + execute(UI, ModuleList, CourseRecord)
+    {abstract} + isExit() : boolean
+}
+
+' --- Your New Command Classes ---
+class FindReviewCommand extends Command {
+    - reviewManager : ReviewManager
+    + FindReview(String, ReviewManager)
+    + execute(UI, ...)
+}
+class ReloadReviewsCommand extends Command {
+    - reviewManager : ReviewManager
+    + execute(UI, ...)
+}
+class ResetReviewsCommand extends Command {
+    - reviewManager : ReviewManager
+    + execute(UI, ...)
+}
+
+' --- Core Logic & Storage Classes (from your code) ---
+class ReviewManager {
+    - reviews : Map<String, List<String>>
+    - storage : ReviewStorage
+    + ReviewManager()
+    + getReviews(String) : List<String>
+    + getAllCourseIds() : Set<String>
+    + flush()
+    + loadReviews()
+}
+class ReviewStorage {
+    - FILE_PATH : String
+    + ReviewStorage()
+    + load() : Map
+    + save(Map)
+    + {static} getFilePath() : String
+}
+
+' --- Your New Utility Classes ---
+class ReviewCleaner {
+    + cleanInvalidReviews()
+}
+class ReviewSyncManager {
+    ' (This class implements a shutdown hook)
+}
+
+' --- Interacting Application Classes ---
+class Parser {
+    + parse(String) : Command
+}
+class UI {
+    + showMessage(String)
+}
+
+' --- Relationships ---
+
+' Parser creates your commands and passes the manager
+Parser ..> FindReviewCommand : <<creates>>
+Parser ..> ReloadReviewsCommand : <<creates>>
+Parser ..> ResetReviewsCommand : <<creates>>
+Parser "1" o-- "1" ReviewManager : (injects)
+
+' Your commands use the ReviewManager and UI
+FindReviewCommand "1" o-- "1" ReviewManager : (uses)
+ReloadReviewsCommand "1" o-- "1" ReviewManager : (uses)
+ResetReviewsCommand "1" o-- "1" ReviewManager : (uses)
+
+FindReviewCommand ..> UI : <<uses>>
+ReloadReviewsCommand ..> UI : <<uses>>
+ResetReviewsCommand ..> UI : <<uses>>
+
+' ReviewManager owns ReviewStorage (Composition)
+ReviewManager "1" *-- "1" ReviewStorage : (owns)
+
+' Your utility classes interacting
+ReviewCleaner ..> ReviewStorage : <<uses {static} getFilePath()>>
+ReviewSyncManager ..> ReviewCleaner : <<uses>>
+ReviewSyncManager ..> ReviewManager : <<uses>>
+
+' Note explaining the new persistence logic
+note right of ReviewSyncManager
+  **Shutdown Hook Logic:**
+  1. Calls `cleaner.cleanInvalidReviews()`
+  2. Calls `manager.flush()`
+end note
+
+@enduml
