@@ -36,4 +36,36 @@ public class ScoreManager {
     private static String normalize(String code) {
         return code == null ? "" : code.trim().toUpperCase();
     }
+
+    public void removeBreakdown(String code) {
+        if (code == null) {
+            return;
+        }
+        String key = code.toUpperCase().trim();
+        scoresByModule.remove(key);
+        storage.save(scoresByModule);
+    }
+
+    public void clearAll() {
+        scoresByModule.clear();
+        storage.save(scoresByModule);
+    }
+
+    public void pruneAgainst(ModuleList modules) {
+        if (modules == null) {
+            return;
+        }
+        boolean changed = false;
+        var iter = scoresByModule.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            if (!modules.doesExist(key)) {
+                iter.remove();
+                changed = true;
+            }
+        }
+        if (changed) {
+            storage.save(scoresByModule);
+        }
+    }
 }
