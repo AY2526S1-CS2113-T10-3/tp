@@ -44,9 +44,13 @@ public class ModuleList {
         return modules.get(index);
     }
 
+    public String normalize(String m) {
+        return m.toUpperCase().trim();
+    }
+
     public Module getModuleByID(String moduleID) throws UniflowException {
         for (Module module : modules) {
-            if (module.getId().equals(moduleID))  {
+            if (normalize(module.getId()).equals(normalize(moduleID)))  {
                 return module;
             }
         }
@@ -55,7 +59,7 @@ public class ModuleList {
 
     public boolean doesExist(String moduleID) {
         for (Module module : modules) {
-            if (module.getId().equals(moduleID))  {
+            if (normalize(module.getId()).equals(normalize(moduleID)))  {
                 return true;
             }
         }
