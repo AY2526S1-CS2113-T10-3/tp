@@ -93,7 +93,11 @@ public class FindReview extends Command {
             System.out.println(" - " + line);
         }
     }
-
+    /**
+     * Returns false since this command does not exit the program.
+     *
+     * @return false to indicate the program should continue
+     */
     @Override
     public boolean isExit() {
         return false;
