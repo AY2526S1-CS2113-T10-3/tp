@@ -37,13 +37,17 @@ public class ScoreManager {
         return code == null ? "" : code.trim().toUpperCase();
     }
 
-
     public void removeBreakdown(String code) {
         if (code == null) {
             return;
         }
         String key = code.toUpperCase().trim();
         scoresByModule.remove(key);
+        storage.save(scoresByModule);
+    }
+
+    public void clearAll() {
+        scoresByModule.clear();
         storage.save(scoresByModule);
     }
 }
