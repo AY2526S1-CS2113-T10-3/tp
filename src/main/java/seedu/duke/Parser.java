@@ -5,7 +5,6 @@ public class Parser {
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
-    private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADD_GRADE = "addgrade";
     private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
     private static final String COMMAND_GPA = "gpa";
@@ -17,9 +16,20 @@ public class Parser {
     private static final String COMMAND_ADD_REVIEW = "addreview";
     private static final String COMMAND_EDIT_REVIEW = "editreview";
     private static final String COMMAND_DELETE_REVIEW = "deletereview";
+    private static final String COMMAND_FIND_REVIEW = "findreview";
     private static final String COMMAND_RATE = "rate";
+    // DODANE NOWE KOMENDY
+    private static final String COMMAND_LIST = "list";
+    private static final String COMMAND_LOAD_REVIEWS = "loadreviews";
+    private static final String COMMAND_RESET_REVIEWS = "reset all reviews";
+    private static final String COMMAND_COUNT_REVIEWS = "amount reviews";
+    // KONIEC DODANYCH KOMEND
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
+    private static final String PREFIX_CODE = "c/";
+    private static final String PREFIX_CREDITS = "cr/";
+    private static final String PREFIX_GRADE = "g/";
+    private static final String PREFIX_MAJOR = "m/";
 
 
     private static final Set<String> VALID_DAYS = Set.of(
@@ -44,9 +54,11 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
         }
+        // DODANA OBSŁUGA "list"
         if (trimmedCommand.startsWith(COMMAND_LIST)) {
             return parseListCommand(trimmedCommand);
         }
+        // KONIEC
         if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
         }
@@ -74,6 +86,12 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
             return parseEditReviewCommand(trimmedCommand);
         }
+        // ZAKTUALIZOWANA OBSŁUGA "findreview"
+        if (trimmedCommand.startsWith(COMMAND_FIND_REVIEW)) {
+            String args = trimmedCommand.substring(COMMAND_FIND_REVIEW.length()).trim();
+            return new FindReview(args, Uniflow.getReviewManager());
+        }
+        // KONIEC AKTUALIZACJI
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
         }
@@ -84,12 +102,27 @@ public class Parser {
             return parseRateCommand(trimmedCommand);
         }
 
+        // DODANA OBSŁUGA NOWYCH KOMEND REVIEW
+        if (trimmedCommand.startsWith(COMMAND_COUNT_REVIEWS)) {
+            String input = trimmedCommand.substring(COMMAND_COUNT_REVIEWS.length()).trim();
+            return new CountReviewsCommand(input, Uniflow.getReviewManager());
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_LOAD_REVIEWS)) {
+            return new LoadReviewsCommand(Uniflow.getReviewManager());
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_REVIEWS)) {
+            return new ResetReviewsCommand();
+        }
+        // KONIEC
+
         throw new UniflowException("Invalid command");
     }
 
-    private static Command parseListCommand(String command) throws UniflowException {
+    // DODANA NOWA METODA "parseListCommand"
+    private static Command parseListCommand(String command) {
         return new ListCommand();
     }
+    // KONIEC
 
     private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
         String[] parts;
@@ -112,21 +145,52 @@ public class Parser {
         String code = null;
         int credits = -1;
         String grade = null;
-        //default is not major course if not specified
         boolean isMajor = false;
 
         for (String part : parts) {
-            if (part.startsWith("c/")) {
-                code = part.substring(2);
-            } else if (part.startsWith("cr/")) {
-                credits = Integer.parseInt(part.substring(3));
-            } else if (part.startsWith("g/")) {
-                grade = part.substring(2);
-            } else if (part.startsWith("m/")) { //for major course indication
-                isMajor = Boolean.parseBoolean(part.substring(2));
+            if (part.startsWith(PREFIX_CODE)) {
+                code = part.substring(PREFIX_CODE.length()).trim();
+                if (code.isEmpty()) {
+                    throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                }
+            } else if (part.startsWith(PREFIX_CREDITS)) {
+                try {
+                    String creditsStr = part.substring(PREFIX_CREDITS.length()).trim();
+                    if (creditsStr.isEmpty()) {
+                        throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                    }
+                    credits = Integer.parseInt(creditsStr);
+                    if (credits <= 0) {
+                        throw new UniflowException("Please enter a positive integer for credits.");
+                    }
+                } catch (NumberFormatException e) {
+                    throw new UniflowException("Please enter a valid integer for credits.");
+                }
+            } else if (part.startsWith(PREFIX_GRADE)) {
+                grade = part.substring(PREFIX_GRADE.length()).trim().toUpperCase();
+                if (grade.isEmpty()) {
+                    throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                }
+                if (!isValidGrade(grade)) {
+                    throw new UniflowException("Please enter a valid grade.");
+                }
+            } else if (part.startsWith(PREFIX_MAJOR)) { //for major course indication
+                String isMajorStr = part.substring(PREFIX_MAJOR.length()).trim().toLowerCase();
+                if (isMajorStr.isEmpty()) {
+                    throw new UniflowException("Invalid input! At least one of the fields is empty.");
+                }
+                //handling the case where input other than true or false is entered
+                //avoiding invalid strings to be parsed as false
+                if (!isMajorStr.equals("true") && !isMajorStr.equals("false")) {
+                    throw new UniflowException("Please enter 'true' or 'false' for major course indication");
+                }
+                isMajor = Boolean.parseBoolean(isMajorStr);
+            } else  {
+                throw new UniflowException("You have entered invalid components.");
             }
         }
 
+        //checks if any components is missing
         if (code == null || grade == null || credits == -1) {
             if (save) {
                 throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE"
@@ -142,6 +206,17 @@ public class Parser {
         } else {
             return new AddTestGradeCommand(code, credits, grade, isMajor);
         }
+    }
+
+    private static boolean isValidGrade(String grade) {
+        String[] validGrades = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F"};
+        for (String g : validGrades) {
+            if (g.equals(grade)) {
+                //input grade is equal to one of the valid grades
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isValidDay(String day) {

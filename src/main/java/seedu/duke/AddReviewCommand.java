@@ -16,6 +16,12 @@ public class AddReviewCommand extends Command {
     @Override
     public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) {
         reviewManager.addReview(course, user, text);
+        ReviewFileManager.saveAllReviews(reviewManager);
         ui.showMessage("Review added for " + course + ".");
+    }
+
+    @Override
+    public boolean isExit() {
+        return false;
     }
 }
