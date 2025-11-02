@@ -1,26 +1,54 @@
 package seedu.duke;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Handles adding, editing, deleting, and retrieving course reviews.
+ * Reviews are stored and persisted through the ReviewStorage class.
+ */
 public class ReviewManager {
+
     private final Map<String, List<String>> reviews;
     private final ReviewStorage storage;
 
+    /**
+     * Initializes the ReviewManager by loading stored reviews from file.
+     */
     public ReviewManager() {
         storage = new ReviewStorage();
         reviews = storage.load();
     }
 
+    /**
+     * Adds a review for a specific course by a user.
+     *
+     * @param course the course code
+     * @param user   the username of the reviewer
+     * @param text   the review text
+     */
     public void addReview(String course, String user, String text) {
         reviews.computeIfAbsent(course, k -> new ArrayList<>()).add(user + ": " + text);
         storage.save(reviews);
     }
 
+    /**
+     * Retrieves all reviews for a specific course.
+     *
+     * @param course the course code
+     * @return a list of reviews or an empty list if none exist
+     */
     public List<String> getReviews(String course) {
-        return reviews.get(course);
+        return reviews.getOrDefault(course, new ArrayList<>());
     }
 
+    /**
+     * Checks if a course exists in the review list.
+     *
+     * @param course the course code
+     * @return true if the course exists, false otherwise
+     */
     public boolean hasCourse(String course) {
         return reviews.containsKey(course);
     }
@@ -28,8 +56,8 @@ public class ReviewManager {
     /**
      * Edits a user's review for a specific course.
      *
-     * @param course the course code
-     * @param user the username
+     * @param course  the course code
+     * @param user    the username of the reviewer
      * @param newText the new review text
      * @return true if the review was found and edited, false otherwise
      */
@@ -51,10 +79,10 @@ public class ReviewManager {
     }
 
     /**
-     * Checks if a user has already posted a review for a course.
+     * Checks if a user has already posted a review for a specific course.
      *
      * @param course the course code
-     * @param user the username
+     * @param user   the username
      * @return true if the user has a review for the course, false otherwise
      */
     public boolean hasUserReview(String course, String user) {
@@ -75,7 +103,7 @@ public class ReviewManager {
      * Deletes a user's review for a specific course.
      *
      * @param course the course code
-     * @param user the username
+     * @param user   the username
      * @return true if the review was found and deleted, false otherwise
      */
     public boolean deleteReview(String course, String user) {

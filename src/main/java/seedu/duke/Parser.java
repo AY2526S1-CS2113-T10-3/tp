@@ -1,10 +1,13 @@
 package seedu.duke;
+
 import java.util.Set;
+
 public class Parser {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
+    private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADD_GRADE = "addgrade";
     private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
     private static final String COMMAND_GPA = "gpa";
@@ -19,7 +22,6 @@ public class Parser {
     private static final String COMMAND_RATE = "rate";
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
-
 
     private static final Set<String> VALID_DAYS = Set.of(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
@@ -42,6 +44,9 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_LIST)) {
+            return parseListCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
@@ -83,6 +88,10 @@ public class Parser {
         throw new UniflowException("Invalid command");
     }
 
+    private static Command parseListCommand(String command) throws UniflowException {
+        return new ListCommand();
+    }
+
     private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
         String[] parts;
         if (save) {
@@ -104,7 +113,6 @@ public class Parser {
         String code = null;
         int credits = -1;
         String grade = null;
-        //default is not major course if not specified
         boolean isMajor = false;
 
         for (String part : parts) {
@@ -114,7 +122,7 @@ public class Parser {
                 credits = Integer.parseInt(part.substring(3));
             } else if (part.startsWith("g/")) {
                 grade = part.substring(2);
-            } else if (part.startsWith("m/")) { //for major course indication
+            } else if (part.startsWith("m/")) {
                 isMajor = Boolean.parseBoolean(part.substring(2));
             }
         }
@@ -141,7 +149,6 @@ public class Parser {
     }
 
     private static boolean isValidTime(String time) {
-        // Expect format HH:MM (24-hour)
         if (time == null || !time.matches("\\d{2}:\\d{2}")) {
             return false;
         }
@@ -150,6 +157,7 @@ public class Parser {
         int minute = Integer.parseInt(parts[1]);
         return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
     }
+
     private static String getValue(String args, String prefix) {
         int start = args.indexOf(prefix);
         if (start == -1) {
@@ -157,7 +165,6 @@ public class Parser {
         }
         start += prefix.length();
 
-        // Find next prefix (any of the known ones)
         int end = args.length();
         String[] prefixes = {"i/", "n/", "d/", "f/", "t/", "s/"};
         for (String p : prefixes) {
@@ -191,13 +198,11 @@ public class Parser {
                 throw new UniflowException("Missing fields in insert command.");
             }
 
-            // Validate day
             if (!isValidDay(day)) {
                 throw new UniflowException("Invalid day: " + day +
                         ". Expected one of MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY.");
             }
 
-            // Validate time formats
             if (!isValidTime(startTime)) {
                 throw new UniflowException("Invalid start time format: " + startTime +
                         ". Expected HH:MM in 24-hour format (e.g., 09:30).");
@@ -207,7 +212,6 @@ public class Parser {
                         ". Expected HH:MM in 24-hour format (e.g., 11:00).");
             }
 
-            // Validate chronological order
             if (startTime.compareTo(endTime) >= 0) {
                 throw new UniflowException("Start time must be earlier than end time.");
             }
@@ -223,7 +227,6 @@ public class Parser {
             if (command.length() <= COMMAND_DELETE.length()) {
                 throw new UniflowException("Usage: delete index/<module_index>");
             }
-            // Remove "delete"
             String args = command.substring(6).trim();
 
             if (!args.startsWith("index/")) {
@@ -287,7 +290,6 @@ public class Parser {
 
         return new ScoreCommand(normId, normalized);
     }
-
 
     private static Command parseFilterCommand(String command) throws UniflowException {
         String trimmedCommand = command.substring(6).trim();
@@ -376,9 +378,8 @@ public class Parser {
             return null;
         }
 
-        startIdx += prefix.length(); // Move past the prefix
+        startIdx += prefix.length();
 
-        // Find the next prefix (c/, u/, or r/)
         int endIdx = input.length();
         int nextC = input.indexOf(" c/", startIdx);
         int nextU = input.indexOf(" u/", startIdx);

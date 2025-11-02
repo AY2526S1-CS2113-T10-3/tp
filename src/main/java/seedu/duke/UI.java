@@ -43,22 +43,24 @@ public class UI {
         return scanner.nextLine();
     }
 
-    public void showModuleList(ModuleList modules) {
-        System.out.println(DIVIDER);
+    public void showModuleCodes(ModuleList modules) {
+        System.out.println("_________________________________________________________");
         if (modules.isEmpty()) {
-            System.out.println(" Your Module list is empty.");
+            System.out.println(" You don’t have any modules yet.");
         } else {
-            System.out.println(" Here are the Modules in your list:");
+            System.out.println(" Your modules:");
             for (int i = 0; i < modules.getSize(); i++) {
                 try {
-                    System.out.println(" " + (i + 1) + "." + modules.getModule(i));
+                    Module module = modules.getModule(i);
+                    System.out.println(" - " + module.getId());
                 } catch (UniflowException e) {
-                    System.out.println(" " + (i + 1) + ". [Error loading Module: " + e.getMessage() + "]");
+                    System.out.println(" [Error loading module: " + e.getMessage() + "]");
                 }
             }
         }
-        System.out.println(DIVIDER);
+        System.out.println("_________________________________________________________");
     }
+
 
     /**
      * Displays filtered modules with a description of the filter applied.
