@@ -1,10 +1,5 @@
 # Maksymilian Paczyński - Project Portfolio
 
-## Overview
-Uniflow is a command-line assistant that helps students manage university modules, timetables, grades, and course reviews efficiently using text-based commands.
-
-## Summary of Contributions
-
 ### Timetable Management
 
 #### ShowTimetableCommand
