@@ -18,6 +18,12 @@ public class Parser {
     private static final String COMMAND_DELETE_REVIEW = "deletereview";
     private static final String COMMAND_FIND_REVIEW = "findreview";
     private static final String COMMAND_RATE = "rate";
+    // DODANE NOWE KOMENDY
+    private static final String COMMAND_LIST = "list";
+    private static final String COMMAND_LOAD_REVIEWS = "loadreviews";
+    private static final String COMMAND_RESET_REVIEWS = "reset all reviews";
+    private static final String COMMAND_COUNT_REVIEWS = "amount reviews";
+    // KONIEC DODANYCH KOMEND
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
     private static final String PREFIX_CODE = "c/";
@@ -48,6 +54,11 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
         }
+        // DODANA OBSŁUGA "list"
+        if (trimmedCommand.startsWith(COMMAND_LIST)) {
+            return parseListCommand(trimmedCommand);
+        }
+        // KONIEC
         if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
         }
@@ -75,9 +86,12 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
             return parseEditReviewCommand(trimmedCommand);
         }
+        // ZAKTUALIZOWANA OBSŁUGA "findreview"
         if (trimmedCommand.startsWith(COMMAND_FIND_REVIEW)) {
-            return new FindReview(Uniflow.getReviewManager());
+            String args = trimmedCommand.substring(COMMAND_FIND_REVIEW.length()).trim();
+            return new FindReview(args, Uniflow.getReviewManager());
         }
+        // KONIEC AKTUALIZACJI
         if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
             return parseAddReviewCommand(trimmedCommand);
         }
@@ -88,8 +102,27 @@ public class Parser {
             return parseRateCommand(trimmedCommand);
         }
 
+        // DODANA OBSŁUGA NOWYCH KOMEND REVIEW
+        if (trimmedCommand.startsWith(COMMAND_COUNT_REVIEWS)) {
+            String input = trimmedCommand.substring(COMMAND_COUNT_REVIEWS.length()).trim();
+            return new CountReviewsCommand(input, Uniflow.getReviewManager());
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_LOAD_REVIEWS)) {
+            return new LoadReviewsCommand(Uniflow.getReviewManager());
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_REVIEWS)) {
+            return new ResetReviewsCommand();
+        }
+        // KONIEC
+
         throw new UniflowException("Invalid command");
     }
+
+    // DODANA NOWA METODA "parseListCommand"
+    private static Command parseListCommand(String command) {
+        return new ListCommand();
+    }
+    // KONIEC
 
     private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
         String[] parts;

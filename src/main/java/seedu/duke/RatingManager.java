@@ -32,4 +32,3 @@ public class RatingManager {
         return moduleRatings;
     }
 }
-

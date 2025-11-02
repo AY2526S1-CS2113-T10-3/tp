@@ -15,9 +15,10 @@ public class ReviewStorage {
     private static final String FILE_PATH = "data/reviews.txt";
 
     /**
-     * Ensures that the reviews file exists.
-     * Creates both folder and file if missing.
+     * * Ensures that the reviews file exists.
+     * * Creates both folder and file if missing.
      */
+
     public ReviewStorage() {
         File file = new File(FILE_PATH);
         try {
@@ -73,5 +74,9 @@ public class ReviewStorage {
         } catch (IOException e) {
             System.out.println("Error saving reviews.");
         }
+    }
+
+    public static String getFilePath() {
+        return FILE_PATH;
     }
 }

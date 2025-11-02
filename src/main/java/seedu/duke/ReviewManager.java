@@ -43,7 +43,16 @@ public class ReviewManager {
     public List<String> getReviews(String course) {
         return reviews.getOrDefault(course, new ArrayList<>());
     }
-
+    /**
+     * Forces saving all current reviews to persistent storage.
+     */
+    public void flush() {
+        try {
+            storage.save(reviews);
+        } catch (Exception e) {
+            System.out.println("Warning: failed to flush reviews: " + e.getMessage());
+        }
+    }
     /**
      * Checks if a course exists in the review list.
      *
@@ -129,5 +138,15 @@ public class ReviewManager {
      */
     public Set<String> getAllCourseIds() {
         return reviews.keySet();
+    }
+    /**
+     * Reloads all reviews from the storage file into memory.
+     * This can be used to refresh data if the file was modified externally.
+     */
+    public void loadReviews() {
+        Map<String, List<String>> reloaded = storage.load();
+        reviews.clear();
+        reviews.putAll(reloaded);
+        System.out.println("Reviews reloaded from file.");
     }
 }

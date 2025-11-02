@@ -1,4 +1,22 @@
+TEST_c6930024-7c5c-4476-8b6b-05e3da5590db|Maks|Great course
+TEST_7ae8ffc0-5810-4f78-bafa-365495f0cfa6|Maks|Updated review
+TEST_f74db41e-be88-4480-ae44-fbddefcb4d71|Maks|Great course
+TEST_a17c710e-882a-4828-bd80-ad7fe449ddf9|Maks|Updated review
 MA1521|Alex|Challenging but rewarding
+TEST_b898a3f7-fad5-4aef-ae1b-7f1bd2db61ac|Maks|Great course
 CS2113|John|Great module with lots of practical examples
 CS2113|Mary|Could use more real-world projects
 CS2113|Maks|Old review
+TEST_1167ec53-e7a8-4d56-a923-811bed54ae69|Maks|Great course
+TEST_1d98822a-4fed-421c-a1d7-a32c6843096d|Maks|Great course
+TEST_f408a8d7-652e-45a5-987f-fef9bf3a4a35|Maks|Updated review
+TEST_0dee1c06-b0fe-4462-ba4e-e4504c809750|Maks|Great course
+TEST_d0fda706-97f5-4dae-bb1e-109e11c04fb7|Maks|Great course
+TEST_e8e2c384-2aa1-4dac-93f5-25d43f088f29|Maks|Great course
+TEST_4d188099-dc30-42c5-bb81-68a4a9ce11a6|Maks|Updated review
+TEST_ca88b7af-5f2e-4e73-89b8-2ad79bfa556e|Maks|Updated review
+TEST_302092fd-fb73-48dc-8a6e-64e0c45688f6|Maks|Updated review
+TEST_50e389e8-5666-4bd8-bc7d-3ecd1b7472ac|Maks|Great course
+TEST_0bdbe2f9-0fa6-4ec5-bbb3-5294c5fa71b0|Maks|Updated review
+TEST_01798f6f-ff9f-4b33-99d1-ca862764fe15|Maks|Updated review
+TEST_0f81a5c5-f3cb-4ea5-8234-5f0f1d4a8ef4|Maks|Updated review
