@@ -20,6 +20,10 @@ public class Parser {
     private static final String COMMAND_RATE = "rate";
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
+    private static final String PREFIX_CODE = "c/";
+    private static final String PREFIX_CREDITS = "cr/";
+    private static final String PREFIX_GRADE = "g/";
+    private static final String PREFIX_MAJOR = "m/";
 
 
     private static final Set<String> VALID_DAYS = Set.of(
@@ -115,14 +119,14 @@ public class Parser {
         boolean isMajor = false;
 
         for (String part : parts) {
-            if (part.startsWith("c/")) {
-                code = part.substring(2).trim();
+            if (part.startsWith(PREFIX_CODE)) {
+                code = part.substring(PREFIX_CODE.length()).trim();
                 if (code.isEmpty()) {
                     throw new UniflowException("Invalid input! At least one of the fields is empty.");
                 }
-            } else if (part.startsWith("cr/")) {
+            } else if (part.startsWith(PREFIX_CREDITS)) {
                 try {
-                    String creditsStr = part.substring(3).trim();
+                    String creditsStr = part.substring(PREFIX_CREDITS.length()).trim();
                     if (creditsStr.isEmpty()) {
                         throw new UniflowException("Invalid input! At least one of the fields is empty.");
                     }
@@ -133,16 +137,16 @@ public class Parser {
                 } catch (NumberFormatException e) {
                     throw new UniflowException("Please enter a valid integer for credits.");
                 }
-            } else if (part.startsWith("g/")) {
-                grade = part.substring(2).trim().toUpperCase();
+            } else if (part.startsWith(PREFIX_GRADE)) {
+                grade = part.substring(PREFIX_GRADE.length()).trim().toUpperCase();
                 if (grade.isEmpty()) {
                     throw new UniflowException("Invalid input! At least one of the fields is empty.");
                 }
                 if (!isValidGrade(grade)) {
                     throw new UniflowException("Please enter a valid grade.");
                 }
-            } else if (part.startsWith("m/")) { //for major course indication
-                String isMajorStr = part.substring(2).trim().toLowerCase();
+            } else if (part.startsWith(PREFIX_MAJOR)) { //for major course indication
+                String isMajorStr = part.substring(PREFIX_MAJOR.length()).trim().toLowerCase();
                 if (isMajorStr.isEmpty()) {
                     throw new UniflowException("Invalid input! At least one of the fields is empty.");
                 }
