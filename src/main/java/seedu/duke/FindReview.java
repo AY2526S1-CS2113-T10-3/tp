@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Command to find reviews by user or course.
+ */
 public class FindReview extends Command {
     private final String user;
     private final String course;
@@ -24,7 +27,8 @@ public class FindReview extends Command {
             }
         }
 
-        if ((tempUser == null || tempUser.isEmpty()) && (tempCourse == null || tempCourse.isEmpty())) {
+        if ((tempUser == null || tempUser.isEmpty())
+                && (tempCourse == null || tempCourse.isEmpty())) {
             throw new UniflowException("Usage: findreview u/USER or findreview c/COURSE or both.");
         }
 
@@ -33,7 +37,8 @@ public class FindReview extends Command {
     }
 
     @Override
-    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord)
+            throws UniflowException {
         List<String> results = new ArrayList<>();
 
         if (user == null) {
@@ -47,7 +52,9 @@ public class FindReview extends Command {
             Set<String> allCourses = reviewManager.getAllCourseIds();
             for (String c : allCourses) {
                 List<String> list = reviewManager.getReviews(c);
-                if (list == null) continue;
+                if (list == null) {
+                    continue;
+                }
                 for (String r : list) {
                     if (r.startsWith(user + ": ")) {
                         results.add(c + " - " + r);

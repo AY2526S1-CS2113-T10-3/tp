@@ -39,7 +39,9 @@ public class CountReviewsCommand extends Command {
             Set<String> allCourses = reviewManager.getAllCourseIds();
             for (String c : allCourses) {
                 List<String> reviews = reviewManager.getReviews(c);
-                if (reviews == null) continue;
+                if (reviews == null) {
+                    continue;
+                };
                 for (String r : reviews) {
                     if (r.startsWith(user + ": ")) {
                         count++;

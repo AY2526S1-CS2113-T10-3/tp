@@ -7,8 +7,6 @@ public class Parser {
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
-    private static final String COMMAND_LOAD_REVIEWS = "loadreviews";
-    private static final String COMMAND_RESET_REVIEWS = "reset all reviews";
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADD_GRADE = "addgrade";
     private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
@@ -21,16 +19,13 @@ public class Parser {
     private static final String COMMAND_ADD_REVIEW = "addreview";
     private static final String COMMAND_EDIT_REVIEW = "editreview";
     private static final String COMMAND_DELETE_REVIEW = "deletereview";
-    private static final String COMMAND_FIND_REVIEW = "findreview";
     private static final String COMMAND_RATE = "rate";
-
+    private static final String COMMAND_FIND_REVIEW = "findreview";
+    private static final String COMMAND_LOAD_REVIEWS = "loadreviews";
+    private static final String COMMAND_RESET_REVIEWS = "reset all reviews";
+    private static final String COMMAND_COUNT_REVIEWS = "amount reviews";
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
-
-    private static final String PREFIX_CODE = "c/";
-    private static final String PREFIX_CREDITS = "cr/";
-    private static final String PREFIX_GRADE = "g/";
-    private static final String PREFIX_MAJOR = "m/";
 
     private static final Set<String> VALID_DAYS = Set.of(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY",
@@ -46,54 +41,79 @@ public class Parser {
 
         if (trimmedCommand.equals(COMMAND_BYE)) {
             return new ExitCommand();
-        } else if (trimmedCommand.startsWith(COMMAND_INSERT)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_INSERT)) {
             return parseInsertCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_DELETE_REVIEW)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_DELETE_REVIEW)) {
             return parseDeleteReviewCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_DELETE)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_LIST)) {
-            return new ListCommand();
-        } else if (trimmedCommand.startsWith(COMMAND_FILTER)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_LIST)) {
+            return parseListCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_SCORE)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_SCORE)) {
             return parseScoreCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_ADD_GRADE)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_ADD_GRADE)) {
             return parseAddGradeCommand(trimmedCommand, true);
-        } else if (trimmedCommand.startsWith(COMMAND_ADD_TEST_GRADE)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_ADD_TEST_GRADE)) {
             return parseAddGradeCommand(trimmedCommand, false);
-        } else if (trimmedCommand.equals(COMMAND_GPA)) {
+        }
+        if (trimmedCommand.equals(COMMAND_GPA)) {
             return new ComputeGpaCommand();
-        } else if (trimmedCommand.equals(COMMAND_PROJECT_GPA)) {
+        }
+        if (trimmedCommand.equals(COMMAND_PROJECT_GPA)) {
             return new ProjectGpaCommand();
-        } else if (trimmedCommand.equalsIgnoreCase(COMMAND_SHOW_TIMETABLE)) {
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_SHOW_TIMETABLE)) {
             return new ShowTimetableCommand();
-        } else if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_TIMETABLE)) {
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_TIMETABLE)) {
             return new ResetTimetableCommand();
-        } else if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
             return parseEditReviewCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_FIND_REVIEW)) {
+        }
+        if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
+            return parseAddReviewCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_REVIEW)) {
+            return parseReviewCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_RATE)) {
+            return parseRateCommand(trimmedCommand);
+        }
+
+        if (trimmedCommand.startsWith(COMMAND_FIND_REVIEW)) {
             String args = trimmedCommand.substring(COMMAND_FIND_REVIEW.length()).trim();
             return new FindReview(args, Uniflow.getReviewManager());
-        } else if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
-                return parseAddReviewCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_REVIEW)) {
-            return parseReviewCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith(COMMAND_RATE)) {
-            return parseRateCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith("amount reviews")) {
-            String input = trimmedCommand.substring("amount reviews".length()).trim();
+        }
+        if (trimmedCommand.startsWith(COMMAND_COUNT_REVIEWS)) {
+            String input = trimmedCommand.substring(COMMAND_COUNT_REVIEWS.length()).trim();
             return new CountReviewsCommand(input, Uniflow.getReviewManager());
-        } else if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_REVIEWS)) {
-            return new ResetReviewsCommand();
-        } else if (trimmedCommand.equalsIgnoreCase(COMMAND_LOAD_REVIEWS)) {
+        }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_LOAD_REVIEWS)) {
             return new LoadReviewsCommand(Uniflow.getReviewManager());
         }
+        if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_REVIEWS)) {
+            return new ResetReviewsCommand();
+        }
+
         throw new UniflowException("Invalid command");
     }
 
-    private static Command parseAddGradeCommand(String command, boolean save)
-            throws UniflowException {
+    private static Command parseListCommand(String command) {
+        return new ListCommand();
+    }
+
+    private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
         String[] parts;
         if (save) {
             parts = command.substring(COMMAND_ADD_GRADE.length()).trim().split(" ");
@@ -102,7 +122,7 @@ public class Parser {
         }
 
         if (parts.length != 4) {
-            throw new UniflowException("Please follow format: "
+            throw new UniflowException("Please follow the format: "
                     + (save ? "addgrade" : "addtestgrade")
                     + " c/COURSE_CODE cr/CREDITS g/GRADE m/ISMAJOR");
         }
@@ -113,18 +133,14 @@ public class Parser {
         boolean isMajor = false;
 
         for (String part : parts) {
-            if (part.startsWith(PREFIX_CODE)) {
-                code = part.substring(PREFIX_CODE.length()).trim();
-            } else if (part.startsWith(PREFIX_CREDITS)) {
-                credits = Integer.parseInt(
-                        part.substring(PREFIX_CREDITS.length()).trim()
-                );
-            } else if (part.startsWith(PREFIX_GRADE)) {
-                grade = part.substring(PREFIX_GRADE.length()).trim();
-            } else if (part.startsWith(PREFIX_MAJOR)) {
-                isMajor = Boolean.parseBoolean(
-                        part.substring(PREFIX_MAJOR.length()).trim()
-                );
+            if (part.startsWith("c/")) {
+                code = part.substring(2);
+            } else if (part.startsWith("cr/")) {
+                credits = Integer.parseInt(part.substring(3));
+            } else if (part.startsWith("g/")) {
+                grade = part.substring(2);
+            } else if (part.startsWith("m/")) {
+                isMajor = Boolean.parseBoolean(part.substring(2));
             }
         }
 
@@ -159,6 +175,7 @@ public class Parser {
             return null;
         }
         start += prefix.length();
+
         int end = args.length();
         String[] prefixes = {"i/", "n/", "d/", "f/", "t/", "s/"};
         for (String p : prefixes) {
@@ -170,12 +187,16 @@ public class Parser {
                 end = idx;
             }
         }
+
         return args.substring(start, end).trim();
     }
 
-    private static Command parseInsertCommand(String command)
-            throws UniflowException {
+    private static Command parseInsertCommand(String command) throws UniflowException {
         try {
+            if (command.length() <= COMMAND_INSERT.length()) {
+                throw new UniflowException("Usage: insert i/<ID> n/<Name> d/<Day> f/<Start> t/<End> [s/<Type>]");
+            }
+
             String args = command.substring(7).trim();
             String id = getValue(args, "i/");
             String moduleName = getValue(args, "n/");
@@ -184,8 +205,7 @@ public class Parser {
             String endTime = getValue(args, "t/");
             String sessionType = getValue(args, "s/");
 
-            if (id == null || moduleName == null
-                    || day == null || startTime == null || endTime == null) {
+            if (id == null || moduleName == null || day == null || startTime == null || endTime == null) {
                 throw new UniflowException("Missing fields in insert command.");
             }
 
@@ -203,18 +223,21 @@ public class Parser {
 
             return new InsertCommand(id, moduleName, day, startTime, endTime, sessionType);
         } catch (Exception e) {
-            throw new UniflowException("Failed to parse insert command: "
-                    + e.getMessage());
+            throw new UniflowException("Failed to parse insert command: " + e.getMessage());
         }
     }
 
-    private static Command parseDeleteCommand(String command)
-            throws UniflowException {
+    private static Command parseDeleteCommand(String command) throws UniflowException {
         try {
-            String args = command.substring(6).trim();
-            if (!args.startsWith("index/")) {
-                throw new UniflowException("Invalid format. Use: delete index/<module_index>");
+            if (command.length() <= COMMAND_DELETE.length()) {
+                throw new UniflowException("Usage: delete index/<module_index>");
             }
+            String args = command.substring(6).trim();
+
+            if (!args.startsWith("index/")) {
+                throw new UniflowException("Invalid format. Please use: delete index/<module_index>");
+            }
+
             int moduleIndex = Integer.parseInt(args.substring(6).trim());
             return new DeleteCommand(moduleIndex);
         } catch (Exception e) {
@@ -222,9 +245,9 @@ public class Parser {
         }
     }
 
-    private static Command parseScoreCommand(String command)
-            throws UniflowException {
+    private static Command parseScoreCommand(String command) throws UniflowException {
         String remainder = command.substring(COMMAND_SCORE.length()).trim();
+
         if (remainder.isEmpty()) {
             throw new UniflowException("Usage: score <MODULE_ID> name1:val1 name2:val2 ...");
         }
@@ -240,9 +263,9 @@ public class Parser {
         return new ScoreCommand(id, breakdown);
     }
 
-    private static Command parseFilterCommand(String command)
-            throws UniflowException {
+    private static Command parseFilterCommand(String command) throws UniflowException {
         String trimmedCommand = command.substring(6).trim();
+
         if (trimmedCommand.isEmpty()) {
             throw new UniflowException("Usage: filter type/VALUE");
         }
@@ -255,8 +278,7 @@ public class Parser {
         return new FilterCommand(parts[0].trim(), parts[1].trim());
     }
 
-    private static Command parseReviewCommand(String command)
-            throws UniflowException {
+    private static Command parseReviewCommand(String command) throws UniflowException {
         String[] parts = command.split(" ", 2);
         if (parts.length < 2) {
             throw new UniflowException("Usage: review COURSE_NAME");
@@ -264,8 +286,7 @@ public class Parser {
         return new ReviewCommand(parts[1].trim(), Uniflow.getReviewManager());
     }
 
-    private static Command parseAddReviewCommand(String command)
-            throws UniflowException {
+    private static Command parseAddReviewCommand(String command) throws UniflowException {
         String input = command.substring(COMMAND_ADD_REVIEW.length()).trim();
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
@@ -278,8 +299,7 @@ public class Parser {
         return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
     }
 
-    private static Command parseEditReviewCommand(String command)
-            throws UniflowException {
+    private static Command parseEditReviewCommand(String command) throws UniflowException {
         String input = command.substring(COMMAND_EDIT_REVIEW.length()).trim();
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
@@ -292,8 +312,7 @@ public class Parser {
         return new EditReviewCommand(course, user, newText, Uniflow.getReviewManager());
     }
 
-    private static Command parseDeleteReviewCommand(String command)
-            throws UniflowException {
+    private static Command parseDeleteReviewCommand(String command) throws UniflowException {
         String input = command.substring(COMMAND_DELETE_REVIEW.length()).trim();
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
@@ -331,8 +350,7 @@ public class Parser {
         return input.substring(startIdx, endIdx).trim();
     }
 
-    private static Command parseRateCommand(String command)
-            throws UniflowException {
+    private static Command parseRateCommand(String command) throws UniflowException {
         String args = command.substring(COMMAND_RATE.length()).trim();
 
         if (args.isEmpty()) {
@@ -346,7 +364,13 @@ public class Parser {
             return new RateCommand(moduleCode, RATING_QUERY_MODE);
         }
 
-        int score = Integer.parseInt(parts[1].trim());
+        int score;
+        try {
+            score = Integer.parseInt(parts[1].trim());
+        } catch (NumberFormatException e) {
+            throw new UniflowException("Rating must be a number between 1 and 5.");
+        }
+
         if (score < 1 || score > 5) {
             throw new UniflowException("Rating must be between 1 and 5.");
         }
