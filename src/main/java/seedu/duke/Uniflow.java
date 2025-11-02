@@ -56,7 +56,7 @@ public class Uniflow {
                 if (c instanceof AddGradeCommand) {
                     gradeStorage.saveGradeRecord(courseRecord);
                 }
-                if (c instanceof InsertCommand) {
+                if (c instanceof InsertCommand || c instanceof DeleteCommand || c instanceof ResetTimetableCommand) {
                     moduleStorage.saveModules(modules);
                 }
                 isExit = c.isExit();
