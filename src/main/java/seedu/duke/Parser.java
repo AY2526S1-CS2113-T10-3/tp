@@ -22,6 +22,10 @@ public class Parser {
     private static final String COMMAND_RATE = "rate";
     private static final int RATING_QUERY_MODE = -1;
     private static final String SCORE_QUERY_MODE = "-1";
+    private static final String PREFIX_CODE = "c/";
+    private static final String PREFIX_CREDITS = "cr/";
+    private static final String PREFIX_GRADE = "g/";
+    private static final String PREFIX_MAJOR = "m/";
 
     private static final Set<String> VALID_DAYS = Set.of(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
@@ -127,6 +131,7 @@ public class Parser {
             }
         }
 
+        //checks if any components is missing
         if (code == null || grade == null || credits == -1) {
             if (save) {
                 throw new UniflowException("Please follow the format: addgrade c/COURSE_CODE"
@@ -142,6 +147,17 @@ public class Parser {
         } else {
             return new AddTestGradeCommand(code, credits, grade, isMajor);
         }
+    }
+
+    private static boolean isValidGrade(String grade) {
+        String[] validGrades = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "F"};
+        for (String g : validGrades) {
+            if (g.equals(grade)) {
+                //input grade is equal to one of the valid grades
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isValidDay(String day) {
