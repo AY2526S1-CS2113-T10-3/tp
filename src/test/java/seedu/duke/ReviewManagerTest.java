@@ -1,11 +1,12 @@
 package seedu.duke;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ReviewManagerTest {
 
@@ -52,14 +53,13 @@ class ReviewManagerTest {
         assertTrue(deleted);
 
         List<String> reviews = rm.getReviews(course);
-        // getReviews może zwrócić null, jeśli nic nie ma
         assertTrue(reviews == null || reviews.isEmpty());
     }
 
     @Test
     void getReviews_noReviews_returnsEmptyOrNull() {
         ReviewManager rm = new ReviewManager();
-        String course = uniqueCourse(); // nie istnieje w pliku
+        String course = uniqueCourse();
 
         List<String> reviews = rm.getReviews(course);
         assertTrue(reviews == null || reviews.isEmpty());
