@@ -109,14 +109,14 @@ score CS2113 exam:50 project:30 participation:20
 
 View Score Breakdown Format:
 ```commandline
-score MODULE_CODE -1
+score MODULE_CODE
 ```
 
 Example:
 ```commandline
-score CS2113 -1
+score CS2113
 ```
-Note: The course must already exist in your grade record before you can add scores.
+Note: The course must already exist in your timetable you can add scores.
 
 ### Adding a Review: `addreview`
 Allows users to add a text review for a course.
