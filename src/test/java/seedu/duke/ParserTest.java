@@ -32,12 +32,6 @@ class ParserTest {
     }
 
     @Test
-    void parse_listCommand() throws UniflowException {
-        Command command = Parser.parse("list");
-        assertInstanceOf(ListCommand.class, command);
-    }
-
-    @Test
     void parse_filterCommand() throws UniflowException {
         Command command = Parser.parse("filter day/Monday");
         assertInstanceOf(FilterCommand.class, command);

@@ -5,7 +5,6 @@ public class Parser {
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
-    private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADD_GRADE = "addgrade";
     private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
     private static final String COMMAND_GPA = "gpa";
@@ -43,9 +42,6 @@ public class Parser {
         }
         if (trimmedCommand.startsWith(COMMAND_DELETE)) {
             return parseDeleteCommand(trimmedCommand);
-        }
-        if (trimmedCommand.startsWith(COMMAND_LIST)) {
-            return parseListCommand(trimmedCommand);
         }
         if (trimmedCommand.startsWith(COMMAND_FILTER)) {
             return parseFilterCommand(trimmedCommand);
@@ -85,10 +81,6 @@ public class Parser {
         }
 
         throw new UniflowException("Invalid command");
-    }
-
-    private static Command parseListCommand(String command) throws UniflowException {
-        return new ListCommand();
     }
 
     private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
