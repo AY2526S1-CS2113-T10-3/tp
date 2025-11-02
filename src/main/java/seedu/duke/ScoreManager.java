@@ -36,4 +36,14 @@ public class ScoreManager {
     private static String normalize(String code) {
         return code == null ? "" : code.trim().toUpperCase();
     }
+
+
+    public void removeBreakdown(String code) {
+        if (code == null) {
+            return;
+        }
+        String key = code.toUpperCase().trim();
+        scoresByModule.remove(key);
+        storage.save(scoresByModule);
+    }
 }
