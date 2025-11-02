@@ -7,6 +7,8 @@ public class Parser {
     private static final String COMMAND_INSERT = "insert";
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_SCORE = "score";
+    private static final String COMMAND_LOAD_REVIEWS = "loadreviews";
+    private static final String COMMAND_RESET_REVIEWS = "reset all reviews";
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_ADD_GRADE = "addgrade";
     private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
@@ -71,15 +73,22 @@ public class Parser {
         } else if (trimmedCommand.startsWith(COMMAND_EDIT_REVIEW)) {
             return parseEditReviewCommand(trimmedCommand);
         } else if (trimmedCommand.startsWith(COMMAND_FIND_REVIEW)) {
-            return new FindReview(Uniflow.getReviewManager());
+            String args = trimmedCommand.substring(COMMAND_FIND_REVIEW.length()).trim();
+            return new FindReview(args, Uniflow.getReviewManager());
         } else if (trimmedCommand.startsWith(COMMAND_ADD_REVIEW)) {
-            return parseAddReviewCommand(trimmedCommand);
+                return parseAddReviewCommand(trimmedCommand);
         } else if (trimmedCommand.startsWith(COMMAND_REVIEW)) {
             return parseReviewCommand(trimmedCommand);
         } else if (trimmedCommand.startsWith(COMMAND_RATE)) {
             return parseRateCommand(trimmedCommand);
+        } else if (trimmedCommand.startsWith("amount reviews")) {
+            String input = trimmedCommand.substring("amount reviews".length()).trim();
+            return new CountReviewsCommand(input, Uniflow.getReviewManager());
+        } else if (trimmedCommand.equalsIgnoreCase(COMMAND_RESET_REVIEWS)) {
+            return new ResetReviewsCommand();
+        } else if (trimmedCommand.equalsIgnoreCase(COMMAND_LOAD_REVIEWS)) {
+            return new LoadReviewsCommand(Uniflow.getReviewManager());
         }
-
         throw new UniflowException("Invalid command");
     }
 

@@ -14,10 +14,6 @@ import java.util.Map;
 public class ReviewStorage {
     private static final String FILE_PATH = "data/reviews.txt";
 
-    /**
-     * Ensures that the reviews file exists.
-     * Creates both folder and file if missing.
-     */
     public ReviewStorage() {
         File file = new File(FILE_PATH);
         try {
@@ -32,10 +28,6 @@ public class ReviewStorage {
         }
     }
 
-    /**
-     * Loads all reviews from the file.
-     * @return a map of course -> list of reviews
-     */
     public Map<String, List<String>> load() {
         Map<String, List<String>> reviews = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
@@ -53,10 +45,6 @@ public class ReviewStorage {
         return reviews;
     }
 
-    /**
-     * Saves all reviews to the file.
-     * @param reviews map of course -> list of reviews
-     */
     public void save(Map<String, List<String>> reviews) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Map.Entry<String, List<String>> entry : reviews.entrySet()) {
@@ -73,5 +61,9 @@ public class ReviewStorage {
         } catch (IOException e) {
             System.out.println("Error saving reviews.");
         }
+    }
+
+    public static String getFilePath() {
+        return FILE_PATH;
     }
 }
