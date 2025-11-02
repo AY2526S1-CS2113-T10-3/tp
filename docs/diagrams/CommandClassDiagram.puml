@@ -16,10 +16,6 @@ class DeleteCommand {
   + execute(...)
 }
 
-class ListCommand {
-  + execute(...)
-}
-
 class FilterCommand {
   - filterType: String
   - filterValue: String
@@ -41,7 +37,6 @@ class XYZCommand {
 
 Command <|-- InsertCommand
 Command <|-- DeleteCommand
-Command <|-- ListCommand
 Command <|-- FilterCommand
 Command <|-- AddGradeCommand
 Command <|-- ComputeGpaCommand

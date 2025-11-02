@@ -1,0 +1,4 @@
+MA1521|Alex|Challenging but rewarding
+CS2113|John|Great module with lots of practical examples
+CS2113|Mary|Could use more real-world projects
+CS2113|Maks|Old review
