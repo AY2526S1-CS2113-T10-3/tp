@@ -11,7 +11,6 @@ public class ReviewSyncManager {
         try {
             reviewManager.flush();
             new ReviewCleaner().cleanInvalidReviews();
-            System.out.println("Reviews synced and cleaned.");
         } catch (Exception e) {
             System.out.println("Warning: failed to save reviews: " + e.getMessage());
         }
