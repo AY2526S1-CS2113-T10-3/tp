@@ -3,6 +3,7 @@ package seedu.duke;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Handles adding, editing, deleting, and retrieving course reviews.
@@ -121,5 +122,12 @@ public class ReviewManager {
             }
         }
         return false;
+    }
+
+    /**
+     * Returns the set of all course IDs that have at least one review.
+     */
+    public Set<String> getAllCourseIds() {
+        return reviews.keySet();
     }
 }
