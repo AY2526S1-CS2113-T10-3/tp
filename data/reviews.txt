@@ -1,4 +1,6 @@
+TEST_ba96418b-1dce-47bc-94c0-b76c007d9981|Maks|Great course
 MA1521|Alex|Challenging but rewarding
+TEST_438b2120-16a2-4a92-9bb9-200ab5a13c9b|Maks|Updated review
 CS2113|John|Great module with lots of practical examples
 CS2113|Mary|Could use more real-world projects
 CS2113|Maks|Old review
