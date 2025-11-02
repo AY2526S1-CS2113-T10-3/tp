@@ -50,4 +50,22 @@ public class ScoreManager {
         scoresByModule.clear();
         storage.save(scoresByModule);
     }
+
+    public void pruneAgainst(ModuleList modules) {
+        if (modules == null) {
+            return;
+        }
+        boolean changed = false;
+        var iter = scoresByModule.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            if (!modules.doesExist(key)) {
+                iter.remove();
+                changed = true;
+            }
+        }
+        if (changed) {
+            storage.save(scoresByModule);
+        }
+    }
 }
