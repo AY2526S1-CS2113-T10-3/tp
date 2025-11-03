@@ -34,6 +34,7 @@ public class ReviewManager {
 
     /**
      * Adds a review for a specific course by a user.
+     * Allows multiple reviews from the same user.
      *
      * @param course the course code
      * @param user   the username of the reviewer
@@ -41,7 +42,6 @@ public class ReviewManager {
      */
     public void addReview(String course, String user, String text) {
         reviews.computeIfAbsent(course, k -> new ArrayList<>()).add(user + ": " + text);
-        // removed storage.save(reviews);
     }
 
     /**
@@ -65,27 +65,36 @@ public class ReviewManager {
     }
 
     /**
-     * Edits a user's review for a specific course.
+     * Edits a specific review from a user for a specific course.
      *
      * @param course  the course code
      * @param user    the username of the reviewer
      * @param newText the new review text
+     * @param index   the index of the review to edit (0-based)
      * @return true if the review was found and edited, false otherwise
      */
-    public boolean editReview(String course, String user, String newText) {
+    public boolean editReview(String course, String user, String newText, int index) {
         if (!reviews.containsKey(course)) {
             return false;
         }
 
         List<String> courseReviews = reviews.get(course);
+        List<Integer> userReviewIndices = new ArrayList<>();
+
+        // Find all reviews from this user
         for (int i = 0; i < courseReviews.size(); i++) {
-            String review = courseReviews.get(i);
-            if (review.startsWith(user + ": ")) {
-                courseReviews.set(i, user + ": " + newText);
-                return true;
+            if (courseReviews.get(i).startsWith(user + ": ")) {
+                userReviewIndices.add(i);
             }
         }
-        return false;
+
+        if (index < 0 || index >= userReviewIndices.size()) {
+            return false;
+        }
+
+        int actualIndex = userReviewIndices.get(index);
+        courseReviews.set(actualIndex, user + ": " + newText);
+        return true;
     }
 
     /**
@@ -110,26 +119,41 @@ public class ReviewManager {
     }
 
     /**
-     * Deletes a user's review for a specific course.
+     * Deletes a specific review from a user for a specific course.
      *
      * @param course the course code
      * @param user   the username
+     * @param index  the index of the review to delete (0-based)
      * @return true if the review was found and deleted, false otherwise
      */
-    public boolean deleteReview(String course, String user) {
+    public boolean deleteReview(String course, String user, int index) {
         if (!reviews.containsKey(course)) {
             return false;
         }
 
         List<String> courseReviews = reviews.get(course);
+        List<Integer> userReviewIndices = new ArrayList<>();
+
+        // Find all reviews from this user
         for (int i = 0; i < courseReviews.size(); i++) {
-            String review = courseReviews.get(i);
-            if (review.startsWith(user + ": ")) {
-                courseReviews.remove(i);
-                return true;
+            if (courseReviews.get(i).startsWith(user + ": ")) {
+                userReviewIndices.add(i);
             }
         }
-        return false;
+
+        if (index < 0 || index >= userReviewIndices.size()) {
+            return false;
+        }
+
+        int actualIndex = userReviewIndices.get(index);
+        courseReviews.remove(actualIndex);
+
+        // Remove course entry if no reviews left
+        if (courseReviews.isEmpty()) {
+            reviews.remove(course);
+        }
+
+        return true;
     }
 
     /**
@@ -180,6 +204,7 @@ public class ReviewManager {
 
         return added > 0;
     }
+
     /**
      * Returns all reviews currently stored in memory.
      */
