@@ -1,7 +1,0 @@
-CS2113|John|Great module with lots of practical examples and engaging lectures
-CS2113|Mary|Challenging assignments but very rewarding once completed
-CS2100|Tom|Tough but fair exams with clear grading criteria
-CS2100|Maks|Interesting topics but the labs can be quite intense
-MA1521|Alex|Challenging but rewarding if you keep up with tutorials
-CS2040|Lisa|Good balance of theory and coding practice
-IS1103|Ben|Useful overview of IT ethics and real-world implications

@@ -38,14 +38,14 @@ public class ModuleStorage {
                 String line = scanner.nextLine();
 
                 String[] parts = line.split(" \\| ");
-                String ID = parts[0].trim();
+                String id = parts[0].trim();  // Changed from ID to id
                 String name = parts[1].trim();
                 String day = parts[2].trim();
                 String startTime = parts[3].trim();
                 String endTime = parts[4].trim();
                 String sessionType = parts[5] != null ? parts[5].toLowerCase() : "lecture";
 
-                loadedModules.addModule(new Module(ID, name, day, startTime, endTime, sessionType));
+                loadedModules.addModule(new Module(id, name, day, startTime, endTime, sessionType));
 
             }
             scanner.close();
@@ -54,6 +54,4 @@ public class ModuleStorage {
         }
         return loadedModules;
     }
-
-
 }

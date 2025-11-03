@@ -184,7 +184,7 @@ public class CourseRecord {
 
     public Course getCourse(String code) {
         for (Course c : courses) {
-            if (c.getCode() != null && c.getCode().trim().toUpperCase().equals(code.trim().toUpperCase())) {
+            if (c.getCode() != null && c.getCode().trim().equalsIgnoreCase(code.trim())) {
                 return c;
             }
         }

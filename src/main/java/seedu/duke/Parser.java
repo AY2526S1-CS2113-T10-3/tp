@@ -412,8 +412,15 @@ public class Parser {
         String user = extractParameter(input, "u/");
         String text = extractParameter(input, "r/");
 
-        if (course == null || user == null || text == null) {
-            throw new UniflowException("Usage: addreview c/COURSE u/USER r/REVIEW");
+        // Validate all required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+        if (text == null || text.trim().isEmpty()) {
+            throw new UniflowException("Review text cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
         }
 
         return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
@@ -425,12 +432,32 @@ public class Parser {
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
         String newText = extractParameter(input, "r/");
+        String indexStr = extractParameter(input, "i/");
 
-        if (course == null || user == null || newText == null) {
-            throw new UniflowException("Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+        // Validate all required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. "
+                    + "Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. "
+                    + "Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
+        }
+        if (newText == null || newText.trim().isEmpty()) {
+            throw new UniflowException("Review text cannot be empty. "
+                    + "Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
 
-        return new EditReviewCommand(course, user, newText, Uniflow.getReviewManager());
+        Integer index = null;
+        if (indexStr != null && !indexStr.trim().isEmpty()) {
+            try {
+                index = Integer.parseInt(indexStr.trim());
+            } catch (NumberFormatException e) {
+                throw new UniflowException("Invalid index. Please enter a valid number.");
+            }
+        }
+
+        return new EditReviewCommand(course, user, newText, index, Uniflow.getReviewManager());
     }
 
     private static Command parseDeleteReviewCommand(String command) throws UniflowException {
@@ -438,39 +465,52 @@ public class Parser {
 
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
+        String indexStr = extractParameter(input, "i/");
 
-        if (course == null || user == null) {
-            throw new UniflowException("Usage: deletereview c/COURSE u/USER");
+        // Validate required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. "
+                    + "Usage: deletereview c/COURSE u/USER [i/INDEX]");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. "
+                    + "Usage: deletereview c/COURSE u/USER [i/INDEX]");
         }
 
-        return new DeleteReviewCommand(course, user, Uniflow.getReviewManager());
+        Integer index = null;
+        if (indexStr != null && !indexStr.trim().isEmpty()) {
+            try {
+                index = Integer.parseInt(indexStr.trim());
+            } catch (NumberFormatException e) {
+                throw new UniflowException("Invalid index. Please enter a valid number.");
+            }
+        }
+
+        return new DeleteReviewCommand(course, user, index, Uniflow.getReviewManager());
     }
 
     private static String extractParameter(String input, String prefix) {
-        int startIdx = input.indexOf(prefix);
-        if (startIdx == -1) {
+        int startIndex = input.indexOf(prefix);
+        if (startIndex == -1) {
             return null;
         }
+        startIndex += prefix.length();
 
-        startIdx += prefix.length(); // Move past the prefix
+        // Find the next parameter (space followed by a parameter prefix)
+        int endIndex = input.length();
+        String[] prefixes = {"c/", "u/", "r/", "i/"};
 
-        // Find the next prefix (c/, u/, or r/)
-        int endIdx = input.length();
-        int nextC = input.indexOf(" c/", startIdx);
-        int nextU = input.indexOf(" u/", startIdx);
-        int nextR = input.indexOf(" r/", startIdx);
-
-        if (nextC != -1 && nextC < endIdx) {
-            endIdx = nextC;
-        }
-        if (nextU != -1 && nextU < endIdx) {
-            endIdx = nextU;
-        }
-        if (nextR != -1 && nextR < endIdx) {
-            endIdx = nextR;
+        for (String nextPrefix : prefixes) {
+            if (nextPrefix.equals(prefix)) {
+                continue; // Skip the current prefix
+            }
+            int nextPrefixIndex = input.indexOf(" " + nextPrefix, startIndex);
+            if (nextPrefixIndex != -1 && nextPrefixIndex < endIndex) {
+                endIndex = nextPrefixIndex;
+            }
         }
 
-        return input.substring(startIdx, endIdx).trim();
+        return input.substring(startIndex, endIndex).trim();
     }
 
     private static Command parseRateCommand(String command) throws UniflowException {

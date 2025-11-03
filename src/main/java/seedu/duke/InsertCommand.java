@@ -21,7 +21,7 @@ public class InsertCommand extends Command {
             }
         }
         modules.addModule(module);
-        ui.showMessage("Got it! I've added this module:\n  " + module.toString() +
+        ui.showMessage("Got it! I've added this module:\n  " + module +
                 "\nNow you have " + modules.getSize() + " module(s) in the list.");
     }
 
