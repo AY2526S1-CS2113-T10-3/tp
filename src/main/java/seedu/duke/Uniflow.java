@@ -33,7 +33,6 @@ public class Uniflow {
         try {
             courseRecord = gradeStorage.loadGradeRecord();
             modules = moduleStorage.loadModules();
-            //ui.showMessage("Loaded " + courseRecord.getSize() + " saved course(s) from record.");
         } catch (Exception e) {
             ui.showGradeLoadingError();
             courseRecord = new CourseRecord();
@@ -55,7 +54,7 @@ public class Uniflow {
                 Command c = Parser.parse(fullCommand);
                 c.execute(ui, modules, courseRecord);
 
-                if (c instanceof AddGradeCommand) {
+                if (c instanceof AddGradeCommand || c instanceof RemoveGradeCommand) {
                     gradeStorage.saveGradeRecord(courseRecord);
                 }
 

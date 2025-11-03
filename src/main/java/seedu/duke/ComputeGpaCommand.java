@@ -1,17 +1,18 @@
 package seedu.duke;
 
 /**
- * Return the users' cumulative gpa and major required courses cumulative gpa.
+ * A command that returns the users' cumulative gpa and major required courses cumulative gpa.
  */
 public class ComputeGpaCommand extends Command {
 
     /**
-     * Extract information based on course record.
-     * Return a summary of information for cumulative gpa and major required courses cumulative gpa.
+     * Extracts information based on course record.
+     * Returns a summary of information for cumulative gpa and major required courses cumulative gpa.
      *
      * @param ui The UI object.
      * @param modules The list storing the modules' information.
      * @param courseRecord The list storing the users' courses grade information.
+     * @throws UniflowException If there's an error during GPA computation
      */
     @Override
     public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
