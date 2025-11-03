@@ -1,5 +1,45 @@
 # Developer Guide
 
+## Table of Contents
+- [Acknowledgements](#acknowledgements)
+- [Design & implementation](#design--implementation)
+    - [Architecture Overview](#architecture-overview)
+    - [Command Execution Flow](#command-execution-flow)
+    - [Key Design Patterns](#key-design-patterns)
+    - [Design Details](#design-details)
+        - [Command Component](#command-component)
+        - [Model Component](#model-component)
+        - [Review Management Component](#review-management-component)
+        - [Rating Management Component](#rating-management-component)
+        - [Score Management Component](#score-management-component)
+- [Implementation Details](#implementation-details)
+    - [Find Review Feature](#find-review-feature)
+    - [Review Data Persistence (ReviewSyncManager & ReviewCleaner)](#review-data-persistence-reviewsyncmanager--reviewcleaner)
+    - [Review Data Management (Reload/Reset)](#review-data-management-reloadreset)
+    - [Insert Module Feature](#insert-module-feature)
+    - [Filter Module Feature](#filter-module-feature)
+    - [GPA Calculation Feature](#gpa-calculation-feature)
+    - [Score Breakdown Feature](#score-breakdown-feature)
+    - [Rating Feature](#rating-feature)
+    - [Timetable Clash Detection](#timetable-clash-detection)
+- [Product scope](#product-scope)
+    - [Target user profile](#target-user-profile)
+    - [Value proposition](#value-proposition)
+- [User Stories](#user-stories)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Glossary](#glossary)
+- [Instructions for manual testing](#instructions-for-manual-testing)
+    - [Setting up the application](#setting-up-the-application)
+    - [Testing Module Management](#testing-module-management)
+    - [Testing Filtering](#testing-filtering)
+    - [Testing Grade Management](#testing-grade-management)
+    - [Testing Score Breakdown](#testing-score-breakdown)
+    - [Testing Review System](#testing-review-system)
+    - [Testing Rating System](#testing-rating-system)
+    - [Testing Timetable Commands](#testing-timetable-commands)
+    - [Testing Error Handling](#testing-error-handling)
+    - [Data Persistence Testing](#data-persistence-testing)
+
 ## Acknowledgements
 
 * Java 17 - Programming language and runtime environment
@@ -18,20 +58,21 @@ The architecture diagram above shows the high-level design of the application. T
 
 **Uniflow (Main Class)**
 - Entry point that initializes core components and runs the main command loop
+- Exposes shared singletons (e.g., `getScoreManager()`) to commands.
 
 **UI (User Interface)**
 - Handles all user interactions, reading commands via Scanner and displaying formatted results
 
 **Parser**
-- Parses user input strings into Command objects
-- Validates command syntax and throws UniflowException for invalid commands
+- Parses user input strings into `Command` objects
+- Validates command syntax and throws `UniflowException` for invalid commands
 
 **Command (Abstract Class)**
 - Base class for all command types using the Command Pattern
-- Defines execute() method and isExit() to control application flow
+- Defines `execute()` method and `isExit()` to control application flow
 
 **Module**
-- Represents a course session with ID, name, timing, session type, and score breakdown
+- Represents a scheduled module with ID, name, day/time, session type, and optional score breakdown
 - Provides methods to check for tutorials and retrieve module information
 
 **ModuleList**
@@ -45,7 +86,7 @@ The architecture diagram above shows the high-level design of the application. T
 - Manages completed courses for academic record keeping
 
 **ReviewManager**
-- Manages course reviews from students, storing reviews in a Map by course code
+- Manages course reviews from students, storing reviews in a Map keyed by module code
 
 **ReviewStorage**
 - Handles persistence of review data to file using pipe-delimited format
@@ -58,13 +99,19 @@ The architecture diagram above shows the high-level design of the application. T
 - Implements a shutdown hook to ensure all in-memory review data is flushed to disk via `ReviewStorage` and `ReviewCleaner` upon application exit, preventing data loss.
 
 **RatingManager**
-- Manages course ratings from students, storing ratings in a map by course code.
+- Manages course ratings from students, storing ratings in a map by module code.
 
 **RatingStats**
 - Represents the aggregate statistics (sum, count, average) for a specific course's ratings.
 
 **RatingStorage**
 - Handles persistence of rating data to the local file system using pipe-delimited format.
+
+**ScoreManager**
+- Orchestrates in-memory map `<MODULE_CODE: {component: value}>` and persistence.
+
+**ScoreStorage**
+- Handles persistence of score data to the local file system using pipe-delimited format.
 
 ### Command Execution Flow
 
@@ -73,27 +120,60 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 ```
 
 1. User enters a command string through the UI Scanner
-2. Parser analyzes the command and creates the appropriate Command object
-3. Command's execute() method is called with UI, ModuleList, CourseRecord, and ReviewManager
+    The `UI` component reads the input from the console.
+2. Parser analyzes the input and creates the appropriate `Command object`
+    It performs syntax validation and throws a `UniflowException` for invalid commands.
+3. Command's `execute()` method is called with core data managers:
+   - `ModuleList` - timetable and active semester modules.
+   - `CourseRecord` - completed courses for GPA tracking.
+   - `ReviewManager`, `RatingManager`, and `ScoreManager` - in-memory feature managers.
 4. Command performs its operation:
-   - ModuleList operations: insert, delete, list, filter modules, detect clashes
-   - CourseRecord operations: add grades, compute GPA
-   - ReviewManager operations: add and retrieve course reviews
-   - RatingManager operations: add or display course ratings
-   - Timetable operations: show, reset
-5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
-6. UI displays the result, filtered list, GPA calculation, reviews, or error message
-7. Loop continues until user enters "bye" (when Command.isExit() returns true)
-8. On exit (either via "bye" or abrupt close), the `ReviewSyncManager`'s shutdown hook is triggered, calling `ReviewStorage` and `ReviewCleaner` to save all review data and `RatingStorage` to save all rating data.
-9. Application terminates gracefully
+   - **ModuleList operations**: `insert`, `delete`, `list`, `filter`, `show timetable`, `reset timetable` and clash detection.
+   - **CourseRecord operations**: `addgrade`, `gpa`, and related grade persistence through GradeStorage.
+   - **ReviewManager operations**: `addreview`, `review`, `findreview`, and review persistence through `ReviewStorage`.
+   - **RatingManager operations**: `rate` (add/view module ratings), persistence through `RatingStorage`.
+   - **ScoreManager operations**: `score` (add/view module breakdowns) persistence through `ScoreStorage`.
+5. Data managers update in-memory structures and trigger persistence where needed:
+   - `ModuleStorage` for timetable data.
+   - `GradeStorage` for GPA records.
+   - `ScoreStorage`, `ReviewStorage`, `RatingStorage` for feature-specific data.
+6. UI outputs feedback to the user: confirmation messages, GPA summaries, filtered module lists, average ratings, or score breakdowns.
+7. Loop continues until the user enters `bye`.
+   When `Command.isExit()` returns `true`, the main loop terminates.
+8. On exit (graceful or abrupt):
+   The `ReviewSyncManager` shutdown hook is triggered, ensuring that `ReviewStorage`, `RatingStorage`, and `ScoreStorage` flush all in-memory data safely to disk.
+9. Application terminates gracefully, with all data persisted to the `/data` directory.
 
 ### Key Design Patterns
 
-**Command Pattern**: Each user action is encapsulated as a Command object (InsertCommand, DeleteCommand, FilterCommand, etc.), allowing for easy extension and modification.
+#### Command Pattern
+Every user action (e.g., `insert`, `delete`, `filter`, `rate`, `score`, `addgrade`, `review`) is implemented as a subclass of the abstract Command class.
+Each command encapsulates its own logic and implements execute(), allowing new features to be added without modifying existing code.
+This pattern isolates user actions, improving extensibility and testability.
 
-**Singleton-like Access**: ReviewManager and CourseRecord are accessed through static methods in Uniflow class, ensuring consistent state across commands.
+#### Separation of Concerns
+The system is divided into three logical layers:
+- **Parser/Command Layer**: Handles command parsing and user intent.
+- **Manager Layer**: Handles business logic (e.g. `ReviewManager`, `RatingManager`, `ScoreManager`).
+- **Storage Layer**: Handles data persistence (`ReviewStorage`, `RatingStorage`, `ScoreStorage`, `ModuleStorage`, `GradeStorage`).
+This design ensures that UI, logic, and persistence can evolve independently.
 
-**Predicate-based Filtering**: ModuleList uses Java Predicate functional interface for flexible filtering operations.
+#### Data Persistence Pattern (Storage Abstraction)
+Each major feature has a dedicated storage class that implements standardized load/save operations using simple delimited formats.
+This keeps data handling consistent across modules (e.g., a`data/modules.txt`, `data/scores.txt`, `data/ratings.txt`).
+
+#### Singleton-like Access
+Global components a(`ReviewManager`, `RatingManager`, `ScoreManager`, `CourseRecord`, and `ModuleList`) are instantiated once and referenced through the `Uniflow` class.
+This ensures a consistent shared state across commands while avoiding tight coupling.
+
+#### Predicate-Based Filtering
+`ModuleList` uses Java’s `Predicate` functional interface for dynamic filtering (e.g., by day, session type, or tutorial presence).
+This makes it easy to extend filtering criteria without changing the base logic.
+
+#### Fail-Safe Shutdown (Observer/Hook Pattern)
+`ReviewSyncManager` registers a JVM shutdown hook that automatically flushes all unsaved data from memory to disk.
+This ensures integrity for reviews, ratings, and scores even if the user terminates the application abruptly.
+
 
 ### Design Details
 
@@ -131,6 +211,39 @@ This component also includes:
 
 ![Review Storage Class Diagram](diagrams/ReviewStorageClassDiagram.png)
 The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
+
+#### Rating Management Component
+The Rating Management component enables users to rate modules and view average ratings for each course.
+It follows the same architecture as Review Management, with a clear separation between logic, data and persistence layers.
+
+![Rating Management Class Diagram](diagrams/RatingManagement.png)
+
+- **RatingManager** - Maintains a `Map<String, RatingStats>` mapping module codes to their cumulative rating data.
+  - It handles all business logic for adding, updating, and retrieving ratings, ensuring each rating is between 1-5.
+- **RatingStats** - A helper class encapsulating statistics:
+  - `sum`: total of all rating values.
+  - `count`: number of ratings.
+  - `average`: computed dynamically as `sum/count`
+- **RatingStorage** - Manages persistence of rating data to `data/ratings.txt` using a pipe-delimited format.
+  - Each line represents one record:
+    `MODULE_CODE|SUM|COUNT`
+  - Ratings are automatically reloaded at application start and saved on exit or when a new rating is added.
+![Rating Storage Class Diagram](diagrams/RatingStorageClassDiagram.png)
+
+#### Score Management Component
+The Score Management component allows users to store and view assessment breakdowns for individual modules.
+It is designed around the same modular architecture as the Review and Rating systems.
+![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.puml)
+
+- **ScoreManager** - Manages a `Map<String, Map<String, Integer>>` representing each module’s breakdown,
+  where the key is a component name (e.g., `"exam"`, `"project"`) and the value is a score weight.
+  Provides methods to:
+  - Add or update a module’s breakdown 
+  - Retrieve existing breakdowns 
+  - Validate format and numeric values
+- **ScoreStorage** - Persists breakdown data to `data/scores.txt` in the following format:
+  `MODULE_CODE|name:value|name2:value2|..`
+  Handles both loading and saving, ensuring file data remains synchronized with the in-memory state.
 
 ### Implementation Details
 
@@ -209,24 +322,35 @@ How GPA calculation works:
 The grade point conversion follows the standard NUS grading scale.
 
 #### Score Breakdown Feature
+Stores per-module assessment breakdowns like `exam:50 project:30`
 
-Modules can store assessment component scores for tracking purposes. The ScoreCommand parses input in the format `name:value` (e.g., "exam:50 participation:10") and validates that:
-- Values are positive integers
-- The format is correct (colon-separated pairs)
+![Score Command Sequence](diagrams/ScoreCommandSequence.png)
 
-The breakdown is stored in the Module's scoreBreakdown Map for future reference.
+How the score feature works:
+1. Parser validates `score <MODULE_CODE> [name:value ...]`.
+   - No args after code ⇒ query mode (show existing breakdown).
+   - Robust checks: non-empty pairs, `:` present, numeric non-negative values, whitespace/commas normalized.
+2. ScoreCommand verifies the module exists in `ModuleList` (module-centric model).
+3. If adding/updating:
+   - Parses pairs into `Map<String,Integer>`.
+   - Updates the module's in-memory `scoreBreakdown`
+   - Persists via `ScoreManager`, which writes the full map to disk using `ScoreStorage`.
+4. If querying:
+   - Reads from the module if present; otherwise tries `ScoreManager` to hydrate and display.
 
 #### Rating Feature
 The rating feature allows users to rate modules they've taken and view the average rating for each module.
 
+![Rate Command Sequence](diagrams/RatingCommandSequence.puml)
+
 How it works:
-1. Parser creates a ```RateCommand``` when the user enters ```rate <MODULE_CODE> [RATING]```
+1. Parser creates a `RateCommand` when the user enters `rate <MODULE_CODE> [RATING]`
 2. If rating value (1-5) is provided:
-   - ```RateCommand``` validates that the course exists in ```CourseRecord```
-   - The rating is then passed to ```RatingManager```, which updates the total and count
-   - ```RatingStorage``` saves the updated data to a file (```data/ratings.txt```)
+   - `RateCommand` validates that the course exists in `CourseRecord`
+   - The rating is then passed to `RatingManager`, which updates the total and count
+   - `RatingStorage` saves the updated data to a file (`data/ratings.txt`)
 3. If no rating is provided:
-   - ```RateCommand``` retrieves the average rating and rating count from ```RatingManager```
+   - RateCommand` retrieves the average rating and rating count from `RatingManager`
    - Displays the average if ratings exist, or a message if none are found
 4. The UI displays a confirmation or the average rating result to the user
 
@@ -253,7 +377,7 @@ Uniflow is designed for university students who:
 * Need to avoid timetable clashes when planning their schedule
 * Want to access and share course reviews with peers
 * Want to rate courses and see average ratings to inform module selection
-* Are comfortable with typing commands and structured input formats
+* Are comfortable typing commands and structured input formats
 
 ### Value proposition
 
@@ -267,33 +391,40 @@ Uniflow solves several problems for university students:
 
 **Peer Reviews**: The review system enables students to share and read course experiences, helping with module selection decisions.
 
+**Score Breakdown**: Students can store and retrieve component scores for transparency on assessment structure.
+
 **Course Ratings**: A lightweight rating system that lets students rate modules and view average ratings, providing a quick and quantitative signal alongside reviews.
 
 **Efficiency**: Command-line interface allows for faster data entry compared to GUI applications, ideal for students who need to quickly update their schedules between classes.
 
 ## User Stories
 
-| Version | As a ... | I want to ...                      | So that I can ...                                        |
-|---------|----------|------------------------------------|----------------------------------------------------------|
-| v1.0    | new user | see usage instructions             | refer to them when I forget how to use the application   |
-| v1.0    | student  | add modules to my timetable        | keep track of all my classes                             |
-| v1.0    | student  | delete modules from my timetable   | remove classes I've dropped                              |
-| v1.0    | student  | list all my modules                | see my complete schedule at a glance                     |
-| v1.0    | student  | check for timetable clashes        | avoid scheduling conflicts                               |
-| v2.0    | student  | filter modules by day              | see what classes I have on specific days                 |
-| v2.0    | student  | filter modules by session type     | quickly find all my tutorials or labs                    |
-| v2.0    | student  | search modules by code or name     | locate specific modules without scanning the entire list |
-| v2.0    | student  | add my grades for completed courses | maintain an academic record                              |
-| v2.0    | student  | calculate my GPA automatically     | track my academic performance                            |
-| v2.0    | student  | store score breakdowns for modules | track individual assessment components                   |
-| v2.0    | student  | add reviews for courses            | share my experiences with other students                 |
-| v2.0    | student  | read reviews for courses           | make informed decisions about module selection           |
-| v2.0    | student  | reset my timetable                 | start fresh for a new semester                           |
-| v2.0    | student  | rate a course                      | share simple feedback on module quality                  |
-| v2.0    | student  | search for reviews by user         | see all feedback from a specific person                  |
-| v2.0    | student  | search for reviews by user & course| find a specific person's review for a course             |
-| v2.0    | (dev)    | manually reload reviews from file  | test persistence without restarting the app              |
-| v2.0    | (dev)    | reset all reviews to default       | return to a clean state for testing                      |
+| Version | As a ...  | I want to ...                       | So that I can ...                                        |
+|---------|-----------|-------------------------------------|----------------------------------------------------------|
+| v1.0    | new user  | see usage instructions              | refer to them when I forget how to use the application   |
+| v1.0    | student   | add modules to my timetable         | keep track of all my classes                             |
+| v1.0    | student   | delete modules from my timetable    | remove classes I've dropped                              |
+| v1.0    | student   | list all my modules                 | see my complete schedule at a glance                     |
+| v1.0    | student   | check for timetable clashes         | avoid scheduling conflicts                               |
+| v2.0    | student   | filter modules by day               | see what classes I have on specific days                 |
+| v2.0    | student   | filter modules by session type      | quickly find all my tutorials or labs                    |
+| v2.0    | student   | search modules by code or name      | locate specific modules without scanning the entire list |
+| v2.0    | student   | add my grades for completed courses | maintain an academic record                              |
+| v2.0    | student   | calculate my GPA automatically      | track my academic performance                            |
+| v2.0    | student   | store score breakdowns for modules  | track individual assessment components                   |
+| v2.0    | student   | add reviews for courses             | share my experiences with other students                 |
+| v2.0    | student   | read reviews for courses            | make informed decisions about module selection           |
+| v2.0    | student   | reset my timetable                  | start fresh for a new semester                           |
+| v2.0    | student   | rate a course                       | share simple feedback on module quality                  |
+| v2.0    | student   | search for reviews by user          | see all feedback from a specific person                  |
+| v2.0    | student   | search for reviews by user & course | find a specific person's review for a course             |
+| v2.0    | (dev)     | manually reload reviews from file   | test persistence without restarting the app              |
+| v2.0    | (dev)     | reset all reviews to default        | return to a clean state for testing                      |
+| v2.1    | (student) | view all scores for a module        | review performance breakdowns across assessments         |
+| v2.1    | (student) | update component scores for a module| correct mistakes or refine ongoing assessments           |
+| v2.1    | (student) | view the average rating for a module| decide which modules to take next semester               |
+
+
 
 
 ## Non-Functional Requirements
@@ -314,17 +445,23 @@ Uniflow solves several problems for university students:
 
 ## Glossary
 
-* **Module** - A university course or subject with scheduled sessions
+* **Module** - A university course or subject with scheduled sessions.
 * **Session Type** - The type of class session (lecture, tutorial, lab, etc.)
-* **Timetable Clash** - When two modules are scheduled at overlapping times on the same day
-* **GPA** - Grade Point Average, calculated from course grades and credits
-* **Score Breakdown** - Individual assessment components and their weightings for a module
-* **Course Record** - Collection of completed courses with grades for GPA calculation
-* **Review** - Student feedback and experiences shared about a specific course
-* **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students
+* **Timetable Clash** - When two modules are scheduled at overlapping times on the same day.
+* **Course Record** - Collection of completed courses with grades for GPA calculation.
+* **GPA** - Grade Point Average, calculated from course grades and credits.
+* **Score Breakdown** - Individual assessment components and their weightings for a module.
+* **ScoreManager** - Manages creation, updating, and retrieval of score breakdowns for each module.
+* **ScoreStorage** - Handles the persistence of score breakdown data to file and ensures integrity between sessions.
+* **Review** - Student feedback and experiences shared about a specific course.
+* **ReviewManager** - Handles in-memory management of reviews (adding, editing, finding, deleting).
+* **ReviewStorage** - Reads and writes all review data to persistent storage.
 * **ReviewCleaner** - A utility that removes corrupted/incomplete data from the review storage file.
 * **ReviewSyncManager** - A component that uses a shutdown hook to auto-save review data on application exit.
-* 
+* **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students.
+* **RatingManager** - Manages ratings per module, tracking total ratings, count, and computing the average.
+* **RatingStorage** - Persists rating data between sessions and reconstructs module ratings on load.
+
 ## Instructions for manual testing
 
 ### Setting up the application
@@ -451,14 +588,12 @@ Expected: Message indicating no reviews found.
 ```commandline
 rate CS2113 4
 ```
-Expected: ```Added Rating: 4 to CS2113```
-Saves the rating to data/ratings.txt
+Expected: Message confirming that the rating has been added.
 **Viewing Average Rating**
 ```commandline
 rate CS2113
 ```
-Expected: Displays the average rating and number of ratings per course, e.g.
-```CS2113 Rating: 4.5 (2 ratings)```
+Expected: Displays the average rating and number of ratings per course.
 
 ### Testing Timetable Commands
 
@@ -528,3 +663,6 @@ Expected: Confirmation that reviews are reloaded from file.
 3. Restart the application
 4. Use `review` command to verify reviews are loaded
 5. Check that `data/reviews.txt` file exists and contains review data in format: course|user|review
+
+
+[↑ Back to top](#developer-guide)
