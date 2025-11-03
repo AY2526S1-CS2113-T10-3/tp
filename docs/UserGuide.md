@@ -30,7 +30,7 @@ insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 ```
 
 ### Deleting a Module: `delete`
-Removes module by index in the timetable.
+Removes a module from the timetable by index.
 
 Format:
 ```commandline
@@ -89,7 +89,7 @@ filter name/Software
 ```
 
 ### Recording Component Scores: `score`
-Allows users to record or view score breakdowns for a specific course (e.g., exam scores, project scores, participation).
+Allows users to record or view score breakdowns for a specific module (e.g., exam scores, project scores, participation).
 
 Add Score Breakdown Format:
 ```commandline
@@ -108,14 +108,14 @@ Example:
 ```commandline
 score CS2113
 ```
-Note: The module must already exist in your timetable you can add scores.
+Note: The module must already exist in your timetable before you can add scores.
 
 ### Adding a Review: `addreview`
-Allows users to add a text review for a course.
+Allows users to add a text review for a module.
 
 Format:
 ```commandline
-addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT
+addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT
 ```
 Example:
 ```commandline
@@ -123,11 +123,11 @@ addreview c/CS2113 u/John r/Great course with practical projects!
 ```
 
 ### Viewing Reviews: `review`
-Displays all reviews for a specific course.
+Displays all reviews for a specific module.
 
 Format:
 ```commandline
-review COURSE_CODE
+review MODULE_CODE
 ```
 Example:
 ```commandline
@@ -135,11 +135,11 @@ review CS2113
 ```
 
 ### Editing a Review: `editreview`
-Allows users to edit their existing review for a course.
+Allows users to edit their existing review for a module.
 
 Format:
 ```commandline
-editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT
+editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT
 ```
 Example:
 ```commandline
@@ -148,11 +148,11 @@ editreview c/CS2113 u/John r/Excellent course with hands-on learning!
 Note: You can only edit your own review. The username must match the one used when adding the review.
 
 ### Deleting a Review: `deletereview`
-Allows users to delete their review for a course.
+Allows users to delete their review for a module.
 
 Format:
 ```commandline
-deletereview c/COURSE_CODE u/USERNAME
+deletereview c/MODULE_CODE u/USERNAME
 ```
 Example:
 ```commandline
@@ -161,13 +161,13 @@ deletereview c/CS2113 u/John
 Note: You can only delete your own review.
 
 ### Finding Reviews: `findreview`
-Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
+Searches for reviews based on the module, the user, or both. This provides more flexible searching than the `review` command.
 
 Formats:
 ```commandline
-findreview c/COURSE_CODE
+findreview c/MODULE_CODE
 findreview u/USERNAME
-findreview c/COURSE_CODE u/USERNAME
+findreview c/MODULE_CODE u/USERNAME
 ```
 Example:
 ```commandline
@@ -177,11 +177,11 @@ findreview c/CS2113 u/john
 ```
 
 ### Rating a Course: `rate`
-Allows users to add or view numerical ratings for a course.
+Allows users to add or view numerical ratings for a module.
 
 Rating Format:
 ```commandline
-rate COURSE_CODE RATING
+rate MODULE_CODE RATING
 ```
 Example:
 ```commandline
@@ -322,31 +322,31 @@ bye
 ---
 
 ## Review Management
-| **Action** | **Format and Examples** | **Explanation**                                    |
-|-------------|----------------------|----------------------------------------------------|
-| **addreview** | `addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great course!` | Adds a review for a course                         |
-| **review** | `review COURSE_CODE` <br> *Example:* `review CS2113` | Displays all reviews for a course                  |
-| **editreview** | `editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved content!` | Edits your own existing review                     |
-| **deletereview** | `deletereview c/COURSE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes your review                                |
-| **findreview** | `findreview c/COURSE_CODE` <br> `findreview u/USERNAME` <br> `findreview c/COURSE_CODE u/USERNAME` <br> *Example:* `findreview u/John` | Searches for reviews by course, user, or both      |
-| **reloadreviews** | `reloadreviews` | Reloads all reviews from file                      |
-| **reset all reviews** | `reset all reviews` | Deletes all reviews and resets the review storage  |
+| **Action** | **Format and Examples**                                                                                                                | **Explanation**                                   |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
+| **addreview** | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great course!`                         | Adds a review for a module                        |
+| **review** | `review MODULE_CODE` <br> *Example:* `review CS2113`                                                                                   | Displays all reviews for a module                 |
+| **editreview** | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved content!`               | Edits your own existing review                    |
+| **deletereview** | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John`                                                 | Deletes your review                               |
+| **findreview** | `findreview c/MODULE_CODE` <br> `findreview u/USERNAME` <br> `findreview c/MODULE_CODE u/USERNAME` <br> *Example:* `findreview u/John` | Searches for reviews by module, user, or both     |
+| **reloadreviews** | `reloadreviews`                                                                                                                        | Reloads all reviews from file                     |
+| **reset all reviews** | `reset all reviews`                                                                                                                    | Deletes all reviews and resets the review storage |
 
 ---
 
 ## Course Ratings
-| **Action**      | **Format and Examples**                                   | **Explanation** |
-|-----------------|-----------------------------------------------------------|-------------|
-| **rate (add)**  | `rate MODULE_CODE RATING` <br> *Example:* `rate CS2113 4` | Adds a numerical rating (1–5) for a course |
-| **rate (view)** | `rate MODULE_CODE` <br> *Example:* `rate CS2113`          | Displays the average rating for a course |
+| **Action**      | **Format and Examples**                                   | **Explanation**                            |
+|-----------------|-----------------------------------------------------------|--------------------------------------------|
+| **rate (add)**  | `rate MODULE_CODE RATING` <br> *Example:* `rate CS2113 4` | Adds a numerical rating (1–5) for a module |
+| **rate (view)** | `rate MODULE_CODE` <br> *Example:* `rate CS2113`          | Displays the average rating for a module   |
 
 ---
 
 ## Score Breakdown
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **score (add)** | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course |
-| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113` | Displays the saved score breakdown for a course |
+| **Action** | **Format and Examples** | **Explanation**                                 |
+|-------------|----------------------|-------------------------------------------------|
+| **score (add)** | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course         |
+| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113` | Displays the saved score breakdown for a module |
 
 ---
 
@@ -358,11 +358,11 @@ bye
 ---
 
 ## Data Persistence
-| **File Location** | **Stored Data** |
-|-------------------|-----------------|
-| `data/modules.txt` | Timetable modules |
-| `data/ratings.txt` | Course ratings |
-| `data/reviews.txt` | Course reviews |
+| **File Location** | **Stored Data**                  |
+|-------------------|----------------------------------|
+| `data/modules.txt` | Timetable modules                |
+| `data/ratings.txt` | Module ratings                   |
+| `data/reviews.txt` | Module reviews                   |
 | `data/grades.txt` | Saved course grades and GPA data |
 
 ---
