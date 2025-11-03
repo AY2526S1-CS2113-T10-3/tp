@@ -6,6 +6,15 @@ package seedu.duke;
 public class ProjectGpaCommand extends Command {
     private final CourseRecord tempRecord = Uniflow.getTempRecord();
 
+    /**
+     * Extracts information based on course record and temporary record.
+     * Returns the projected cumulative GPA and major required courses cumulative GPA.
+     *
+     * @param ui The UI object.
+     * @param modules The list storing the modules' information.
+     * @param courseRecord The list storing the users' courses grade information.
+     * @throws UniflowException If there's an error during the computation
+     */
     @Override
     public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         if (courseRecord.isEmpty() && tempRecord.isEmpty()) {

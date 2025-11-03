@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * An array list that is used to store the completed courses and respective grades.
+ * It consists of two lists, one storing the record of all courses, one only for major courses.
+ * Consists of methods for computing GPA.
  */
 public class CourseRecord {
     private final ArrayList<Course> courses = new ArrayList<>();
@@ -24,6 +26,7 @@ public class CourseRecord {
 
     /**
      * Returns the total number of credits of all courses the user studied.
+     * @return Total number of credits of all courses.
      */
     public int getTotalCredits() {
         int totalCredits = 0;
@@ -35,6 +38,8 @@ public class CourseRecord {
 
     /**
      * Returns the user's total grade points of all courses.
+     * @return Total grade points of all courses.
+     * @throws UniflowException If there is invalid grade.
      */
     public double getTotalGradePoints() throws UniflowException {
         double totalGradePoints = 0;
@@ -49,6 +54,7 @@ public class CourseRecord {
 
     /**
      * Returns the total number of credits of major courses the user studied.
+     * @return Total number of credits of all major courses.
      */
     public int getMajorTotalCredits() {
         int totalMajorCredits = 0;
@@ -60,6 +66,8 @@ public class CourseRecord {
 
     /**
      * Returns the user's total grade points of major courses.
+     * @return Total grade points of all major courses.
+     * @throws UniflowException If there is invalid grade.
      */
     public double getMajorTotalGradePoints() throws UniflowException {
         double totalMajorGradePoints = 0;
@@ -73,7 +81,9 @@ public class CourseRecord {
     }
 
     /**
-     * Computes and returns the user's cumulative GPA.
+     * Returns the user's cumulative GPA calculated from total grade points and total credits.
+     * @return Cumulative GPA of the user.
+     * @throws UniflowException If errors occur during the computation.
      */
     public double computeGpa() throws UniflowException {
         if (courses.isEmpty()) {
@@ -83,7 +93,9 @@ public class CourseRecord {
     }
 
     /**
-     * Computes and returns the users' cumulative major gpa.
+     * Returns the users' cumulative major GPA calculated from total grade points and total credits.
+     * @return Cumulative major GPA of the user.
+     * @throws UniflowException If errors occur during the computation.
      */
     public double computeMajorGpa() throws UniflowException {
         if (majorCourses.isEmpty()) {
@@ -94,9 +106,11 @@ public class CourseRecord {
     }
 
     /**
-     * Combined two course lists' information to calculate the gpa of the courses in the two lists
+     * Combined two course lists' information to calculate the GPA of the courses in the two lists.
      *
      * @param tempRecord A temporary course list the user has created.
+     * @return Combined GPA calculated from the two records.
+     * @throws UniflowException If errors occur during the computation, e.g. no courses found.
      */
     public double computeCombinedGpa(CourseRecord tempRecord) throws UniflowException {
         double combinedGradePoints = getTotalGradePoints() + tempRecord.getTotalGradePoints();
@@ -108,9 +122,11 @@ public class CourseRecord {
     }
 
     /**
-     * Combined two course lists' information to calculate the major course gpa of the courses in the two lists
+     * Combined two course lists' information to calculate the major course GPA of the courses in the two lists.
      *
      * @param tempRecord A temporary course list the user has created.
+     * @return Combined major GPA calculated from the two records.
+     * @throws UniflowException If errors occur during the computation, e.g. no courses found.
      */
     public double computeCombinedMajorGpa(CourseRecord tempRecord) throws UniflowException {
         double combinedMajorGradePoints = getMajorTotalGradePoints() + tempRecord.getMajorTotalGradePoints();
@@ -123,6 +139,10 @@ public class CourseRecord {
 
     /**
      * Converts the letter grade to its respective grade point.
+     *
+     * @param grade The letter grade to convert (e.g. "A+", "A").
+     * @return The corresponding grade point.
+     * @throws UniflowException If the grade is invalid.
      */
     private double convertGradePoint(String grade) throws UniflowException {
         switch (grade) {
