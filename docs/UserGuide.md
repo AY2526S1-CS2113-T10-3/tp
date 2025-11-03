@@ -297,34 +297,74 @@ Format:
 bye
 ```
 
-## Command Summary
+# Command Summary (Uniflow)
 
-### GPA Calculator
+## Module Management
 | **Action** | **Format and Examples** | **Explanation** |
 |-------------|----------------------|-------------|
-| **addgrade** | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true` | Adding course grade information<br>to a record and saving it |
-| **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adding predicted course grade<br>information to a temporary record |
-| **gpa** | `gpa`| Compute cumulative GPA<br>based on saved course record |
-| **projectgpa** | `projectgpa` | Compute projected cumulative GPA<br>after entering predicted grades<br>of some courses |
+| **insert** | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture` | Adds a new module to your timetable |
+| **delete** | `delete index/MODULE_INDEX` <br> *Example:* `delete index/CS2113` | Deletes a module by its index or ID |
+| **list** | `list` | Lists all modules currently added |
+| **show timetable** | `show timetable` | Displays all modules with full details |
+| **reset timetable** | `reset timetable` | Removes all modules from your timetable (cannot be undone) |
+| **filter** | `filter day/DAY` <br> `filter type/SESSION_TYPE` <br> `filter id/MODULE_ID` <br> `filter name/MODULE_NAME` <br> `filter hastutorial` <br> `filter notutorial` <br> *Example:* `filter day/Monday` | Filters modules by given criteria such as day, session type, or presence of tutorials |
 
-### Review Management
+---
+
+## GPA Calculator
 | **Action** | **Format and Examples** | **Explanation** |
-|---|---|---|   
-| **addreview** | `addreview c/COURSE u/USER r/REVIEW` <br> *Example:* `addreview c/CS2113 u/John r/Good` | Adds a new text review |
-| **review** | `review COURSE_CODE` <br> *Example:* `review CS2113` | Views all reviews for a course |
-| **editreview** | `editreview c/COURSE u/USER r/NEW_REVIEW` <br> *Example:* `editreview c/CS2113 u/John r/Bad` | Edits an existing review |
-| **deletereview** | `deletereview c/COURSE u/USER` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes an existing review |
-| **findreview** | `findreview [c/COURSE] [u/USER]` <br> *Example:* `findreview u/John` | Searches for reviews by user or course |
-| **reloadreviews** | `reloadreviews` | Reloads reviews from file (testing) |
-| **reset all reviews**| `reset all reviews` | Resets reviews to default (testing) |
+|-------------|----------------------|-------------|
+| **addgrade** | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true` | Adds a grade entry for a course to your permanent record |
+| **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adds a *temporary* grade for GPA projection |
+| **gpa** | `gpa` | Computes cumulative GPA and major GPA based on stored grades |
+| **projectgpa** | `projectgpa` | Computes predicted GPA including test grades |
 
-### Data Persistence
-Uniflow automatically saves and loads your data between sessions.
+---
 
-The following are stored persistently:
-- **Modules** — via `ModuleStorage` (`data/modules.txt`)
-- **Scores** — via `ScoreStorage` (`data/scores.txt`)
-- **Ratings** — via `RatingStorage` (`data/ratings.txt`)
-- **Reviews** — via `ReviewStorage` (`data/reviews.txt`)
+## Review Management
+| **Action** | **Format and Examples** | **Explanation**                                    |
+|-------------|----------------------|----------------------------------------------------|
+| **addreview** | `addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great course!` | Adds a review for a course                         |
+| **review** | `review COURSE_CODE` <br> *Example:* `review CS2113` | Displays all reviews for a course                  |
+| **editreview** | `editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved content!` | Edits your own existing review                     |
+| **deletereview** | `deletereview c/COURSE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes your review                                |
+| **findreview** | `findreview c/COURSE_CODE` <br> `findreview u/USERNAME` <br> `findreview c/COURSE_CODE u/USERNAME` <br> *Example:* `findreview u/John` | Searches for reviews by course, user, or both      |
+| **reloadreviews** | `reloadreviews` | Reloads all reviews from file                      |
+| **reset all reviews** | `reset all reviews` | Deletes all reviews and resets the review storage  |
 
-Your data will remain available even after exiting the program.
+---
+
+## Course Ratings
+| **Action**      | **Format and Examples**                                   | **Explanation** |
+|-----------------|-----------------------------------------------------------|-------------|
+| **rate (add)**  | `rate MODULE_CODE RATING` <br> *Example:* `rate CS2113 4` | Adds a numerical rating (1–5) for a course |
+| **rate (view)** | `rate MODULE_CODE` <br> *Example:* `rate CS2113`          | Displays the average rating for a course |
+
+---
+
+## Score Breakdown
+| **Action** | **Format and Examples** | **Explanation** |
+|-------------|----------------------|-------------|
+| **score (add)** | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course |
+| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113` | Displays the saved score breakdown for a course |
+
+---
+
+## System and Utility Commands
+| **Action** | **Format and Examples** | **Explanation** |
+|-------------|----------------------|-------------|
+| **bye** | `bye` | Exits the program |
+
+---
+
+## Data Persistence
+| **File Location** | **Stored Data** |
+|-------------------|-----------------|
+| `data/modules.txt` | Timetable modules |
+| `data/ratings.txt` | Course ratings |
+| `data/reviews.txt` | Course reviews |
+| `data/grades.txt` | Saved course grades and GPA data |
+
+---
+
+**Note:** All stored data persists between sessions and is automatically reloaded when Uniflow starts. This ensures your timetable, ratings, reviews, and grades remain available across program runs.
