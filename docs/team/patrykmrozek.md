@@ -96,5 +96,3 @@ This product is designed for university students who prefer a fast, keyboard-bas
 ### 8. Review and Mentoring Contributions
 - Reviewed and provided feedback on teammates’ pull requests with a focus on maintainability and adherence to coding standards.
 - Assisted in resolving merge conflicts and logic inconsistencies in the `Parser` class during feature merges.
-- Guided teammates on proper JUnit test structuring and Checkstyle compliance.
-- Promoted consistent use of assertions and exception handling throughout the project.  
