@@ -301,7 +301,7 @@ How the score feature works:
 #### Rating Feature
 The rating feature allows users to rate modules they've taken and view the average rating for each module.
 
-![Rate Command Sequence](diagrams/RateCommandSequence.png)
+![Rate Command Sequence](diagrams/RatingCommandSequence.puml)
 
 How it works:
 1. Parser creates a `RateCommand` when the user enters `rate <MODULE_CODE> [RATING]`
@@ -337,7 +337,7 @@ Uniflow is designed for university students who:
 * Need to avoid timetable clashes when planning their schedule
 * Want to access and share course reviews with peers
 * Want to rate courses and see average ratings to inform module selection
-* Are comfortable with typing commands and structured input formats
+* Are comfortable typing commands and structured input formats
 
 ### Value proposition
 
@@ -350,6 +350,8 @@ Uniflow solves several problems for university students:
 **Module Organization**: Students can filter and search modules by various criteria (day, session type, module code, name), making it easy to find specific classes or plan study schedules.
 
 **Peer Reviews**: The review system enables students to share and read course experiences, helping with module selection decisions.
+
+**Score Breakdown**: Students can store and retrieve component scores for transparency on assessment structure.
 
 **Course Ratings**: A lightweight rating system that lets students rate modules and view average ratings, providing a quick and quantitative signal alongside reviews.
 
