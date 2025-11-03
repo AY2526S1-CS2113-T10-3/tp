@@ -33,11 +33,11 @@ insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 Removes module by ID.
 Format:
 ```commandline
-delete i/MODULE_CODE
+delete index/MODULE_CODE
 ```
 Example:
 ```commandline
-delete i/CS2113
+delete index/CS2113
 ```
 
 ### List All Module - `list`
