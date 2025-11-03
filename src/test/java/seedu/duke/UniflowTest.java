@@ -75,7 +75,7 @@ class UniflowTest {
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
         Uniflow uniflow = new Uniflow("test_data");
-        assertDoesNotThrow(() -> uniflow.run());
+        assertDoesNotThrow(uniflow::run);
     }
 
     @Test
