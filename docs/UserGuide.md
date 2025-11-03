@@ -88,15 +88,9 @@ show timetable
 Expected Output:
 ```commandline
 ___________________________________________________________________________
-___________________________________________________________________________
  Here is your timetable:
-___________________________________________________________________________
-___________________________________________________________________________
  1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
-___________________________________________________________________________
-___________________________________________________________________________
  2. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
-___________________________________________________________________________
 ___________________________________________________________________________
 ```
 
@@ -110,9 +104,7 @@ reset timetable
 Expected Output:
 ```commandline
 ___________________________________________________________________________
-___________________________________________________________________________
  Timetable has been reset!
-___________________________________________________________________________
 ___________________________________________________________________________
 ```
 Note: This action cannot be undone. The system will confirm if your timetable is already empty.
@@ -187,7 +179,7 @@ ___________________________________________________________________________
 Note: The module must already exist in your timetable before you can add scores.
 
 ### Adding a Review: `addreview`
-Allows users to add a text review for a module.
+Allows users to add a text review for a module. **This review is added to the current session in such as like in-memory and is not automatically saved to the file.**
 
 Format:
 ```commandline
@@ -207,7 +199,7 @@ ___________________________________________________________________________
 ```
 
 ### Viewing Reviews: `review`
-Displays all reviews for a specific module.
+Displays all reviews for a specific module from the current session (in-memory).
 
 Format:
 ```commandline
@@ -219,14 +211,14 @@ review CS2113
 ```
 Expected Output:
 ```commandline
- Reviews for CS2113:
 ___________________________________________________________________________
+ Reviews for CS2113:
  - John: Great module with lots of practical examples
 ___________________________________________________________________________
 ```
 
 ### Editing a Review: `editreview`
-Allows users to edit their existing review for a module.
+Allows users to edit their existing review for a module in the current session (in-memory).
 
 Format:
 ```commandline
@@ -247,7 +239,7 @@ ___________________________________________________________________________
 Note: You can only edit your own review. The username must match the one used when adding the review.
 
 ### Deleting a Review: `deletereview`
-Allows users to delete their review for a module.
+Allows users to delete their review for a module from the current session (in-memory).
 
 Format:
 ```commandline
@@ -268,7 +260,7 @@ ___________________________________________________________________________
 Note: You can only delete your own review.
 
 ### Finding Reviews: `findreview`
-Searches for reviews based on the module, the user, or both. This provides more flexible searching than the `review` command.
+Searches for reviews in the current session (in-memory) based on the module, the user, or both.
 
 Formats:
 ```commandline
@@ -282,13 +274,11 @@ findreview c/CS2113
 findreview u/john
 findreview c/CS2113 u/john
 ```
-Expected Output:
+Expected Output: 
 ```commandline
 ___________________________________________________________________________
-___________________________________________________________________________
- Reviews for CS2113:
-___________________________________________________________________________
- - CS2113 - John: Great course with practical projects!
+ Reviews by john in CS2113:
+ - CS2113 - john: Great course with practical projects!
 ___________________________________________________________________________
 ```
 
@@ -439,11 +429,85 @@ ____________________________________________________________
 ```
 *Note: after the computation of the projected gpa, the newly added course will **NOT** be stored in our saved record.*
 
+### Counting Reviews: `amount reviews`
+Counts the number of reviews **currently in memory** for a specific module or user.
+
+Format:
+```commandline
+amount reviews [c/MODULE_CODE] [u/USERNAME]
+```
+Example:
+```commandline
+amount reviews c/CS2113
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+Course CS2113 has 1 review(s).
+___________________________________________________________________________
+```
+
+### Loading Reviews from File: `load reviews`
+Clears all reviews from memory and reloads them from the data/reviews.txt file.
+Warning: If you have unsaved reviews in memory, this command will ask if you want to merge them into the file before reloading.
+
+Format:
+```commandline
+load reviews
+```
+Expected Output
+```commandline
+___________________________________________________________________________
+Reloading all reviews from file...
+There are unsaved reviews in memory. Do you want to add them to the database? (yes/no)
+```
+Followed by:
+```commandline
+All reviews successfully reloaded from file. (Memory now matches file)
+___________________________________________________________________________
+```
+
+### Adding In-Memory Reviews to File: `add reviews database`
+Manually saves (merges) any new reviews from your current session into the data/reviews.txt file without clearing your memory.
+
+Format:
+```commandline
+add reviews database
+```
+Expected Output
+```commandline
+___________________________________________________________________________
+Synchronizing in-memory reviews with database...
+Added 1 new review(s) to the database.
+___________________________________________________________________________
+```
+
+### Resetting All Reviews: `reset all reviews`
+This clears all reviews from memory only. It does not delete the data/reviews.txt file
+
+Format:
+```commandline
+reset all reviews
+```
+Expected Output
+```commandline
+___________________________________________________________________________
+ All reviews have been cleared from memory.
+___________________________________________________________________________
+```
+
 ### Exiting the program: `bye`
 Users can exit the program.  
+
 Format:
 ```commandline
 bye
+```
+Note: If you have added or edited reviews in your session, 
+Uniflow will detect these unsaved changes and ask you if you want to save them to the file before exiting.
+```commandline
+___________________________________________________________________________
+You have unsaved reviews in memory. Do you want to save them before exiting? (yes/no)
 ```
 
 # Command Summary (Uniflow)
@@ -452,7 +516,7 @@ bye
 | **Action** | **Format and Examples** | **Explanation** |
 |-------------|----------------------|-------------|
 | **insert** | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture` | Adds a new module to your timetable |
-| **delete** | `delete index/MODULE_INDEX` <br> *Example:* `delete index/CS2113` | Deletes a module by its index or ID |
+| **delete** | `delete index/MODULE_INDEX`  *Example:* `delete index/1` | Deletes a module by its list index |
 | **list** | `list` | Lists all modules currently added |
 | **show timetable** | `show timetable` | Displays all modules with full details |
 | **reset timetable** | `reset timetable` | Removes all modules from your timetable (cannot be undone) |
@@ -471,15 +535,17 @@ bye
 ---
 
 ## Review Management
-| **Action** | **Format and Examples**                                                                                                                | **Explanation**                                   |
-|-------------|----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| **addreview** | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great course!`                         | Adds a review for a module                        |
-| **review** | `review MODULE_CODE` <br> *Example:* `review CS2113`                                                                                   | Displays all reviews for a module                 |
-| **editreview** | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved content!`               | Edits your own existing review                    |
-| **deletereview** | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John`                                                 | Deletes your review                               |
-| **findreview** | `findreview c/MODULE_CODE` <br> `findreview u/USERNAME` <br> `findreview c/MODULE_CODE u/USERNAME` <br> *Example:* `findreview u/John` | Searches for reviews by module, user, or both     |
-| **reloadreviews** | `reloadreviews`                                                                                                                        | Reloads all reviews from file                     |
-| **reset all reviews** | `reset all reviews`                                                                                                                    | Deletes all reviews and resets the review storage |
+| **Action** | **Format and Examples** | **Explanation** |
+| :--- | :--- | :--- |
+| **addreview** | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great!` | Adds a review **to memory** (session-only) |
+| **review** | `review MODULE_CODE` <br> *Example:* `review CS2113` | Displays all reviews **from memory** |
+| **editreview** | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved!` | Edits an existing review **in memory** |
+| **deletereview** | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes your review **from memory** |
+| **findreview** | `findreview [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `findreview u/John` | Searches for reviews **in memory** by module or user |
+| **amount reviews** | `amount reviews [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `amount reviews c/CS2113` | Counts reviews **in memory** by module or user |
+| **load reviews** | `load reviews` | Clears memory and loads reviews from file (prompts to merge) |
+| **add reviews database** | `add reviews database` | Manually merges reviews from memory into the file (saves progress) |
+| **reset all reviews** | `reset all reviews` | Clears all reviews **from memory only** (does not touch the file) |                                                                                                    | Deletes all reviews and resets the review storage |
 
 ---
 
@@ -502,7 +568,7 @@ bye
 ## System and Utility Commands
 | **Action** | **Format and Examples** | **Explanation** |
 |-------------|----------------------|-------------|
-| **bye** | `bye` | Exits the program |
+| **bye** | `bye` | Exits the program (prompts to save unsaved reviews) |
 
 ---
 
@@ -514,6 +580,11 @@ bye
 | `data/reviews.txt` | Module reviews                   |
 | `data/grades.txt` | Saved course grades and GPA data |
 
----
+**Note on Data Persistence:**
+Most data (Timetable, Grades, Scores, Ratings) is saved automatically.
+**Reviews are different.** They operate in a "RAM-first" mode. Your reviews are **NOT** saved automatically.
+To save reviews, you must either:
+1.  Say **"yes"** when prompted by the `bye` or `load reviews` commands.
+2.  Manually run the `add reviews database` command.
 
-**Note:** All stored data persists between sessions and is automatically reloaded when Uniflow starts. This ensures your timetable, ratings, reviews, and grades remain available across program runs.
+---
