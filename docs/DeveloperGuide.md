@@ -18,20 +18,21 @@ The architecture diagram above shows the high-level design of the application. T
 
 **Uniflow (Main Class)**
 - Entry point that initializes core components and runs the main command loop
+- Exposes shared singletons (e.g., `getScoreManager()`) to commands.
 
 **UI (User Interface)**
 - Handles all user interactions, reading commands via Scanner and displaying formatted results
 
 **Parser**
-- Parses user input strings into Command objects
-- Validates command syntax and throws UniflowException for invalid commands
+- Parses user input strings into `Command` objects
+- Validates command syntax and throws `UniflowException` for invalid commands
 
 **Command (Abstract Class)**
 - Base class for all command types using the Command Pattern
-- Defines execute() method and isExit() to control application flow
+- Defines `execute()` method and `isExit()` to control application flow
 
 **Module**
-- Represents a course session with ID, name, timing, session type, and score breakdown
+- Represents a scheduled module with ID, name, day/time, session type, and optional score breakdown
 - Provides methods to check for tutorials and retrieve module information
 
 **ModuleList**
@@ -45,7 +46,7 @@ The architecture diagram above shows the high-level design of the application. T
 - Manages completed courses for academic record keeping
 
 **ReviewManager**
-- Manages course reviews from students, storing reviews in a Map by course code
+- Manages course reviews from students, storing reviews in a Map keyed by module code
 
 **ReviewStorage**
 - Handles persistence of review data to file using pipe-delimited format
@@ -58,13 +59,19 @@ The architecture diagram above shows the high-level design of the application. T
 - Implements a shutdown hook to ensure all in-memory review data is flushed to disk via `ReviewStorage` and `ReviewCleaner` upon application exit, preventing data loss.
 
 **RatingManager**
-- Manages course ratings from students, storing ratings in a map by course code.
+- Manages course ratings from students, storing ratings in a map by module code.
 
 **RatingStats**
 - Represents the aggregate statistics (sum, count, average) for a specific course's ratings.
 
 **RatingStorage**
 - Handles persistence of rating data to the local file system using pipe-delimited format.
+
+**ScoreManager**
+- Orchestrates in-memory map `<MODULE_CODE: {component: value}>` and persistence.
+
+**ScoreStorage**
+- Handles persistence of score data to the local file system using pipe-delimited format.
 
 ### Command Execution Flow
 
@@ -73,6 +80,7 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 ```
 
 1. User enters a command string through the UI Scanner
+    The `UI` component reads the input from the console.
 2. Parser analyzes the command and creates the appropriate Command object
 3. Command's execute() method is called with UI, ModuleList, CourseRecord, and ReviewManager
 4. Command performs its operation:
