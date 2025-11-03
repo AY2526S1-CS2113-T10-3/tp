@@ -11,6 +11,8 @@ public class Parser {
     private static final String COMMAND_PROJECT_GPA = "projectgpa";
     private static final String COMMAND_SHOW_GRADE = "showgrade";
     private static final String COMMAND_SHOW_TEST_GRADE = "showtestgrade";
+    private static final String COMMAND_REMOVE_GRADE = "removegrade";
+    private static final String COMMAND_REMOVE_TEST_GRADE = "removetestgrade";
     private static final String COMMAND_FILTER = "filter";
     private static final String COMMAND_SHOW_TIMETABLE = "show timetable";
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
@@ -84,6 +86,12 @@ public class Parser {
         }
         if (trimmedCommand.equals(COMMAND_SHOW_TEST_GRADE)) {
             return new ShowTestGradeCommand();
+        }
+        if (trimmedCommand.startsWith(COMMAND_REMOVE_GRADE)) {
+            return parseRemoveGradeCommand(trimmedCommand);
+        }
+        if (trimmedCommand.startsWith(COMMAND_REMOVE_TEST_GRADE)) {
+            return parseRemoveTestGradeCommand(trimmedCommand);
         }
         if (trimmedCommand.equalsIgnoreCase(COMMAND_SHOW_TIMETABLE)) {
             return new ShowTimetableCommand();
@@ -213,6 +221,34 @@ public class Parser {
             return new AddGradeCommand(code, credits, grade, isMajor);
         } else {
             return new AddTestGradeCommand(code, credits, grade, isMajor);
+        }
+    }
+
+    private static Command parseRemoveGradeCommand(String command) throws UniflowException {
+        String[] parts = command.trim().split(" ");
+        if (parts.length != 2) {
+            throw new UniflowException("Please follow the format: removegrade INDEX");
+        }
+
+        try {
+            int index = Integer.parseInt(parts[1].trim());
+            return new RemoveGradeCommand(index);
+        } catch (NumberFormatException e) {
+            throw new UniflowException("Please enter a valid positive integer index.");
+        }
+    }
+
+    private static Command parseRemoveTestGradeCommand(String command) throws UniflowException {
+        String[] parts = command.trim().split(" ");
+        if (parts.length != 2) {
+            throw new UniflowException("Please follow the format: removetestgrade INDEX");
+        }
+
+        try {
+            int index = Integer.parseInt(parts[1].trim());
+            return new RemoveTestGradeCommand(index);
+        } catch (NumberFormatException e) {
+            throw new UniflowException("Please enter a valid positive integer index.");
         }
     }
 

@@ -56,7 +56,7 @@ public class Uniflow {
                 Command c = Parser.parse(fullCommand);
                 c.execute(ui, modules, courseRecord);
 
-                if (c instanceof AddGradeCommand) {
+                if (c instanceof AddGradeCommand || c instanceof RemoveGradeCommand) {
                     gradeStorage.saveGradeRecord(courseRecord);
                 }
 
