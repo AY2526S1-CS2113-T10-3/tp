@@ -30,13 +30,20 @@ class FilterCommandTest {
         System.setOut(new PrintStream(outputStream));
 
         // Add sample modules using the correct constructor
-        moduleList.addModule(new Module("CS1010", "Programming Methodology", "Monday", "10:00", "12:00", "lecture"));
-        moduleList.addModule(new Module("CS2040", "Data Structures and Algorithms", "Tuesday", "14:00", "16:00", "lecture"));
-        moduleList.addModule(new Module("CS2113", "Software Engineering & Object-Oriented Programming", "Wednesday", "09:00", "11:00", "tutorial"));
-        moduleList.addModule(new Module("CS2030", "Programming Paradigms", "Thursday", "15:00", "17:00", "lecture"));
-        moduleList.addModule(new Module("MA1521", "Calculus for Computing", "Friday", "10:00", "12:00", "lecture"));
-        moduleList.addModule(new Module("MA2001", "Linear Algebra I", "Monday", "14:00", "16:00", "tutorial"));
-        moduleList.addModule(new Module("ST2334", "Probability and Statistics", "Tuesday", "10:00", "12:00", "lecture"));
+        moduleList.addModule(new Module("CS1010", "Programming Methodology",
+                "Monday", "10:00", "12:00", "lecture"));
+        moduleList.addModule(new Module("CS2040", "Data Structures and Algorithms",
+                "Tuesday", "14:00", "16:00", "lecture"));
+        moduleList.addModule(new Module("CS2113", "Software Engineering & Object-Oriented Programming",
+                "Wednesday", "09:00", "11:00", "tutorial"));
+        moduleList.addModule(new Module("CS2030", "Programming Paradigms",
+                "Thursday", "15:00", "17:00", "lecture"));
+        moduleList.addModule(new Module("MA1521", "Calculus for Computing",
+                "Friday", "10:00", "12:00", "lecture"));
+        moduleList.addModule(new Module("MA2001", "Linear Algebra I",
+                "Monday", "14:00", "16:00", "tutorial"));
+        moduleList.addModule(new Module("ST2334", "Probability and Statistics",
+                "Tuesday", "10:00", "12:00", "lecture"));
     }
 
     @AfterEach
