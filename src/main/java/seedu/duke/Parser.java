@@ -405,6 +405,27 @@ public class Parser {
         return new ReviewCommand(parts[1].trim(), Uniflow.getReviewManager());
     }
 
+    private static Command parseAddReviewCommand(String command) throws UniflowException {
+        String input = command.substring(COMMAND_ADD_REVIEW.length()).trim();
+
+        String course = extractParameter(input, "c/");
+        String user = extractParameter(input, "u/");
+        String text = extractParameter(input, "r/");
+
+        // Validate all required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+        if (text == null || text.trim().isEmpty()) {
+            throw new UniflowException("Review text cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+
+        return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
+    }
+
     private static Command parseEditReviewCommand(String command) throws UniflowException {
         String input = command.substring(COMMAND_EDIT_REVIEW.length()).trim();
 
