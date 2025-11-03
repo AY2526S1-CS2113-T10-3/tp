@@ -7,12 +7,14 @@ public class EditReviewCommand extends Command {
     private final String course;
     private final String user;
     private final String newText;
+    private final Integer reviewIndex;
     private final ReviewManager reviewManager;
 
-    public EditReviewCommand(String course, String user, String newText, ReviewManager reviewManager) {
+    public EditReviewCommand(String course, String user, String newText, Integer reviewIndex, ReviewManager reviewManager) {
         this.course = course;
         this.user = user;
         this.newText = newText;
+        this.reviewIndex = reviewIndex;
         this.reviewManager = reviewManager;
     }
 
@@ -38,29 +40,29 @@ public class EditReviewCommand extends Command {
                 throw new UniflowException("Failed to edit review for " + course + ".");
             }
         } else {
-            // Multiple reviews, let user choose
-            ui.showMessage("You have multiple reviews for " + course + ". Please choose which one to edit:");
-            for (int i = 0; i < userReviews.size(); i++) {
-                System.out.println(" " + (i + 1) + ". " + userReviews.get(i));
-            }
-
-            ui.showMessage("Enter the number of the review to edit:");
-            String input = ui.readCommand().trim();
-
-            try {
-                int choice = Integer.parseInt(input);
-                if (choice < 1 || choice > userReviews.size()) {
-                    throw new UniflowException("Invalid choice. Please enter a number between 1 and " + userReviews.size());
+            // Multiple reviews
+            if (reviewIndex == null) {
+                // No index provided, show all reviews and ask user to retry with index
+                StringBuilder message = new StringBuilder();
+                message.append("You have multiple reviews for ").append(course).append(":\n");
+                for (int i = 0; i < userReviews.size(); i++) {
+                    message.append(" ").append(i + 1).append(". ").append(userReviews.get(i)).append("\n");
+                }
+                message.append(" Please specify which review to edit using: editreview c/")
+                        .append(course).append(" u/").append(user).append(" r/NEW_TEXT i/INDEX");
+                ui.showMessage(message.toString());
+            } else {
+                // Index provided, validate and edit
+                if (reviewIndex < 1 || reviewIndex > userReviews.size()) {
+                    throw new UniflowException("Invalid index. Please enter a number between 1 and " + userReviews.size());
                 }
 
-                boolean success = reviewManager.editReview(course, user, newText, choice - 1);
+                boolean success = reviewManager.editReview(course, user, newText, reviewIndex - 1);
                 if (success) {
                     ui.showMessage("Review updated for " + course + ".");
                 } else {
                     throw new UniflowException("Failed to edit review for " + course + ".");
                 }
-            } catch (NumberFormatException e) {
-                throw new UniflowException("Invalid input. Please enter a valid number.");
             }
         }
     }
