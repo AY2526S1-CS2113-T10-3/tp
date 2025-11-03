@@ -47,16 +47,6 @@ Format:
 list
 ```
 
-### Finding Reviews: `findreview`
-Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
-
-Formats:
-```commandline
-findreview c/COURSE_CODE
-findreview u/USERNAME
-findreview c/COURSE_CODE u/USERNAME
-```
-
 ### Showing Your Timetable: `show timetable`
 Displays all modules in your timetable with their full details.
 Format:
@@ -71,6 +61,16 @@ Format:
 reset timetable
 ```
 Note: This action cannot be undone. The system will confirm if your timetable is already empty.
+
+### Finding Reviews: `findreview`
+Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
+
+Formats:
+```commandline
+findreview c/COURSE_CODE
+findreview u/USERNAME
+findreview c/COURSE_CODE u/USERNAME
+```
 
 ### Filter Modules: `filter`
 Filters modules by various criteria including day, session type, module ID, module name, or tutorial presence.
