@@ -143,9 +143,9 @@ public class Parser {
     private static Command parseAddGradeCommand(String command, boolean save) throws UniflowException {
         String[] parts;
         if (save) {
-            parts = command.substring(COMMAND_ADD_GRADE.length()).trim().split(" ");
+            parts = command.substring(COMMAND_ADD_GRADE.length()).trim().split("\\s+");
         } else {
-            parts = command.substring(COMMAND_ADD_TEST_GRADE.length()).trim().split(" ");
+            parts = command.substring(COMMAND_ADD_TEST_GRADE.length()).trim().split("\\s+");
         }
 
         if (parts.length != 4) {
@@ -225,7 +225,7 @@ public class Parser {
     }
 
     private static Command parseRemoveGradeCommand(String command) throws UniflowException {
-        String[] parts = command.trim().split(" ");
+        String[] parts = command.trim().split("\\s+");
         if (parts.length != 2) {
             throw new UniflowException("Please follow the format: removegrade INDEX");
         }
@@ -239,7 +239,7 @@ public class Parser {
     }
 
     private static Command parseRemoveTestGradeCommand(String command) throws UniflowException {
-        String[] parts = command.trim().split(" ");
+        String[] parts = command.trim().split("\\s+");
         if (parts.length != 2) {
             throw new UniflowException("Please follow the format: removetestgrade INDEX");
         }
