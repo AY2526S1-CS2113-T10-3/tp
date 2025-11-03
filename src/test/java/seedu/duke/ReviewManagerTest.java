@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ReviewManagerTest {
 
-    private ReviewManager reviewManager;
     private static final String TEST_FILE_PATH = "data/reviews.txt";
+    private ReviewManager reviewManager;
 
     @BeforeEach
     void setUp() {
