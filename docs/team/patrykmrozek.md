@@ -22,13 +22,15 @@ This product is designed for university students who prefer a fast, keyboard-bas
 - Implemented **`RatingStorage`** for persistent storage across sessions (`data/ratings.txt`).
 - Extended **`Parser`** to distinguish between add/view modes based on user input.
 - This feature allows students to collectively evaluate courses, helping peers make informed module choices.
+- Added **Rating Management UML diagrams** (Class + Sequence) to Developer Guide for v2.1.
+
 
 ---
 
 ### 2. Major Feature — Score Breakdown System (Original Design + Rework)
 - Designed and implemented the **`ScoreCommand`** from scratch to allow users to record assessment breakdowns for each module.
     - Example: `score CS2113 exam:50 project:30 participation:20`
-    - Query mode: `score CS2113 -1` displays the saved breakdown.
+    - Query mode: `score CS2113` displays the saved breakdown.
 - Built the **core parsing logic** to handle flexible `component:score` input, including spacing, ordering, and validation.
 - Later **reworked the system** into a modular architecture with persistent storage:
     - Added **`ScoreManager`** for managing all breakdown logic independently from the command layer.
@@ -36,7 +38,7 @@ This product is designed for university students who prefer a fast, keyboard-bas
     - Updated **`Uniflow`** to initialize a shared `ScoreManager` for consistent access across sessions.
 - The rework improved code maintainability, modularity, and data persistence while preserving the original functionality.
 - **Overall Impact**: The score system is one of Uniflow’s core academic tracking features, giving users a clear overview of module weightings and progress distribution.
-
+- Added **Score Management UML diagrams** (Class + Sequence) to Developer Guide.
 ---
 
 ### 3. Module Management Enhancements
@@ -70,9 +72,9 @@ This product is designed for university students who prefer a fast, keyboard-bas
 - Authored clear, example-driven documentation for:
     - **Course Rating System** — Explained command usage, examples, and error handling.
     - **Score Breakdown System** — Documented both input format and query mode for retrieving breakdowns.
+- Added command examples to “Instructions for Manual Testing” section.
 - Included edge cases, invalid input examples, and usage hints for clarity.
 - Improved overall user experience with structured sections and consistent formatting.
-
 ---
 
 ### 6. Contributions to the Developer Guide
@@ -82,17 +84,17 @@ This product is designed for university students who prefer a fast, keyboard-bas
     - Load/save data flow for persistent storage.
 - Added explanation of **ModuleStorage integration**, describing how module data is serialized and deserialized.
 - Updated diagrams and explanations after reworking the Score system to reflect the new architecture.
-
+- Contributed to **Implementation Details**, **Key Design Patterns**, and **Design Details** sections.
 ---
 
 ### 7. Contributions to Team-Based Tasks
 - Regularly participated in design discussions and helped shape how core managers interact with storage components.
 - Standardized naming conventions, error messages, and command syntax across all features.
 - Assisted teammates with integration issues related to shared resources and file handling.
-- Helped organize and maintain `AboutUs.md` and ensure team documentation consistency.
 
 ---
 
 ### 8. Review and Mentoring Contributions
 - Reviewed and provided feedback on teammates’ pull requests with a focus on maintainability and adherence to coding standards.
 - Assisted in resolving merge conflicts and logic inconsistencies in the `Parser` class during feature merges.
+- Supported the final integration of all storage-based managers before v2.1 release.
