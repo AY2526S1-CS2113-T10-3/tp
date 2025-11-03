@@ -125,7 +125,7 @@ public class CourseRecord {
      * Converts the letter grade to its respective grade point.
      */
     private double convertGradePoint(String grade) throws UniflowException {
-        return switch (grade) {
+        double result = switch (grade) {
             case "A+", "A" -> 5.0;
             case "A-" -> 4.5;
             case "B+" -> 4.0;
@@ -138,6 +138,7 @@ public class CourseRecord {
             case "F" -> 0.0;
             default -> throw new UniflowException("You have entered an invalid grade!");
         };
+        return result;
     }
 
     public ArrayList<Course> getCourseRecord() {
