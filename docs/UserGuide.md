@@ -67,13 +67,13 @@ reset timetable
 Note: This action cannot be undone. The system will confirm if your timetable is already empty.
 
 ### Filtering Modules: `filter`
-Filters modules by various criteria including day, session type, module ID, module name, or tutorial presence.
+Filters modules by various criteria including day, session type, module CODE, module name, or tutorial presence.
 
 Format:
 ```commandline
 filter day/DAY
 filter type/SESSION_TYPE
-filter id/MODULE_ID
+filter id/MODULE_CODE
 filter name/MODULE_NAME
 filter hastutorial
 filter notutorial
@@ -307,7 +307,7 @@ bye
 | **list** | `list` | Lists all modules currently added |
 | **show timetable** | `show timetable` | Displays all modules with full details |
 | **reset timetable** | `reset timetable` | Removes all modules from your timetable (cannot be undone) |
-| **filter** | `filter day/DAY` <br> `filter type/SESSION_TYPE` <br> `filter id/MODULE_ID` <br> `filter name/MODULE_NAME` <br> `filter hastutorial` <br> `filter notutorial` <br> *Example:* `filter day/Monday` | Filters modules by given criteria such as day, session type, or presence of tutorials |
+| **filter** | `filter day/DAY` <br> `filter type/SESSION_TYPE` <br> `filter id/MODULE_CODE` <br> `filter name/MODULE_NAME` <br> `filter hastutorial` <br> `filter notutorial` <br> *Example:* `filter day/Monday` | Filters modules by given criteria such as day, session type, or presence of tutorials |
 
 ---
 
