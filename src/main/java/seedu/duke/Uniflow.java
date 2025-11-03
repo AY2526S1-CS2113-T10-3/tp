@@ -36,7 +36,6 @@ public class Uniflow {
         try {
             courseRecord = gradeStorage.loadGradeRecord();
             modules = moduleStorage.loadModules();
-            //ui.showMessage("Loaded " + courseRecord.getSize() + " saved course(s) from record.");
         } catch (Exception e) {
             ui.showGradeLoadingError();
             courseRecord = new CourseRecord();

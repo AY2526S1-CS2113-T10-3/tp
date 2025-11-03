@@ -9,6 +9,8 @@ public class Parser {
     private static final String COMMAND_ADD_TEST_GRADE = "addtestgrade";
     private static final String COMMAND_GPA = "gpa";
     private static final String COMMAND_PROJECT_GPA = "projectgpa";
+    private static final String COMMAND_SHOW_GRADE = "showgrade";
+    private static final String COMMAND_SHOW_TEST_GRADE = "showtestgrade";
     private static final String COMMAND_FILTER = "filter";
     private static final String COMMAND_SHOW_TIMETABLE = "show timetable";
     private static final String COMMAND_RESET_TIMETABLE = "reset timetable";
@@ -76,6 +78,12 @@ public class Parser {
         }
         if (trimmedCommand.equals(COMMAND_PROJECT_GPA)) {
             return new ProjectGpaCommand();
+        }
+        if (trimmedCommand.equals(COMMAND_SHOW_GRADE)) {
+            return new ShowGradeCommand();
+        }
+        if (trimmedCommand.equals(COMMAND_SHOW_TEST_GRADE)) {
+            return new ShowTestGradeCommand();
         }
         if (trimmedCommand.equalsIgnoreCase(COMMAND_SHOW_TIMETABLE)) {
             return new ShowTimetableCommand();
