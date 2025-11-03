@@ -81,27 +81,59 @@ User Input → Parser → Command Object → execute() → Updates Data → UI O
 
 1. User enters a command string through the UI Scanner
     The `UI` component reads the input from the console.
-2. Parser analyzes the command and creates the appropriate Command object
-3. Command's execute() method is called with UI, ModuleList, CourseRecord, and ReviewManager
+2. Parser analyzes the input and creates the appropriate `Command object`
+    It performs syntax validation and throws a `UniflowException` for invalid commands.
+3. Command's `execute()` method is called with core data managers:
+   - `ModuleList` - timetable and active semester modules.
+   - `CourseRecord` - completed courses for GPA tracking.
+   - `ReviewManager`, `RatingManager`, and `ScoreManager` - in-memory feature managers.
 4. Command performs its operation:
-   - ModuleList operations: insert, delete, list, filter modules, detect clashes
-   - CourseRecord operations: add grades, compute GPA
-   - ReviewManager operations: add and retrieve course reviews
-   - RatingManager operations: add or display course ratings
-   - Timetable operations: show, reset
-5. Command updates the respective data models (ModuleList, CourseRecord, or ReviewManager)
-6. UI displays the result, filtered list, GPA calculation, reviews, or error message
-7. Loop continues until user enters "bye" (when Command.isExit() returns true)
-8. On exit (either via "bye" or abrupt close), the `ReviewSyncManager`'s shutdown hook is triggered, calling `ReviewStorage` and `ReviewCleaner` to save all review data and `RatingStorage` to save all rating data.
-9. Application terminates gracefully
+   - **ModuleList operations**: `insert`, `delete`, `list`, `filter`, `show timetable`, `reset timetable` and clash detection.
+   - **CourseRecord operations**: `addgrade`, `gpa`, and related grade persistence through GradeStorage.
+   - **ReviewManager operations**: `addreview`, `review`, `findreview`, and review persistence through `ReviewStorage`.
+   - **RatingManager operations**: `rate` (add/view module ratings), persistence through `RatingStorage`.
+   - **ScoreManager operations**: `score` (add/view module breakdowns) persistence through `ScoreStorage`.
+5. Data managers update in-memory structures and trigger persistence where needed:
+   - `ModuleStorage` for timetable data.
+   - `GradeStorage` for GPA records.
+   - `ScoreStorage`, `ReviewStorage`, `RatingStorage` for feature-specific data.
+6. UI outputs feedback to the user: confirmation messages, GPA summaries, filtered module lists, average ratings, or score breakdowns.
+7. Loop continues until the user enters `bye`.
+   When `Command.isExit()` returns `true`, the main loop terminates.
+8. On exit (graceful or abrupt):
+   The `ReviewSyncManager` shutdown hook is triggered, ensuring that `ReviewStorage`, `RatingStorage`, and `ScoreStorage` flush all in-memory data safely to disk.
+9. Application terminates gracefully, with all data persisted to the `/data` directory.
 
 ### Key Design Patterns
 
-**Command Pattern**: Each user action is encapsulated as a Command object (InsertCommand, DeleteCommand, FilterCommand, etc.), allowing for easy extension and modification.
+#### Command Pattern
+Every user action (e.g., `insert`, `delete`, `filter`, `rate`, `score`, `addgrade`, `review`) is implemented as a subclass of the abstract Command class.
+Each command encapsulates its own logic and implements execute(), allowing new features to be added without modifying existing code.
+This pattern isolates user actions, improving extensibility and testability.
 
-**Singleton-like Access**: ReviewManager and CourseRecord are accessed through static methods in Uniflow class, ensuring consistent state across commands.
+#### Separation of Concerns
+The system is divided into three logical layers:
+- **Parser/Command Layer**: Handles command parsing and user intent.
+- **Manager Layer**: Handles business logic (e.g. `ReviewManager`, `RatingManager`, `ScoreManager`).
+- **Storage Layer**: Handles data persistence (`ReviewStorage`, `RatingStorage`, `ScoreStorage`, `ModuleStorage`, `GradeStorage`).
+This design ensures that UI, logic, and persistence can evolve independently.
 
-**Predicate-based Filtering**: ModuleList uses Java Predicate functional interface for flexible filtering operations.
+#### Data Persistence Pattern (Storage Abstraction)
+Each major feature has a dedicated storage class that implements standardized load/save operations using simple delimited formats.
+This keeps data handling consistent across modules (e.g., a`data/modules.txt`, `data/scores.txt`, `data/ratings.txt`).
+
+#### Singleton-like Access
+Global components a(`ReviewManager`, `RatingManager`, `ScoreManager`, `CourseRecord`, and `ModuleList`) are instantiated once and referenced through the `Uniflow` class.
+This ensures a consistent shared state across commands while avoiding tight coupling.
+
+#### Predicate-Based Filtering
+`ModuleList` uses Java’s `Predicate` functional interface for dynamic filtering (e.g., by day, session type, or tutorial presence).
+This makes it easy to extend filtering criteria without changing the base logic.
+
+#### Fail-Safe Shutdown (Observer/Hook Pattern)
+`ReviewSyncManager` registers a JVM shutdown hook that automatically flushes all unsaved data from memory to disk.
+This ensures integrity for reviews, ratings, and scores even if the user terminates the application abruptly.
+
 
 ### Design Details
 
