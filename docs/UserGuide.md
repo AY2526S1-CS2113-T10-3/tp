@@ -28,6 +28,16 @@ Example:
 ```commandline
 insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Got it! I've added this module:
+  Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+Now you have 1 module(s) in the list.
+___________________________________________________________________________
+___________________________________________________________________________
+```
 Note: The `SESSION_TYPE` field is optional. If left empty, it will default to `Lecture`.
 
 ### Deleting a Module: `delete`
@@ -39,7 +49,17 @@ delete index/MODULE_INDEX
 ```
 Example:
 ```commandline
-delete index/CS2113
+delete index/1
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Noted. I've removed this module:
+  Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+Now you have 0 module(s) left in the list.
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 
 ### Listing All Modules: `list`
@@ -49,6 +69,14 @@ Format:
 ```commandline
 list
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+Your modules:
+1. CS2113
+2. CS3241
+___________________________________________________________________________
+```
 
 ### Showing Your Timetable: `show timetable`
 Displays all modules in your timetable with their full details.
@@ -57,6 +85,20 @@ Format:
 ```commandline
 show timetable
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Here is your timetable:
+___________________________________________________________________________
+___________________________________________________________________________
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+___________________________________________________________________________
+___________________________________________________________________________
+ 2. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
 
 ### Resetting Your Timetable: `reset timetable`
 Clears all modules from your timetable.
@@ -64,6 +106,14 @@ Clears all modules from your timetable.
 Format:
 ```commandline
 reset timetable
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Timetable has been reset!
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 Note: This action cannot be undone. The system will confirm if your timetable is already empty.
 
@@ -88,6 +138,15 @@ filter notutorial
 filter id/CS2113
 filter name/Software
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Found 1 module(s) matching day 'Monday':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
 
 ### Recording Component Scores: `score`
 Allows users to record or view score breakdowns for a specific module (e.g., exam scores, project scores, participation).
@@ -100,6 +159,14 @@ Example:
 ```commandline
 score CS2113 exam:50 project:30 participation:20
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Saved score breakdown for {CS2113:{exam=50, participation=20, project=30}}
+___________________________________________________________________________
+___________________________________________________________________________
+```
 
 View Score Breakdown Format:
 ```commandline
@@ -108,6 +175,14 @@ score MODULE_CODE
 Example:
 ```commandline
 score CS2113
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Score breakdown for CS2113: {exam=50, participation=20, project=30}
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 Note: The module must already exist in your timetable before you can add scores.
 
@@ -122,6 +197,14 @@ Example:
 ```commandline
 addreview c/CS2113 u/John r/Great course with practical projects!
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Review added for CS2113.
+___________________________________________________________________________
+___________________________________________________________________________
+```
 
 ### Viewing Reviews: `review`
 Displays all reviews for a specific module.
@@ -134,6 +217,13 @@ Example:
 ```commandline
 review CS2113
 ```
+Expected Output:
+```commandline
+ Reviews for CS2113:
+___________________________________________________________________________
+ - John: Great module with lots of practical examples
+___________________________________________________________________________
+```
 
 ### Editing a Review: `editreview`
 Allows users to edit their existing review for a module.
@@ -145,6 +235,14 @@ editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT
 Example:
 ```commandline
 editreview c/CS2113 u/John r/Excellent course with hands-on learning!
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Review updated for CS2113.
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 Note: You can only edit your own review. The username must match the one used when adding the review.
 
@@ -159,6 +257,14 @@ Example:
 ```commandline
 deletereview c/CS2113 u/John
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Review deleted for CS2113.
+___________________________________________________________________________
+___________________________________________________________________________
+```
 Note: You can only delete your own review.
 
 ### Finding Reviews: `findreview`
@@ -170,11 +276,20 @@ findreview c/MODULE_CODE
 findreview u/USERNAME
 findreview c/MODULE_CODE u/USERNAME
 ```
-Example:
+Examples:
 ```commandline
 findreview c/CS2113
 findreview u/john
 findreview c/CS2113 u/john
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Reviews for CS2113:
+___________________________________________________________________________
+ - CS2113 - John: Great course with practical projects!
+___________________________________________________________________________
 ```
 
 ### Rating a Course: `rate`
@@ -188,9 +303,26 @@ Example:
 ```commandline
 rate CS2113 4
 ```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Added Rating: 4 to CS2113
+___________________________________________________________________________
+___________________________________________________________________________
+
+```
 View Average Rating Format:
 ```commandline
 rate CS2113
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ CS2113 Rating: 4.0 (1 rating(s))
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 
 ### Adding a Course's Grade Information: `addgrade`
@@ -206,6 +338,14 @@ addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR
 Example:
 ```commandline
 addgrade c/CS2113 cr/4 g/A m/true
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ OK! Now I have added your record of the course CS2113 (4 credits, Grade: A) (Major course)
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 In this example, you added the course CS2113 to the record. It is a 4-credit course. You got an A in the course. It is a major required course. 
 
@@ -223,6 +363,14 @@ addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR
 Example:
 ```commandline
 addtestgrade c/CS2113 cr/4 g/A m/true
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Added course: CS2113 (4 credits, Grade: A) (Major course) in temporary record.
+___________________________________________________________________________
+___________________________________________________________________________
 ```
 In this example, you added the course CS2113 to the temporary record. It is a 4-credit course. You assume that you get an A in the course. It is a major required course. 
 
@@ -244,7 +392,7 @@ Suppose you have added two courses:
 *CS2113, 5 credits, grade: B, major course*  
 *EC3322, 5 credits, grade: A, not a major required course*
   
-Expected output:
+Expected Output:
 ```commandline
 ____________________________________________________________  
 ____________________________________________________________  
@@ -280,7 +428,7 @@ You are studying a course in the upcoming semester:
   
 And you added it to the temporary record.  
 
-Expected output:
+Expected Output:
 ```commandline
 ____________________________________________________________
 ____________________________________________________________
