@@ -11,7 +11,7 @@ public class ListCommand extends Command {
         System.out.println("Your modules:");
         for (int i = 0; i < modules.getSize(); i++) {
             Module module = modules.getAllModules().get(i);
-            System.out.println(module.getId());
+            System.out.println(i+1 + ". " + module.getId());
         }
     }
 }
