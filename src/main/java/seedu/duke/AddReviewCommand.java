@@ -29,9 +29,4 @@ public class AddReviewCommand extends Command {
         reviewManager.addReview(course, user, text);
         ui.showMessage("Review added for " + course + ".");
     }
-
-    @Override
-    public boolean isExit() {
-        return false;
-    }
 }

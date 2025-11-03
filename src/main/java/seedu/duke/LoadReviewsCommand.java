@@ -89,9 +89,4 @@ public class LoadReviewsCommand extends Command {
 
         return added;
     }
-
-    @Override
-    public boolean isExit() {
-        return false;
-    }
 }

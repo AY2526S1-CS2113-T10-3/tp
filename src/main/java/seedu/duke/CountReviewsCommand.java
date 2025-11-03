@@ -41,7 +41,7 @@ public class CountReviewsCommand extends Command {
                 List<String> reviews = reviewManager.getReviews(c);
                 if (reviews == null) {
                     continue;
-                };
+                }
                 for (String r : reviews) {
                     if (r.startsWith(user + ": ")) {
                         count++;
@@ -57,10 +57,5 @@ public class CountReviewsCommand extends Command {
             count = (reviews != null) ? reviews.size() : 0;
             ui.showMessage("Course " + course + " has " + count + " review(s).");
         }
-    }
-
-    @Override
-    public boolean isExit() {
-        return false;
     }
 }

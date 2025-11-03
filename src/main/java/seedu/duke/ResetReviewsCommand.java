@@ -12,9 +12,4 @@ public class ResetReviewsCommand extends Command {
             ui.showError("Failed to clear in-memory reviews: " + e.getMessage());
         }
     }
-
-    @Override
-    public boolean isExit() {
-        return false;
-    }
 }

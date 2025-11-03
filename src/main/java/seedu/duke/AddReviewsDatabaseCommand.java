@@ -45,9 +45,4 @@ public class AddReviewsDatabaseCommand extends Command {
             ui.showMessage("No new reviews found to add.");
         }
     }
-
-    @Override
-    public boolean isExit() {
-        return false;
-    }
 }
