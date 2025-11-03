@@ -1,0 +1,59 @@
+@startuml
+title Score Feature — Sequence Diagram (Add/Update vs Query)
+
+actor User
+participant UI
+participant Parser
+participant "ScoreCommand" as SC
+participant "ModuleList" as ML
+participant "Module" as M
+participant "ScoreManager" as SM
+database "ScoreStorage" as SS
+
+User -> UI: Enter command\nscore <MODULE_CODE> [name:value ...]
+UI -> Parser: readCommand()
+Parser -> SC: new ScoreCommand(module, breakdown)
+Parser --> UI: Command
+UI -> SC: execute(ui, modules, courseRecord)
+
+SC -> ML: doesExist(module)
+ML --> SC: true/false
+alt Module not found
+  SC -> UI: showError("Module does not exist")
+  return
+end
+
+SC -> ML: getModuleByID(module)
+ML --> SC: M
+
+alt breakdown is null/blank
+  SC -> UI: showError("Please provide scores in name:value format")
+  return
+end
+
+alt breakdown == "-1" (Query mode)
+  alt M.hasBreakdown()
+    SC -> M: getScoreBreakdown()
+    M --> SC: Map<String,Integer>
+    SC -> UI: showMessage("Score breakdown ...")
+  else No in-memory breakdown
+    SC -> SM: hasBreakdown(module)
+    SM --> SC: true/false
+    alt Persisted exists
+      SC -> SM: getBreakdown(module)
+      SM --> SC: Map<String,Integer>
+      SC -> M: setScoreBreakdown(map)
+      SC -> UI: showMessage("Score breakdown ...")
+    else None persisted
+      SC -> UI: showMessage("Score not found for <module>")
+    end
+  end
+else Add/Update mode
+  SC -> SC: parse & validate pairs → Map<String,Integer>\n(name not empty, value is non-negative int)
+  SC -> M: setScoreBreakdown(map)
+  SC -> SM: saveBreakdown(module, map)
+  SM -> SS: save(allBreakdowns as text)
+  SS --> SM: OK
+  SC -> UI: showMessage("Saved score breakdown ...")
+end
+@enduml

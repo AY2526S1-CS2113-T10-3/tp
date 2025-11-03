@@ -1,0 +1,29 @@
+@startuml RatingStorage_Class_Diagram
+skinparam dpi 200
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Monospaced
+title RatingStorage - Class Diagram
+
+class RatingStorage {
+  - static final String FILE_PATH = "data/ratings.txt"
+  == Constructors ==
+  + RatingStorage()
+  == Methods ==
+  + Map<String, RatingStats> load()
+  + void save(Map<String, RatingStats> ratings)
+}
+
+class RatingStats {
+  - int sum
+  - int count
+  + RatingStats()
+  + RatingStats(int sum, int count)
+  + void add(int rating)
+  + double average()
+  + int getSum()
+  + int getCount()
+}
+
+RatingStorage --> RatingStats : uses
+@enduml

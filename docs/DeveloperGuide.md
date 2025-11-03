@@ -44,6 +44,46 @@
     - [Testing Error Handling](#testing-error-handling)
     - [Data Persistence Testing](#data-persistence-testing)
 
+## Table of Contents
+- [Acknowledgements](#acknowledgements)
+- [Design & implementation](#design--implementation)
+    - [Architecture Overview](#architecture-overview)
+    - [Command Execution Flow](#command-execution-flow)
+    - [Key Design Patterns](#key-design-patterns)
+    - [Design Details](#design-details)
+        - [Command Component](#command-component)
+        - [Model Component](#model-component)
+        - [Review Management Component](#review-management-component)
+        - [Rating Management Component](#rating-management-component)
+        - [Score Management Component](#score-management-component)
+- [Implementation Details](#implementation-details)
+    - [Find Review Feature](#find-review-feature)
+    - [Review Data Persistence (ReviewSyncManager & ReviewCleaner)](#review-data-persistence-reviewsyncmanager--reviewcleaner)
+    - [Review Data Management (Reload/Reset)](#review-data-management-reloadreset)
+    - [Insert Module Feature](#insert-module-feature)
+    - [Filter Module Feature](#filter-module-feature)
+    - [GPA Calculation Feature](#gpa-calculation-feature)
+    - [Score Breakdown Feature](#score-breakdown-feature)
+    - [Rating Feature](#rating-feature)
+    - [Timetable Clash Detection](#timetable-clash-detection)
+- [Product scope](#product-scope)
+    - [Target user profile](#target-user-profile)
+    - [Value proposition](#value-proposition)
+- [User Stories](#user-stories)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Glossary](#glossary)
+- [Instructions for manual testing](#instructions-for-manual-testing)
+    - [Setting up the application](#setting-up-the-application)
+    - [Testing Module Management](#testing-module-management)
+    - [Testing Filtering](#testing-filtering)
+    - [Testing Grade Management](#testing-grade-management)
+    - [Testing Score Breakdown](#testing-score-breakdown)
+    - [Testing Review System](#testing-review-system)
+    - [Testing Rating System](#testing-rating-system)
+    - [Testing Timetable Commands](#testing-timetable-commands)
+    - [Testing Error Handling](#testing-error-handling)
+    - [Data Persistence Testing](#data-persistence-testing)
+
 ## Acknowledgements
 
 * Java 17 - Programming language and runtime environment
@@ -214,6 +254,39 @@ The Review Management component was refactored to a "RAM-first" architecture, se
 - **ReviewStorage**: A utility class responsible only for file I/O (reading and writing the `reviews.txt` file).
 - **Persistence Commands**: `LoadReviewsCommand` and `AddReviewsDatabaseCommand` orchestrate the merging of data between `ReviewManager` and `ReviewStorage`.
 - **ExitSaveManager**: A new component that uses `ReviewManager` and `ReviewStorage` to detect unsaved changes and prompt the user (yes/no) before the application closes via the `bye` command.
+
+#### Rating Management Component
+The Rating Management component enables users to rate modules and view average ratings for each course.
+It follows the same architecture as Review Management, with a clear separation between logic, data and persistence layers.
+
+![Rating Management Class Diagram](diagrams/RatingManagement.png)
+
+- **RatingManager** - Maintains a `Map<String, RatingStats>` mapping module codes to their cumulative rating data.
+  - It handles all business logic for adding, updating, and retrieving ratings, ensuring each rating is between 1-5.
+- **RatingStats** - A helper class encapsulating statistics:
+  - `sum`: total of all rating values.
+  - `count`: number of ratings.
+  - `average`: computed dynamically as `sum/count`
+- **RatingStorage** - Manages persistence of rating data to `data/ratings.txt` using a pipe-delimited format.
+  - Each line represents one record:
+    `MODULE_CODE|SUM|COUNT`
+  - Ratings are automatically reloaded at application start and saved on exit or when a new rating is added.
+![Rating Storage Class Diagram](diagrams/RatingStorageClassDiagram.png)
+
+#### Score Management Component
+The Score Management component allows users to store and view assessment breakdowns for individual modules.
+It is designed around the same modular architecture as the Review and Rating systems.
+![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.puml)
+
+- **ScoreManager** - Manages a `Map<String, Map<String, Integer>>` representing each module’s breakdown,
+  where the key is a component name (e.g., `"exam"`, `"project"`) and the value is a score weight.
+  Provides methods to:
+  - Add or update a module’s breakdown 
+  - Retrieve existing breakdowns 
+  - Validate format and numeric values
+- **ScoreStorage** - Persists breakdown data to `data/scores.txt` in the following format:
+  `MODULE_CODE|name:value|name2:value2|..`
+  Handles both loading and saving, ensuring file data remains synchronized with the in-memory state.
 
 #### Rating Management Component
 The Rating Management component enables users to rate modules and view average ratings for each course.
