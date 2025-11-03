@@ -188,6 +188,7 @@ It follows the same architecture as Review Management, with a clear separation b
   - Each line represents one record:
     `MODULE_CODE|SUM|COUNT`
   - Ratings are automatically reloaded at application start and saved on exit or when a new rating is added.
+![Rating Storage Class Diagram](diagrams/RatingStorageClassDiagram.png)
 
 #### Score Management Component
 The Score Management component allows users to store and view assessment breakdowns for individual modules.
