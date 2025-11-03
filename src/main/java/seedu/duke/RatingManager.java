@@ -31,4 +31,22 @@ public class RatingManager {
     public Map<String, RatingStats> getmoduleRatings() {
         return moduleRatings;
     }
+
+    public void pruneAgainst(ModuleList modules) {
+        if (modules == null) {
+            return;
+        }
+        boolean changed = false;
+        var iter = moduleRatings.keySet().iterator();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            if (!modules.doesExist(key)) {
+                iter.remove();
+                changed = true;
+            }
+        }
+        if (changed) {
+            storage.save(moduleRatings);
+        }
+    }
 }

@@ -63,6 +63,8 @@ public class Uniflow {
 
                 if (c instanceof InsertCommand ||  c instanceof DeleteCommand || c instanceof ResetTimetableCommand) {
                     moduleStorage.saveModules(modules);
+                    Uniflow.getScoreManager().pruneAgainst(modules);
+                    Uniflow.getRatingManager().pruneAgainst(modules);
                 }
 
                 isExit = c.isExit();
