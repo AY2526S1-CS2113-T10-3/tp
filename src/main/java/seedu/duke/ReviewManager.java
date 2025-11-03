@@ -15,12 +15,22 @@ public class ReviewManager {
     private final ReviewStorage storage;
 
     /**
-     * Initializes the ReviewManager by loading stored reviews from file.
+     * Initializes the ReviewManager by loading stored reviews from file or storing data on RAM-only mode.
      */
     public ReviewManager() {
         storage = new ReviewStorage();
-        reviews = storage.load();
+        Map<String, List<String>> loaded;
+
+        try {
+            loaded = storage.load();
+        } catch (Exception e) {
+            System.out.println("Warning: Review file could not be loaded. Running in RAM-only mode.");
+            loaded = new java.util.HashMap<>();
+        }
+
+        reviews = loaded;
     }
+
 
     /**
      * Adds a review for a specific course by a user.
@@ -31,7 +41,7 @@ public class ReviewManager {
      */
     public void addReview(String course, String user, String text) {
         reviews.computeIfAbsent(course, k -> new ArrayList<>()).add(user + ": " + text);
-        storage.save(reviews);
+        // removed storage.save(reviews);
     }
 
     /**
@@ -43,16 +53,7 @@ public class ReviewManager {
     public List<String> getReviews(String course) {
         return reviews.getOrDefault(course, new ArrayList<>());
     }
-    /**
-     * Forces saving all current reviews to persistent storage.
-     */
-    public void flush() {
-        try {
-            storage.save(reviews);
-        } catch (Exception e) {
-            System.out.println("Warning: failed to flush reviews: " + e.getMessage());
-        }
-    }
+
     /**
      * Checks if a course exists in the review list.
      *
@@ -81,7 +82,6 @@ public class ReviewManager {
             String review = courseReviews.get(i);
             if (review.startsWith(user + ": ")) {
                 courseReviews.set(i, user + ": " + newText);
-                storage.save(reviews);
                 return true;
             }
         }
@@ -126,7 +126,6 @@ public class ReviewManager {
             String review = courseReviews.get(i);
             if (review.startsWith(user + ": ")) {
                 courseReviews.remove(i);
-                storage.save(reviews);
                 return true;
             }
         }
@@ -139,6 +138,7 @@ public class ReviewManager {
     public Set<String> getAllCourseIds() {
         return reviews.keySet();
     }
+
     /**
      * Reloads all reviews from the storage file into memory.
      * This can be used to refresh data if the file was modified externally.
@@ -147,6 +147,43 @@ public class ReviewManager {
         Map<String, List<String>> reloaded = storage.load();
         reviews.clear();
         reviews.putAll(reloaded);
-        System.out.println("Reviews reloaded from file.");
+    }
+
+    /**
+     * Clean all reviews locally from RAM memory.
+     */
+    public void clearAll() {
+        reviews.clear();
+    }
+
+    /**
+     * Synchronizes the in-memory reviews with those in the file,
+     * adding only missing entries from the file without removing anything.
+     */
+    public boolean mergeWithFile() {
+        Map<String, List<String>> fileData = storage.load();
+        int added = 0;
+
+        for (Map.Entry<String, List<String>> entry : fileData.entrySet()) {
+            String course = entry.getKey();
+            List<String> fileReviews = entry.getValue();
+
+            reviews.computeIfAbsent(course, k -> new ArrayList<>());
+
+            for (String review : fileReviews) {
+                if (!reviews.get(course).contains(review)) {
+                    reviews.get(course).add(review);
+                    added++;
+                }
+            }
+        }
+
+        return added > 0;
+    }
+    /**
+     * Returns all reviews currently stored in memory.
+     */
+    public Map<String, List<String>> getAllReviews() {
+        return reviews;
     }
 }

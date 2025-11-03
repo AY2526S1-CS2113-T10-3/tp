@@ -7,16 +7,4 @@ public class ReviewSyncManager {
         this.reviewManager = reviewManager;
     }
 
-    public void saveAndClean() {
-        try {
-            reviewManager.flush();
-            new ReviewCleaner().cleanInvalidReviews();
-        } catch (Exception e) {
-            System.out.println("Warning: failed to save reviews: " + e.getMessage());
-        }
-    }
-
-    public void setupAutoSync() {
-        Runtime.getRuntime().addShutdownHook(new Thread(this::saveAndClean));
-    }
 }

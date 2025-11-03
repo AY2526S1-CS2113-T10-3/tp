@@ -27,11 +27,8 @@ public class Uniflow {
         ui = new UI();
         modules = new ModuleList();
 
-        new ReviewCleaner().cleanInvalidReviews();
-
         reviewManager = new ReviewManager();
-        ReviewSyncManager reviewSync = new ReviewSyncManager(reviewManager);
-        reviewSync.setupAutoSync();
+        reviewManager.loadReviews();
 
         try {
             courseRecord = gradeStorage.loadGradeRecord();
@@ -41,6 +38,7 @@ public class Uniflow {
             ui.showGradeLoadingError();
             courseRecord = new CourseRecord();
         }
+
     }
 
     /**
@@ -67,7 +65,11 @@ public class Uniflow {
                     Uniflow.getRatingManager().pruneAgainst(modules);
                 }
 
-                isExit = c.isExit();
+                if (c.isExit()) {
+                    new ExitSaveManager(ui, reviewManager).promptSaveBeforeExit();
+                    isExit = true;
+                }
+
             } catch (UniflowException e) {
                 ui.showError(e.getMessage());
             } finally {
@@ -94,7 +96,6 @@ public class Uniflow {
 
     /**
      * Main entry point for the Uniflow chatbot application.
-     * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
         new Uniflow("testing").run();
