@@ -41,7 +41,7 @@ Example:
 delete index/CS2113
 ```
 
-### List All Module: `list`
+### Listing All Modules: `list`
 Displays all modules in your timetable.
 
 Format:
@@ -66,7 +66,7 @@ reset timetable
 ```
 Note: This action cannot be undone. The system will confirm if your timetable is already empty.
 
-### Filter Modules: `filter`
+### Filtering Modules: `filter`
 Filters modules by various criteria including day, session type, module ID, module name, or tutorial presence.
 
 Format:
@@ -88,7 +88,7 @@ filter id/CS2113
 filter name/Software
 ```
 
-### Record Component Scores: `score`
+### Recording Component Scores: `score`
 Allows users to record or view score breakdowns for a specific course (e.g., exam scores, project scores, participation).
 
 Add Score Breakdown Format:
@@ -176,7 +176,7 @@ findreview u/john
 findreview c/CS2113 u/john
 ```
 
-### Rate a Course: `rate`
+### Rating a Course: `rate`
 Allows users to add or view numerical ratings for a course.
 
 Rating Format:
@@ -192,7 +192,7 @@ View Average Rating Format:
 rate CS2113
 ```
 
-### Add a Course's Grade Information: `addgrade`
+### Adding a Course's Grade Information: `addgrade`
 Allows users to add the grade of a specific course. It will be stored in the course record (or grade record).  
 The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
   
@@ -208,7 +208,7 @@ addgrade c/CS2113 cr/4 g/A m/true
 ```
 In this example, you added the course CS2113 to the record. It is a 4-credit course. You got an A in the course. It is a major required course. 
 
-### Add a Course's Predicted Grade: `addtestgrade`
+### Adding a Course's Predicted Grade: `addtestgrade`
 Allows users to add a predicted grade of a specific course they are (or will be) studying.  
 It will only be stored in a temporary record and will not be saved.  
 The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
@@ -225,7 +225,7 @@ addtestgrade c/CS2113 cr/4 g/A m/true
 ```
 In this example, you added the course CS2113 to the temporary record. It is a 4-credit course. You assume that you get an A in the course. It is a major required course. 
 
-### Compute Cumulative GPA: `gpa`
+### Computing Cumulative GPA: `gpa`
 Allows users to get a summary of their academic performance based on the current course record.   
 It will show the cumulative GPA and major GPA, respectively.  
   
@@ -261,7 +261,7 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
-### Compute a projected GPA: `projectgpa`
+### Computing a projected GPA: `projectgpa`
 Allows users to compute their **predicted** GPA and major course GPA, based on their predicted grades of courses they are studying. 
     
 Format:
