@@ -282,7 +282,7 @@ ____________________________________________________________
 ```
 *Note: after the computation of the projected gpa, the newly added course will **NOT** be stored in our saved record.*
 
-### Exitting the program - `bye`
+### Exiting the program - `bye`
 Users can exit the program.  
 Format:
 ```commandline
