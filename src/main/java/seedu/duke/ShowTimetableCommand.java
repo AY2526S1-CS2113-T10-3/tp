@@ -11,7 +11,7 @@ public class ShowTimetableCommand extends Command {
         ui.showMessage("Here is your timetable:");
         for (int i = 0; i < modules.getSize(); i++) {
             Module m = modules.getAllModules().get(i);
-            ui.showMessage((i + 1) + ". " + m.toString());
+            System.out.println(" " + (i + 1) + ". " + m.toString());
         }
     }
 }

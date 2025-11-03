@@ -37,7 +37,6 @@ public class ReviewFileManager {
             Path path = Path.of(REVIEW_FILE_PATH);
             Files.createDirectories(path.getParent());
             Files.write(path, defaultRecords, StandardCharsets.UTF_8);
-            System.out.println("Review file reset to default state.");
         } catch (IOException e) {
             System.out.println("Failed to reset review file: " + e.getMessage());
         }
