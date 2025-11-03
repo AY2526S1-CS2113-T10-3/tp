@@ -35,6 +35,7 @@ public class EditReviewCommand extends Command {
             // Only one review, edit it directly
             boolean success = reviewManager.editReview(course, user, newText, 0);
             if (success) {
+                reviewManager.saveReviews(); // Save after editing
                 ui.showMessage("Review updated for " + course + ".");
             } else {
                 throw new UniflowException("Failed to edit review for " + course + ".");
@@ -59,6 +60,7 @@ public class EditReviewCommand extends Command {
 
                 boolean success = reviewManager.editReview(course, user, newText, reviewIndex - 1);
                 if (success) {
+                    reviewManager.saveReviews(); // Save after editing
                     ui.showMessage("Review updated for " + course + ".");
                 } else {
                     throw new UniflowException("Failed to edit review for " + course + ".");
