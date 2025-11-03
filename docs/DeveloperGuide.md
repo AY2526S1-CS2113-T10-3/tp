@@ -282,24 +282,35 @@ How GPA calculation works:
 The grade point conversion follows the standard NUS grading scale.
 
 #### Score Breakdown Feature
+Stores per-module assessment breakdowns like `exam:50 project:30`
 
-Modules can store assessment component scores for tracking purposes. The ScoreCommand parses input in the format `name:value` (e.g., "exam:50 participation:10") and validates that:
-- Values are positive integers
-- The format is correct (colon-separated pairs)
+![Score Command Sequence](diagrams/ScoreCommandSequence.png)
 
-The breakdown is stored in the Module's scoreBreakdown Map for future reference.
+How the score feature works:
+1. Parser validates `score <MODULE_CODE> [name:value ...]`.
+   - No args after code ⇒ query mode (show existing breakdown).
+   - Robust checks: non-empty pairs, `:` present, numeric non-negative values, whitespace/commas normalized.
+2. ScoreCommand verifies the module exists in `ModuleList` (module-centric model).
+3. If adding/updating:
+   - Parses pairs into `Map<String,Integer>`.
+   - Updates the module's in-memory `scoreBreakdown`
+   - Persists via `ScoreManager`, which writes the full map to disk using `ScoreStorage`.
+4. If querying:
+   - Reads from the module if present; otherwise tries `ScoreManager` to hydrate and display.
 
 #### Rating Feature
 The rating feature allows users to rate modules they've taken and view the average rating for each module.
 
+![Rate Command Sequence](diagrams/RateCommandSequence.png)
+
 How it works:
-1. Parser creates a ```RateCommand``` when the user enters ```rate <MODULE_CODE> [RATING]```
+1. Parser creates a `RateCommand` when the user enters `rate <MODULE_CODE> [RATING]`
 2. If rating value (1-5) is provided:
-   - ```RateCommand``` validates that the course exists in ```CourseRecord```
-   - The rating is then passed to ```RatingManager```, which updates the total and count
-   - ```RatingStorage``` saves the updated data to a file (```data/ratings.txt```)
+   - `RateCommand` validates that the course exists in `CourseRecord`
+   - The rating is then passed to `RatingManager`, which updates the total and count
+   - `RatingStorage` saves the updated data to a file (`data/ratings.txt`)
 3. If no rating is provided:
-   - ```RateCommand``` retrieves the average rating and rating count from ```RatingManager```
+   - RateCommand` retrieves the average rating and rating count from `RatingManager`
    - Displays the average if ratings exist, or a message if none are found
 4. The UI displays a confirmation or the average rating result to the user
 

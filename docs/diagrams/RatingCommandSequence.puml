@@ -1,0 +1,39 @@
+@startuml
+title Rating Feature — Sequence Diagram (Add vs View)
+
+actor User
+participant UI
+participant Parser
+participant "RateCommand" as RC
+participant "ModuleList" as ML
+participant "RatingManager" as RM
+database "RatingStorage" as RS
+
+User -> UI: Enter command\nrate <MODULE_CODE> [RATING]
+UI -> Parser: readCommand()
+Parser -> RC: new RateCommand(module, optionalRating)
+Parser --> UI: Command
+UI -> RC: execute(ui, modules, courseRecord)
+
+RC -> ML: doesExist(module)
+ML --> RC: true/false
+alt Module not found
+  RC -> UI: showError("Module does not exist")
+  return
+end
+
+alt Rating provided (1..5)
+  RC -> RM: addRating(module, rating)
+  RM -> RS: save(ratings map as text)
+  RS --> RM: OK
+  RC -> UI: showMessage("Added Rating: X to <module>")
+else No rating provided (view)
+  RC -> RM: getAverage(module)\ngetCount(module)
+  RM --> RC: average, count (or empty)
+  alt Has ratings
+    RC -> UI: showMessage("<module> Rating: <avg> (<count> rating(s))")
+  else No ratings
+    RC -> UI: showMessage("No ratings found for <module>")
+  end
+end
+@enduml
