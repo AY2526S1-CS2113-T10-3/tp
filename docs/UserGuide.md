@@ -309,3 +309,14 @@ bye
 | **findreview** | `findreview [c/COURSE] [u/USER]` <br> *Example:* `findreview u/John` | Searches for reviews by user or course |
 | **reloadreviews** | `reloadreviews` | Reloads reviews from file (testing) |
 | **reset all reviews**| `reset all reviews` | Resets reviews to default (testing) |
+
+### Data Persistence
+Uniflow automatically saves and loads your data between sessions.
+
+The following are stored persistently:
+- **Modules** — via `ModuleStorage` (`data/modules.txt`)
+- **Scores** — via `ScoreStorage` (`data/scores.txt`)
+- **Ratings** — via `RatingStorage` (`data/ratings.txt`)
+- **Reviews** — via `ReviewStorage` (`data/reviews.txt`)
+
+Your data will remain available even after exiting the program.
