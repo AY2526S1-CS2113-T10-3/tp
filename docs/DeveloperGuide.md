@@ -405,17 +405,23 @@ Uniflow solves several problems for university students:
 
 ## Glossary
 
-* **Module** - A university course or subject with scheduled sessions
+* **Module** - A university course or subject with scheduled sessions.
 * **Session Type** - The type of class session (lecture, tutorial, lab, etc.)
-* **Timetable Clash** - When two modules are scheduled at overlapping times on the same day
-* **GPA** - Grade Point Average, calculated from course grades and credits
-* **Score Breakdown** - Individual assessment components and their weightings for a module
-* **Course Record** - Collection of completed courses with grades for GPA calculation
-* **Review** - Student feedback and experiences shared about a specific course
-* **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students
+* **Timetable Clash** - When two modules are scheduled at overlapping times on the same day.
+* **Course Record** - Collection of completed courses with grades for GPA calculation.
+* **GPA** - Grade Point Average, calculated from course grades and credits.
+* **Score Breakdown** - Individual assessment components and their weightings for a module.
+* **ScoreManager** - Manages creation, updating, and retrieval of score breakdowns for each module.
+* **ScoreStorage** - Handles the persistence of score breakdown data to file and ensures integrity between sessions.
+* **Review** - Student feedback and experiences shared about a specific course.
+* **ReviewManager** - Handles in-memory management of reviews (adding, editing, finding, deleting).
+* **ReviewStorage** - Reads and writes all review data to persistent storage.
 * **ReviewCleaner** - A utility that removes corrupted/incomplete data from the review storage file.
 * **ReviewSyncManager** - A component that uses a shutdown hook to auto-save review data on application exit.
-* 
+* **Rating** - Numerical evaluation of a course's quality, used to compute average ratings displayed to students.
+* **RatingManager** - Manages ratings per module, tracking total ratings, count, and computing the average.
+* **RatingStorage** - Persists rating data between sessions and reconstructs module ratings on load.
+
 ## Instructions for manual testing
 
 ### Setting up the application
