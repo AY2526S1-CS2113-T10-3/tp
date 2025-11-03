@@ -30,10 +30,10 @@ insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 ```
 
 ### Deleting a Module - `delete`
-Removes module by ID.
+Removes module by index in the timetable.
 Format:
 ```commandline
-delete index/MODULE_CODE
+delete index/MODULE_INDEX
 ```
 Example:
 ```commandline
