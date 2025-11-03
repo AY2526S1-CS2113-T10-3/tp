@@ -31,6 +31,7 @@ insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 
 ### Deleting a Module: `delete`
 Removes module by index in the timetable.
+
 Format:
 ```commandline
 delete index/MODULE_INDEX
@@ -42,6 +43,7 @@ delete index/CS2113
 
 ### List All Module: `list`
 Displays all modules in your timetable.
+
 Format:
 ```commandline
 list
@@ -49,6 +51,7 @@ list
 
 ### Showing Your Timetable: `show timetable`
 Displays all modules in your timetable with their full details.
+
 Format:
 ```commandline
 show timetable
@@ -56,6 +59,7 @@ show timetable
 
 ### Resetting Your Timetable: `reset timetable`
 Clears all modules from your timetable.
+
 Format:
 ```commandline
 reset timetable
@@ -64,6 +68,7 @@ Note: This action cannot be undone. The system will confirm if your timetable is
 
 ### Filter Modules: `filter`
 Filters modules by various criteria including day, session type, module ID, module name, or tutorial presence.
+
 Format:
 ```commandline
 filter day/DAY
@@ -73,7 +78,6 @@ filter name/MODULE_NAME
 filter hastutorial
 filter notutorial
 ```
-
 Examples:
 ```commandline
 filter day/Monday
@@ -86,11 +90,11 @@ filter name/Software
 
 ### Record Component Scores: `score`
 Allows users to record or view score breakdowns for a specific course (e.g., exam scores, project scores, participation).
+
 Add Score Breakdown Format:
 ```commandline
 score MODULE_CODE component1:value1 component2:value2
 ```
-
 Example:
 ```commandline
 score CS2113 exam:50 project:30 participation:20
@@ -100,7 +104,6 @@ View Score Breakdown Format:
 ```commandline
 score MODULE_CODE
 ```
-
 Example:
 ```commandline
 score CS2113
@@ -109,53 +112,57 @@ Note: The module must already exist in your timetable you can add scores.
 
 ### Adding a Review: `addreview`
 Allows users to add a text review for a course.
+
 Format:
-```
+```commandline
 addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT
 ```
-
 Example:
-```
+```commandline
 addreview c/CS2113 u/John r/Great course with practical projects!
 ```
 
 ### Viewing Reviews: `review`
 Displays all reviews for a specific course.
+
 Format:
-```
+```commandline
 review COURSE_CODE
 ```
 Example:
-```
+```commandline
 review CS2113
 ```
 
 ### Editing a Review: `editreview`
 Allows users to edit their existing review for a course.
+
 Format:
-```
+```commandline
 editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT
 ```
 Example:
-```
+```commandline
 editreview c/CS2113 u/John r/Excellent course with hands-on learning!
 ```
 Note: You can only edit your own review. The username must match the one used when adding the review.
 
 ### Deleting a Review: `deletereview`
 Allows users to delete their review for a course.
+
 Format:
-```
+```commandline
 deletereview c/COURSE_CODE u/USERNAME
 ```
 Example:
-```
+```commandline
 deletereview c/CS2113 u/John
 ```
 Note: You can only delete your own review.
 
 ### Finding Reviews: `findreview`
 Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
+
 Formats:
 ```commandline
 findreview c/COURSE_CODE
@@ -171,6 +178,7 @@ findreview c/CS2113 u/john
 
 ### Rate a Course: `rate`
 Allows users to add or view numerical ratings for a course.
+
 Rating Format:
 ```commandline
 rate COURSE_CODE RATING
