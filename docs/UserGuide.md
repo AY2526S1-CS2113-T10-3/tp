@@ -47,15 +47,6 @@ Format:
 list
 ```
 
-### Filter Modules - `filter`
-Filters modules by day, session, type, or tutorial presence.
-Example:
-```commandline
-filter day/Monday
-filter type/tutorial
-filter hastutorial
-```
-
 ### Finding Reviews: `findreview`
 Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
 
