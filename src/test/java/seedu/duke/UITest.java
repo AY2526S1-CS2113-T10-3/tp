@@ -89,7 +89,7 @@ class UITest {
     }
 
     @Test
-    void showModuleList_emptyList_displaysEmptyMessage() throws UniflowException {
+    void showModuleList_emptyList_displaysEmptyMessage() {
         ModuleList emptyList = new ModuleList();
         ui.showModuleList(emptyList);
 
@@ -111,7 +111,7 @@ class UITest {
     }
 
     @Test
-    void showFilteredModules_emptyList_displaysNoMatch() throws UniflowException {
+    void showFilteredModules_emptyList_displaysNoMatch() {
         ModuleList emptyList = new ModuleList();
         ui.showFilteredModules(emptyList, "test filter");
 
@@ -132,7 +132,7 @@ class UITest {
     }
 
     @Test
-    void showClashWarning_displaysWarning() throws UniflowException {
+    void showClashWarning_displaysWarning() {
         Module module1 = new Module("CS2113", "SE", "Monday", "10:00", "12:00", "lecture");
         Module module2 = new Module("CS2040", "DSA", "Monday", "10:00", "12:00", "lecture");
 
