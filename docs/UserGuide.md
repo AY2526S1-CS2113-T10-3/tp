@@ -86,7 +86,6 @@ filter name/Software
 
 ### Record Component Scores: `score`
 Allows users to record or view score breakdowns for a specific course (e.g., exam scores, project scores, participation).
-
 Add Score Breakdown Format:
 ```commandline
 score MODULE_CODE component1:value1 component2:value2
@@ -106,46 +105,68 @@ Example:
 ```commandline
 score CS2113
 ```
-Note: The course must already exist in your timetable you can add scores.
+Note: The module must already exist in your timetable you can add scores.
 
 ### Adding a Review: `addreview`
 Allows users to add a text review for a course.
 Format:
-`addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT`
+```
+addreview c/COURSE_CODE u/USERNAME r/REVIEW_TEXT
+```
+
 Example:
-`addreview c/CS2113 u/John r/Great course with practical projects!`
+```
+addreview c/CS2113 u/John r/Great course with practical projects!
+```
 
 ### Viewing Reviews: `review`
 Displays all reviews for a specific course.
 Format:
-`review COURSE_CODE`
+```
+review COURSE_CODE
+```
 Example:
-`review CS2113`
+```
+review CS2113
+```
 
 ### Editing a Review: `editreview`
 Allows users to edit their existing review for a course.
 Format:
-`editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT`
+```
+editreview c/COURSE_CODE u/USERNAME r/NEW_REVIEW_TEXT
+```
 Example:
-`editreview c/CS2113 u/John r/Excellent course with hands-on learning!`
+```
+editreview c/CS2113 u/John r/Excellent course with hands-on learning!
+```
 Note: You can only edit your own review. The username must match the one used when adding the review.
 
 ### Deleting a Review: `deletereview`
 Allows users to delete their review for a course.
 Format:
-`deletereview c/COURSE_CODE u/USERNAME`
+```
+deletereview c/COURSE_CODE u/USERNAME
+```
 Example:
-`deletereview c/CS2113 u/John`
+```
+deletereview c/CS2113 u/John
+```
 Note: You can only delete your own review.
 
 ### Finding Reviews: `findreview`
 Searches for reviews based on the course, the user, or both. This provides more flexible searching than the `review` command.
-
 Formats:
 ```commandline
 findreview c/COURSE_CODE
 findreview u/USERNAME
 findreview c/COURSE_CODE u/USERNAME
+```
+Example:
+```commandline
+findreview c/CS2113
+findreview u/john
+findreview c/CS2113 u/john
 ```
 
 ### Rate a Course - `rate`
