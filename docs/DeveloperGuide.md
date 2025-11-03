@@ -359,27 +359,32 @@ Uniflow solves several problems for university students:
 
 ## User Stories
 
-| Version | As a ... | I want to ...                      | So that I can ...                                        |
-|---------|----------|------------------------------------|----------------------------------------------------------|
-| v1.0    | new user | see usage instructions             | refer to them when I forget how to use the application   |
-| v1.0    | student  | add modules to my timetable        | keep track of all my classes                             |
-| v1.0    | student  | delete modules from my timetable   | remove classes I've dropped                              |
-| v1.0    | student  | list all my modules                | see my complete schedule at a glance                     |
-| v1.0    | student  | check for timetable clashes        | avoid scheduling conflicts                               |
-| v2.0    | student  | filter modules by day              | see what classes I have on specific days                 |
-| v2.0    | student  | filter modules by session type     | quickly find all my tutorials or labs                    |
-| v2.0    | student  | search modules by code or name     | locate specific modules without scanning the entire list |
-| v2.0    | student  | add my grades for completed courses | maintain an academic record                              |
-| v2.0    | student  | calculate my GPA automatically     | track my academic performance                            |
-| v2.0    | student  | store score breakdowns for modules | track individual assessment components                   |
-| v2.0    | student  | add reviews for courses            | share my experiences with other students                 |
-| v2.0    | student  | read reviews for courses           | make informed decisions about module selection           |
-| v2.0    | student  | reset my timetable                 | start fresh for a new semester                           |
-| v2.0    | student  | rate a course                      | share simple feedback on module quality                  |
-| v2.0    | student  | search for reviews by user         | see all feedback from a specific person                  |
-| v2.0    | student  | search for reviews by user & course| find a specific person's review for a course             |
-| v2.0    | (dev)    | manually reload reviews from file  | test persistence without restarting the app              |
-| v2.0    | (dev)    | reset all reviews to default       | return to a clean state for testing                      |
+| Version | As a ...  | I want to ...                       | So that I can ...                                        |
+|---------|-----------|-------------------------------------|----------------------------------------------------------|
+| v1.0    | new user  | see usage instructions              | refer to them when I forget how to use the application   |
+| v1.0    | student   | add modules to my timetable         | keep track of all my classes                             |
+| v1.0    | student   | delete modules from my timetable    | remove classes I've dropped                              |
+| v1.0    | student   | list all my modules                 | see my complete schedule at a glance                     |
+| v1.0    | student   | check for timetable clashes         | avoid scheduling conflicts                               |
+| v2.0    | student   | filter modules by day               | see what classes I have on specific days                 |
+| v2.0    | student   | filter modules by session type      | quickly find all my tutorials or labs                    |
+| v2.0    | student   | search modules by code or name      | locate specific modules without scanning the entire list |
+| v2.0    | student   | add my grades for completed courses | maintain an academic record                              |
+| v2.0    | student   | calculate my GPA automatically      | track my academic performance                            |
+| v2.0    | student   | store score breakdowns for modules  | track individual assessment components                   |
+| v2.0    | student   | add reviews for courses             | share my experiences with other students                 |
+| v2.0    | student   | read reviews for courses            | make informed decisions about module selection           |
+| v2.0    | student   | reset my timetable                  | start fresh for a new semester                           |
+| v2.0    | student   | rate a course                       | share simple feedback on module quality                  |
+| v2.0    | student   | search for reviews by user          | see all feedback from a specific person                  |
+| v2.0    | student   | search for reviews by user & course | find a specific person's review for a course             |
+| v2.0    | (dev)     | manually reload reviews from file   | test persistence without restarting the app              |
+| v2.0    | (dev)     | reset all reviews to default        | return to a clean state for testing                      |
+| v2.1    | (student) | view all scores for a module        | review performance breakdowns across assessments         |
+| v2.1    | (student) | update component scores for a module| correct mistakes or refine ongoing assessments           |
+| v2.1    | (student) | view the average rating for a module| decide which modules to take next semester               |
+
+
 
 
 ## Non-Functional Requirements
