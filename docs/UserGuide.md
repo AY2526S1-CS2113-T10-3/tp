@@ -314,9 +314,15 @@ ___________________________________________________________________________
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
+### GPA calculator
+Overview:  
+1. It will allow you to store the grades of your completed courses in a record.  
+   You can then compute the cumulative GPA and the major required courses GPA, respectively.
+2. It will allow you to enter predicted grades of not yet completed courses and store them in a temporary record.  
+   You can then compute a projected cumulative GPA and major GPA based on the predicted grades and saved courses' grades. 
 
 ### Adding a Course's Grade Information: `addgrade`
-Allows users to add the grade of a specific course. It will be stored in the course record (or grade record).  
+Allows users to add the grade of a specific course. It will be saved in a permanent course record (or grade record).  
 The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
   
 **IS_MAJOR**: true if the course is a major required course, false if not.  
@@ -342,7 +348,7 @@ In this example, you added the course CS2113 to the record. It is a 4-credit cou
 ### Adding a Course's Predicted Grade: `addtestgrade`
 Allows users to add a predicted grade of a specific course they are (or will be) studying.  
 It will only be stored in a temporary record and will not be saved.  
-The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
+The information stored will be the course code, number of credits (or units), the predicted grade the user might attain and whether it is a major required course.  
   
 *It is used for testing their projected GPA.*  
   
@@ -363,6 +369,86 @@ ___________________________________________________________________________
 ___________________________________________________________________________
 ```
 In this example, you added the course CS2113 to the temporary record. It is a 4-credit course. You assume that you get an A in the course. It is a major required course. 
+
+### Listing out the currently stored course grades: `showgrade`
+Displays what courses are saved in the permanent record.  
+Allows users to keep track of what courses they have saved in the permanent record.  
+  
+Format:  
+```commandline
+showgrade
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+Currently, you have 3 saved course grades
+Here are your saved course grade records:
+___________________________________________________________________________
+1. EC3322 (5 credits, Grade: B) (Major course)
+2. CS2113 (5 credits, Grade: A) (Major course)
+3. CS1010 (4 credits, Grade: A) (Major course)
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+### Listing out the temporarily stored predicted grades: `showtestgrade`
+Displays what courses are currently in the temporary record.  
+Allows users to keep track of what courses they have input into the temporary record.  
+  
+Format:
+```commandline
+showtestgrade
+```
+The output is similar to `showgrade`
+### Removing a Course From Saved Record: `removegrade`
+Allows users to remove the record of a specific course. It will be deleted from the permanent course record (or grade record).  
+This is to allow users to modify the record in case of inputting the details wrongly.  
+
+Format:  
+```commandline
+removegrade INDEX
+```
+Example:  
+```commandline
+removegrade 3
+```
+Assume you have three saved courses
+```commandline
+1. EC3322 (5 credits, Grade: B) (Major course)
+2. CS2113 (5 credits, Grade: A) (Major course)
+3. CS1010 (4 credits, Grade: A) (Major course)
+```
+After `removegrade 3`, the 3rd course in the list will be removed.  
+  
+Expected Output:  
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Removed course grade record: CS1010 (4 credits, Grade: A) (Major course)
+___________________________________________________________________________
+___________________________________________________________________________
+```
+Your saved record will only have two courses left. That is:  
+```commandline
+1. EC3322 (5 credits, Grade: B) (Major course)
+2. CS2113 (5 credits, Grade: A) (Major course)
+```
+
+### Removing a Course From Temporary Record: `removetestgrade`
+Allows users to remove a specific course from the temporary record. (That you use to project your GPA)  
+This is to allow users to modify the temporary record in case of inputting the details wrongly or hoping to change the details.  
+
+Format:  
+```commandline
+removetestgrade INDEX
+```
+Example:  
+```commandline
+removetestgrade 3
+```
+Similar to `removegrade`, after `removetestgrade 3`, the 3rd course in the temporary record will be removed.  
+The output and effect is similar to `removegrade`
 
 ### Computing Cumulative GPA: `gpa`
 Allows users to get a summary of their academic performance based on the current course record.   
@@ -401,7 +487,7 @@ ____________________________________________________________
 ```
 
 ### Computing a projected GPA: `projectgpa`
-Allows users to compute their **predicted** GPA and major course GPA, based on their predicted grades of courses they are studying. 
+Allows users to compute their **predicted** GPA and major course GPA, based on their predicted grades of courses they are/will be studying. 
     
 Format:
 ```commandline
@@ -427,7 +513,8 @@ ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
 ```
-*Note: after the computation of the projected gpa, the newly added course will **NOT** be stored in our saved record.*
+*Note: after the computation of the projected GPA, the newly added course will **NOT** be stored in our saved record.*  
+*Only completed courses will be stored in the permanent record.*
 
 ### Counting Reviews: `amount reviews`
 Counts the number of reviews **currently in memory** for a specific module or user.
@@ -529,6 +616,10 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 |-------------|----------------------|-------------|
 | **addgrade** | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true` | Adds a grade entry for a course to your permanent record |
 | **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adds a *temporary* grade for GPA projection |
+| **removegrade** | `removegrade INDEX` <br> *Example:* `removegrade 3` | Removes a grade entry for a course from your permanent record |
+| **removetestgrade** | `removetestgrade INDEX` <br> *Example:* `removetestgrade 3` | Removes a course from the *temporary* grade record |
+| **showgrade** | `showgrade` | Displays what courses are saved in the permanent record |
+| **showtestgrade** | `showtestgrade` | Displays what courses are currently in the temporary record |
 | **gpa** | `gpa` | Computes cumulative GPA and major GPA based on stored grades |
 | **projectgpa** | `projectgpa` | Computes predicted GPA including test grades |
 
@@ -578,7 +669,7 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 | `data/modules.txt` | Timetable modules                |
 | `data/ratings.txt` | Module ratings                   |
 | `data/reviews.txt` | Module reviews                   |
-| `data/grades.txt` | Saved course grades and GPA data |
+| `data/grades.txt` | Saved course grades |
 
 **Note on Data Persistence:**
 Most data (Timetable, Grades, Scores, Ratings) is saved automatically.
