@@ -436,13 +436,16 @@ public class Parser {
 
         // Validate all required fields
         if (course == null || course.trim().isEmpty()) {
-            throw new UniflowException("Course code cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
+            throw new UniflowException("Course code cannot be empty. "
+                    + "Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
         if (user == null || user.trim().isEmpty()) {
-            throw new UniflowException("User name cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
+            throw new UniflowException("User name cannot be empty. "
+                    + "Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
         if (newText == null || newText.trim().isEmpty()) {
-            throw new UniflowException("Review text cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
+            throw new UniflowException("Review text cannot be empty. "
+                    + "Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
 
         Integer index = null;
@@ -466,10 +469,12 @@ public class Parser {
 
         // Validate required fields
         if (course == null || course.trim().isEmpty()) {
-            throw new UniflowException("Course code cannot be empty. Usage: deletereview c/COURSE u/USER [i/INDEX]");
+            throw new UniflowException("Course code cannot be empty. "
+                    + "Usage: deletereview c/COURSE u/USER [i/INDEX]");
         }
         if (user == null || user.trim().isEmpty()) {
-            throw new UniflowException("User name cannot be empty. Usage: deletereview c/COURSE u/USER [i/INDEX]");
+            throw new UniflowException("User name cannot be empty. "
+                    + "Usage: deletereview c/COURSE u/USER [i/INDEX]");
         }
 
         Integer index = null;

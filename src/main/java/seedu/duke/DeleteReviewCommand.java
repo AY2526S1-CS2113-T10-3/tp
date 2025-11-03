@@ -48,12 +48,14 @@ public class DeleteReviewCommand extends Command {
                     message.append(" ").append(i + 1).append(". ").append(userReviews.get(i)).append("\n");
                 }
                 message.append(" Please specify which review to delete using: deletereview c/")
-                        .append(course).append(" u/").append(user).append(" i/INDEX");
+                        .append(course).append(" u/").append(user)
+                        .append(" i/INDEX");
                 ui.showMessage(message.toString());
             } else {
                 // Index provided, validate and delete
                 if (reviewIndex < 1 || reviewIndex > userReviews.size()) {
-                    throw new UniflowException("Invalid index. Please enter a number between 1 and " + userReviews.size());
+                    throw new UniflowException("Invalid index. Please enter a number between 1 and "
+                            + userReviews.size());
                 }
 
                 boolean success = reviewManager.deleteReview(course, user, reviewIndex - 1);

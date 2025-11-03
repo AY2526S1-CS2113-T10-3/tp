@@ -10,7 +10,8 @@ public class EditReviewCommand extends Command {
     private final Integer reviewIndex;
     private final ReviewManager reviewManager;
 
-    public EditReviewCommand(String course, String user, String newText, Integer reviewIndex, ReviewManager reviewManager) {
+    public EditReviewCommand(String course, String user, String newText, Integer reviewIndex,
+                             ReviewManager reviewManager) {
         this.course = course;
         this.user = user;
         this.newText = newText;
@@ -50,12 +51,14 @@ public class EditReviewCommand extends Command {
                     message.append(" ").append(i + 1).append(". ").append(userReviews.get(i)).append("\n");
                 }
                 message.append(" Please specify which review to edit using: editreview c/")
-                        .append(course).append(" u/").append(user).append(" r/NEW_TEXT i/INDEX");
+                        .append(course).append(" u/").append(user)
+                        .append(" r/NEW_TEXT i/INDEX");
                 ui.showMessage(message.toString());
             } else {
                 // Index provided, validate and edit
                 if (reviewIndex < 1 || reviewIndex > userReviews.size()) {
-                    throw new UniflowException("Invalid index. Please enter a number between 1 and " + userReviews.size());
+                    throw new UniflowException("Invalid index. Please enter a number between 1 and "
+                            + userReviews.size());
                 }
 
                 boolean success = reviewManager.editReview(course, user, newText, reviewIndex - 1);
