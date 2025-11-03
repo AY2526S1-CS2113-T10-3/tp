@@ -485,30 +485,27 @@ public class Parser {
     }
 
     private static String extractParameter(String input, String prefix) {
-        int startIdx = input.indexOf(prefix);
-        if (startIdx == -1) {
+        int startIndex = input.indexOf(prefix);
+        if (startIndex == -1) {
             return null;
         }
+        startIndex += prefix.length();
 
-        startIdx += prefix.length(); // Move past the prefix
+        // Find the next parameter (space followed by a parameter prefix)
+        int endIndex = input.length();
+        String[] prefixes = {"c/", "u/", "r/", "i/"};
 
-        // Find the next prefix (c/, u/, or r/)
-        int endIdx = input.length();
-        int nextC = input.indexOf(" c/", startIdx);
-        int nextU = input.indexOf(" u/", startIdx);
-        int nextR = input.indexOf(" r/", startIdx);
-
-        if (nextC != -1 && nextC < endIdx) {
-            endIdx = nextC;
-        }
-        if (nextU != -1 && nextU < endIdx) {
-            endIdx = nextU;
-        }
-        if (nextR != -1 && nextR < endIdx) {
-            endIdx = nextR;
+        for (String nextPrefix : prefixes) {
+            if (nextPrefix.equals(prefix)) {
+                continue; // Skip the current prefix
+            }
+            int nextPrefixIndex = input.indexOf(" " + nextPrefix, startIndex);
+            if (nextPrefixIndex != -1 && nextPrefixIndex < endIndex) {
+                endIndex = nextPrefixIndex;
+            }
         }
 
-        return input.substring(startIdx, endIdx).trim();
+        return input.substring(startIndex, endIndex).trim();
     }
 
     private static Command parseRateCommand(String command) throws UniflowException {
