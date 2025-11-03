@@ -16,17 +16,17 @@ This product is designed for university students who prefer a fast, keyboard-bas
 
 ### Enhancements Implemented
 #### 1. Course Search and Filtering Feature
-- **What it does**: Allows users to search and filter courses with command `filter` based on various criteria such as course code, name, or other attributes. 
-- **Justification**: This enhancement is essential for users managing multiple courses across semesters. It significantly improves user experience by enabling quick access to specific course information without having to scroll through the entire course list. 
+- **What it does**: Allows users to search and filter courses with command `filter` based on various criteria such as course code, name, or other attributes.
+- **Justification**: This enhancement is essential for users managing multiple courses across semesters. It significantly improves user experience by enabling quick access to specific course information without having to scroll through the entire course list.
 - **Highlights**: The implementation required careful consideration of search algorithms and filtering logic to ensure efficient and accurate results. I designed the feature to be extensible, allowing for future enhancements such as advanced filtering options.
 #### 2. Review Management System
 - **Review Post Feature**: `addreview`
-  - Implemented the functionality for users to create and post reviews for their courses, allowing students to share their experiences and insights. 
+    - Implemented the functionality for users to create and post reviews for their courses, allowing students to share their experiences and insights.
 - **Review Edit Feature**: `editreview`
-  - Developed the editing capability that enables users to modify their previously posted reviews, ensuring review information remains current and accurate. 
+    - Developed the editing capability that enables users to modify their previously posted reviews, ensuring review information remains current and accurate.
 - **Review Delete Feature**: `deletereview`
-  - Developed the deletion functionality to allow users to remove reviews they no longer wish to keep. 
-- **Justification**: The review system adds significant value to the application by creating a knowledge-sharing platform where students can help each other make informed course selections. This peer-to-peer information exchange is crucial for academic planning. 
+    - Developed the deletion functionality to allow users to remove reviews they no longer wish to keep.
+- **Justification**: The review system adds significant value to the application by creating a knowledge-sharing platform where students can help each other make informed course selections. This peer-to-peer information exchange is crucial for academic planning.
 - **Highlights**: The implementation required careful design of the data structure to efficiently store and retrieve reviews. I ensured data integrity by implementing proper validation and error handling mechanisms.
 #### 3. Testing and Code Quality Enhancements
 - **Comprehensive JUnit Test Suite**: Developed extensive JUnit test cases to ensure feature reliability and robustness across the application, significantly improving overall code coverage and quality. Test suites include:
@@ -51,6 +51,22 @@ This product is designed for university students who prefer a fast, keyboard-bas
 
 ---
 
+### Contributions to the User Guide
+- **Documentation/user guide update-1**: Contributed comprehensive documentation for the search and filtering features, as well as the review management system (post, edit, delete).
+- Wrote clear, user-friendly instructions with examples to help users understand how to effectively use these features.
+- Included common use cases and troubleshooting tips to enhance user experience.
+
+---
+
+### Contributions to the Developer Guide
+- **Documentation/diagrams setup**: Set up the initial structure and framework for technical diagrams in the Developer Guide.
+- **Documentation/developer guide setup**: Established the overall structure and sections of the Developer Guide to ensure consistency and completeness.
+- **Documentation/embed diagrams in developer guide**: Integrated UML diagrams and other technical diagrams into the Developer Guide to illustrate system architecture and component interactions.
+- Created detailed technical documentation explaining the implementation of the search/filter feature and the review management system.
+- Designed and updated UML diagrams to visualize the architecture and workflow.
+
+---
+
 ### Contributions to Team-Based Tasks
 - Managed releases `v1.0`, `v2.0`, and `v2.1` on GitHub, ensuring smooth deployment and version control.
 - Set up and kept maintaining the project repository organization and structure, e.g., `issue trackers`, `milestones`, `labels`.
@@ -63,8 +79,8 @@ This product is designed for university students who prefer a fast, keyboard-bas
 ---
 
 ### Review/Mentoring Contributions
-- Reviewed and provided feedback on pull requests from team members. 
-- Collaborated with teammates to resolve merge conflicts and integration issues. 
+- Reviewed and provided feedback on pull requests from team members.
+- Collaborated with teammates to resolve merge conflicts and integration issues.
 - Shared knowledge about documentation best practices with the team.
 
 ---
