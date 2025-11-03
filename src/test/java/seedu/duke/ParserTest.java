@@ -1,7 +1,8 @@
 package seedu.duke;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ParserTest {
 
@@ -55,7 +56,7 @@ class ParserTest {
     void parseInsertCommandMissingId() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert n/CS2113 d/Monday st/1000 et/1200");
+            Parser.parse("insert n/CS2113 d/Monday st/1000 et/1200");
         });
     }
 
@@ -63,7 +64,7 @@ class ParserTest {
     void parseInsertCommandMissingName() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 d/Monday st/1000 et/1200");
+            Parser.parse("insert i/CS2113 d/Monday st/1000 et/1200");
         });
     }
 
@@ -71,7 +72,7 @@ class ParserTest {
     void parseInsertCommandMissingDay() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering st/1000 et/1200");
+            Parser.parse("insert i/CS2113 n/Software Engineering st/1000 et/1200");
         });
     }
 
@@ -79,7 +80,7 @@ class ParserTest {
     void parseInsertCommandMissingStartTime() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering d/Monday et/1200");
+            Parser.parse("insert i/CS2113 n/Software Engineering d/Monday et/1200");
         });
     }
 
@@ -87,7 +88,7 @@ class ParserTest {
     void parseInsertCommandMissingEndTime() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/1000");
+            Parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/1000");
         });
     }
 
@@ -95,7 +96,7 @@ class ParserTest {
     void parseInsertCommandInvalidDay() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering d/Funday st/1000 et/1200");
+            Parser.parse("insert i/CS2113 n/Software Engineering d/Funday st/1000 et/1200");
         });
     }
 
@@ -103,7 +104,7 @@ class ParserTest {
     void parseInsertCommandInvalidTimeFormat() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/10:00 et/12:00");
+            Parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/10:00 et/12:00");
         });
     }
 
@@ -111,7 +112,7 @@ class ParserTest {
     void parseInsertCommandEndBeforeStart() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/1200 et/1000");
+            Parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/1200 et/1000");
         });
     }
 
@@ -119,7 +120,7 @@ class ParserTest {
     void parseInsertCommandSameStartAndEnd() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/1000 et/1000");
+            Parser.parse("insert i/CS2113 n/Software Engineering d/Monday st/1000 et/1000");
         });
     }
 
@@ -127,7 +128,7 @@ class ParserTest {
     void parseDeleteCommandMissingIndex() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("delete");
+            Parser.parse("delete");
         });
     }
 
@@ -135,7 +136,7 @@ class ParserTest {
     void parseDeleteCommandInvalidFormat() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("delete abc");
+            Parser.parse("delete abc");
         });
     }
 
@@ -143,7 +144,7 @@ class ParserTest {
     void parseDeleteCommandNonNumericIndex() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("delete abc");
+            Parser.parse("delete abc");
         });
     }
 
@@ -151,7 +152,7 @@ class ParserTest {
     void parseFilterCommandEmptyValue() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("filter n/");
+            Parser.parse("filter n/");
         });
     }
 
@@ -159,7 +160,7 @@ class ParserTest {
     void parseFilterCommandMissingParameters() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("filter");
+            Parser.parse("filter");
         });
     }
 
@@ -167,7 +168,7 @@ class ParserTest {
     void parseAddGradeCommandMissingCode() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade mc/4 g/A m/yes");
+            Parser.parse("addgrade mc/4 g/A m/yes");
         });
     }
 
@@ -175,7 +176,7 @@ class ParserTest {
     void parseAddGradeCommandMissingCredits() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 g/A m/yes");
+            Parser.parse("addgrade c/CS2113 g/A m/yes");
         });
     }
 
@@ -183,7 +184,7 @@ class ParserTest {
     void parseAddGradeCommandMissingGrade() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 mc/4 m/yes");
+            Parser.parse("addgrade c/CS2113 mc/4 m/yes");
         });
     }
 
@@ -191,7 +192,7 @@ class ParserTest {
     void parseAddGradeCommandMissingMajor() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 mc/4 g/A");
+            Parser.parse("addgrade c/CS2113 mc/4 g/A");
         });
     }
 
@@ -199,7 +200,7 @@ class ParserTest {
     void parseAddGradeCommandInvalidGrade() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 mc/4 g/Z m/yes");
+            Parser.parse("addgrade c/CS2113 mc/4 g/Z m/yes");
         });
     }
 
@@ -207,7 +208,7 @@ class ParserTest {
     void parseAddGradeCommandInvalidCredits() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 mc/abc g/A m/yes");
+            Parser.parse("addgrade c/CS2113 mc/abc g/A m/yes");
         });
     }
 
@@ -215,7 +216,7 @@ class ParserTest {
     void parseAddGradeCommandNegativeCredits() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 mc/-4 g/A m/yes");
+            Parser.parse("addgrade c/CS2113 mc/-4 g/A m/yes");
         });
     }
 
@@ -223,7 +224,7 @@ class ParserTest {
     void parseAddGradeCommandInvalidMajor() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("addgrade c/CS2113 mc/4 g/A m/invalid");
+            Parser.parse("addgrade c/CS2113 mc/4 g/A m/invalid");
         });
     }
 
@@ -231,7 +232,7 @@ class ParserTest {
     void parseRemoveGradeCommandMissingIndex() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("removegrade");
+            Parser.parse("removegrade");
         });
     }
 
@@ -239,7 +240,7 @@ class ParserTest {
     void parseRemoveGradeCommandInvalidIndex() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            parser.parse("removegrade abc");
+            Parser.parse("removegrade abc");
         });
     }
 }
