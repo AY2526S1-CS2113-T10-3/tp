@@ -172,6 +172,24 @@ This component also includes:
 ![Review Storage Class Diagram](diagrams/ReviewStorageClassDiagram.png)
 The ReviewManager handles in-memory storage of course reviews, while ReviewStorage manages persistence to the file system. This separation follows the **Single Responsibility Principle**, making it easier to modify storage mechanisms without affecting review management logic.
 
+#### Rating Management Component
+The Rating Management component enables users to rate modules and view average ratings for each course.
+It follows the same architecture as Review Management, with a clear separation between logic, data and persistence layers.
+
+- **RatingManager** - Maintains a `Map<String, RatingStats>` mapping module codes to their cumulative rating data.
+  - It handles all business logic for adding, updating, and retrieving ratings, ensuring each rating is between 1-5.
+- **RatingStats** - A helper class encapsulating statistics:
+  - `sum`: total of all rating values.
+  - `count`: number of ratings.
+  - `average`: computed dynamically as `sum/count`
+- **RatingStorage** - Manages persistence of rating data to `data/ratings.txt` using a pipe-delimited format.
+  - Each line represents one record:
+    `MODULE_CODE|SUM|COUNT`
+  - Ratings are automatically reloaded at application start and saved on exit or when a new rating is added.
+
+
+#### Score Management Component
+
 ### Implementation Details
 
 #### Find Review Feature
