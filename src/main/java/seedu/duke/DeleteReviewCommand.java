@@ -33,6 +33,7 @@ public class DeleteReviewCommand extends Command {
             // Only one review, delete it directly
             boolean success = reviewManager.deleteReview(course, user, 0);
             if (success) {
+                reviewManager.saveReviews(); // Save after deleting
                 ui.showMessage("Review deleted for " + course + ".");
             } else {
                 throw new UniflowException("Failed to delete review for " + course + ".");
@@ -57,6 +58,7 @@ public class DeleteReviewCommand extends Command {
 
                 boolean success = reviewManager.deleteReview(course, user, reviewIndex - 1);
                 if (success) {
+                    reviewManager.saveReviews(); // Save after deleting
                     ui.showMessage("Review deleted for " + course + ".");
                 } else {
                     throw new UniflowException("Failed to delete review for " + course + ".");
