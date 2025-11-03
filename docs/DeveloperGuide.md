@@ -193,6 +193,7 @@ It follows the same architecture as Review Management, with a clear separation b
 #### Score Management Component
 The Score Management component allows users to store and view assessment breakdowns for individual modules.
 It is designed around the same modular architecture as the Review and Rating systems.
+![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.puml)
 
 - **ScoreManager** - Manages a `Map<String, Map<String, Integer>>` representing each module’s breakdown,
   where the key is a component name (e.g., `"exam"`, `"project"`) and the value is a score weight.

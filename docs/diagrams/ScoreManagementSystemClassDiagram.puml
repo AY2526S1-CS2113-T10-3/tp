@@ -1,0 +1,47 @@
+@startuml Score_System_Class_Diagram
+skinparam dpi 200
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Monospaced
+
+title Score Management System - Class Diagram
+
+' ---- Aliases for Java generic types ----
+class "Map<String, Integer>" as ScoreBreakdown <<Java Collection>>
+class "Map<String, ScoreBreakdown>" as ModuleToBreakdownMap <<Java Collection>>
+
+class ScoreManager {
+  - storage : ScoreStorage
+  - moduleScores : ModuleToBreakdownMap
+  ==
+  + ScoreManager()
+  ==
+  + boolean hasBreakdown(moduleCode : String)
+  + java.util.Map<String, Integer> getBreakdown(moduleCode : String)
+  + void saveBreakdown(moduleCode : String, breakdown : java.util.Map<String, Integer>)
+  + void removeBreakdown(moduleCode : String)
+  + java.util.Map<String, java.util.Map<String, Integer>> getAll()
+}
+
+class ScoreStorage {
+  - FILE_PATH : String = "data/scores.txt"
+  ==
+  + java.util.Map<String, java.util.Map<String, Integer>> load()
+  + void save(data : java.util.Map<String, java.util.Map<String, Integer>>)
+}
+
+class ScoreCommand {
+  - courseID : String
+  - breakdown : String
+  ==
+  + ScoreCommand(courseID : String, breakdown : String)
+  + void execute(ui : UI, modules : ModuleList, courseRecord : CourseRecord) throws UniflowException
+}
+
+' ---- Relationships ----
+ScoreManager --> ScoreStorage : uses
+ScoreManager *-- ModuleToBreakdownMap : "stores per module"
+ModuleToBreakdownMap o-- ScoreBreakdown : "components"
+ScoreCommand --> ScoreManager : "delegates persistence"
+
+@enduml
