@@ -548,14 +548,12 @@ Expected: Message indicating no reviews found.
 ```commandline
 rate CS2113 4
 ```
-Expected: ```Added Rating: 4 to CS2113```
-Saves the rating to data/ratings.txt
+Expected: Message confirming that the rating has been added.
 **Viewing Average Rating**
 ```commandline
 rate CS2113
 ```
-Expected: Displays the average rating and number of ratings per course, e.g.
-```CS2113 Rating: 4.5 (2 ratings)```
+Expected: Displays the average rating and number of ratings per course.
 
 ### Testing Timetable Commands
 
