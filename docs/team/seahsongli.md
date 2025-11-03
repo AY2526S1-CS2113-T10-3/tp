@@ -1,4 +1,4 @@
-# 🎓 Seah Song Li — Project Portfolio
+# Seah Song Li — Project Portfolio
 
 ## Overview
 **Uniflow** is a command-line university module management assistant that helps students organize their timetables, track academic progress, and collaborate through course reviews and ratings.
