@@ -412,8 +412,15 @@ public class Parser {
         String user = extractParameter(input, "u/");
         String text = extractParameter(input, "r/");
 
-        if (course == null || user == null || text == null) {
-            throw new UniflowException("Usage: addreview c/COURSE u/USER r/REVIEW");
+        // Validate all required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
+        }
+        if (text == null || text.trim().isEmpty()) {
+            throw new UniflowException("Review text cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
         }
 
         return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
@@ -426,8 +433,15 @@ public class Parser {
         String user = extractParameter(input, "u/");
         String newText = extractParameter(input, "r/");
 
-        if (course == null || user == null || newText == null) {
-            throw new UniflowException("Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+        // Validate all required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+        }
+        if (newText == null || newText.trim().isEmpty()) {
+            throw new UniflowException("Review text cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
         }
 
         return new EditReviewCommand(course, user, newText, Uniflow.getReviewManager());
@@ -439,8 +453,12 @@ public class Parser {
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
 
-        if (course == null || user == null) {
-            throw new UniflowException("Usage: deletereview c/COURSE u/USER");
+        // Validate required fields
+        if (course == null || course.trim().isEmpty()) {
+            throw new UniflowException("Course code cannot be empty. Usage: deletereview c/COURSE u/USER");
+        }
+        if (user == null || user.trim().isEmpty()) {
+            throw new UniflowException("User name cannot be empty. Usage: deletereview c/COURSE u/USER");
         }
 
         return new DeleteReviewCommand(course, user, Uniflow.getReviewManager());
