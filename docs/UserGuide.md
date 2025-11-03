@@ -29,7 +29,7 @@ Example:
 insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 ```
 
-### Deleting a Module - `delete`
+### Deleting a Module: `delete`
 Removes module by index in the timetable.
 Format:
 ```commandline
@@ -40,7 +40,7 @@ Example:
 delete index/CS2113
 ```
 
-### List All Module - `list`
+### List All Module: `list`
 Displays all modules in your timetable.
 Format:
 ```commandline
@@ -169,7 +169,7 @@ findreview u/john
 findreview c/CS2113 u/john
 ```
 
-### Rate a Course - `rate`
+### Rate a Course: `rate`
 Allows users to add or view numerical ratings for a course.
 Rating Format:
 ```commandline
@@ -184,7 +184,7 @@ View Average Rating Format:
 rate CS2113
 ```
 
-### Add a Course's Grade Information - `addgrade`
+### Add a Course's Grade Information: `addgrade`
 Allows users to add the grade of a specific course. It will be stored in the course record (or grade record).  
 The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
   
@@ -200,7 +200,7 @@ addgrade c/CS2113 cr/4 g/A m/true
 ```
 In this example, you added the course CS2113 to the record. It is a 4-credit course. You got an A in the course. It is a major required course. 
 
-### Add a Course's Predicted Grade - `addtestgrade`
+### Add a Course's Predicted Grade: `addtestgrade`
 Allows users to add a predicted grade of a specific course they are (or will be) studying.  
 It will only be stored in a temporary record and will not be saved.  
 The information stored will be the course code, number of credits (or units), grade attained and whether it is a major required course.  
@@ -217,7 +217,7 @@ addtestgrade c/CS2113 cr/4 g/A m/true
 ```
 In this example, you added the course CS2113 to the temporary record. It is a 4-credit course. You assume that you get an A in the course. It is a major required course. 
 
-### Compute Cumulative GPA - `gpa`
+### Compute Cumulative GPA: `gpa`
 Allows users to get a summary of their academic performance based on the current course record.   
 It will show the cumulative GPA and major GPA, respectively.  
   
@@ -253,7 +253,7 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
-### Compute a projected GPA - `projectgpa`
+### Compute a projected GPA: `projectgpa`
 Allows users to compute their **predicted** GPA and major course GPA, based on their predicted grades of courses they are studying. 
     
 Format:
@@ -282,7 +282,7 @@ ____________________________________________________________
 ```
 *Note: after the computation of the projected gpa, the newly added course will **NOT** be stored in our saved record.*
 
-### Exiting the program - `bye`
+### Exiting the program: `bye`
 Users can exit the program.  
 Format:
 ```commandline
