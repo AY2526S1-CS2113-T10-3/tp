@@ -164,6 +164,13 @@ public class ReviewManager {
     }
 
     /**
+     * Saves all reviews to the storage file.
+     */
+    public void saveReviews() {
+        storage.save(reviews);
+    }
+
+    /**
      * Reloads all reviews from the storage file into memory.
      * This can be used to refresh data if the file was modified externally.
      */
