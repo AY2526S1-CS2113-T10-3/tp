@@ -405,46 +405,35 @@ public class Parser {
         return new ReviewCommand(parts[1].trim(), Uniflow.getReviewManager());
     }
 
-    private static Command parseAddReviewCommand(String command) throws UniflowException {
-        String input = command.substring(COMMAND_ADD_REVIEW.length()).trim();
-
-        String course = extractParameter(input, "c/");
-        String user = extractParameter(input, "u/");
-        String text = extractParameter(input, "r/");
-
-        // Validate all required fields
-        if (course == null || course.trim().isEmpty()) {
-            throw new UniflowException("Course code cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
-        }
-        if (user == null || user.trim().isEmpty()) {
-            throw new UniflowException("User name cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
-        }
-        if (text == null || text.trim().isEmpty()) {
-            throw new UniflowException("Review text cannot be empty. Usage: addreview c/COURSE u/USER r/REVIEW");
-        }
-
-        return new AddReviewCommand(course, user, text, Uniflow.getReviewManager());
-    }
-
     private static Command parseEditReviewCommand(String command) throws UniflowException {
         String input = command.substring(COMMAND_EDIT_REVIEW.length()).trim();
 
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
         String newText = extractParameter(input, "r/");
+        String indexStr = extractParameter(input, "i/");
 
         // Validate all required fields
         if (course == null || course.trim().isEmpty()) {
-            throw new UniflowException("Course code cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+            throw new UniflowException("Course code cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
         if (user == null || user.trim().isEmpty()) {
-            throw new UniflowException("User name cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+            throw new UniflowException("User name cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
         if (newText == null || newText.trim().isEmpty()) {
-            throw new UniflowException("Review text cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW");
+            throw new UniflowException("Review text cannot be empty. Usage: editreview c/COURSE u/USER r/NEW_REVIEW [i/INDEX]");
         }
 
-        return new EditReviewCommand(course, user, newText, Uniflow.getReviewManager());
+        Integer index = null;
+        if (indexStr != null && !indexStr.trim().isEmpty()) {
+            try {
+                index = Integer.parseInt(indexStr.trim());
+            } catch (NumberFormatException e) {
+                throw new UniflowException("Invalid index. Please enter a valid number.");
+            }
+        }
+
+        return new EditReviewCommand(course, user, newText, index, Uniflow.getReviewManager());
     }
 
     private static Command parseDeleteReviewCommand(String command) throws UniflowException {
@@ -452,16 +441,26 @@ public class Parser {
 
         String course = extractParameter(input, "c/");
         String user = extractParameter(input, "u/");
+        String indexStr = extractParameter(input, "i/");
 
         // Validate required fields
         if (course == null || course.trim().isEmpty()) {
-            throw new UniflowException("Course code cannot be empty. Usage: deletereview c/COURSE u/USER");
+            throw new UniflowException("Course code cannot be empty. Usage: deletereview c/COURSE u/USER [i/INDEX]");
         }
         if (user == null || user.trim().isEmpty()) {
-            throw new UniflowException("User name cannot be empty. Usage: deletereview c/COURSE u/USER");
+            throw new UniflowException("User name cannot be empty. Usage: deletereview c/COURSE u/USER [i/INDEX]");
         }
 
-        return new DeleteReviewCommand(course, user, Uniflow.getReviewManager());
+        Integer index = null;
+        if (indexStr != null && !indexStr.trim().isEmpty()) {
+            try {
+                index = Integer.parseInt(indexStr.trim());
+            } catch (NumberFormatException e) {
+                throw new UniflowException("Invalid index. Please enter a valid number.");
+            }
+        }
+
+        return new DeleteReviewCommand(course, user, index, Uniflow.getReviewManager());
     }
 
     private static String extractParameter(String input, String prefix) {
