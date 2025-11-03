@@ -28,6 +28,7 @@ Example:
 ```commandline
 insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
 ```
+Note: The `SESSION_TYPE` field is optional. If left empty, it will default to `Lecture`.
 
 ### Deleting a Module: `delete`
 Removes a module from the timetable by index.
