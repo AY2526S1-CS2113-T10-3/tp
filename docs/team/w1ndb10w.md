@@ -51,22 +51,6 @@ This product is designed for university students who prefer a fast, keyboard-bas
 
 ---
 
-### Contributions to the User Guide
-- **Documentation/user guide update-1**: Contributed comprehensive documentation for the search and filtering features, as well as the review management system (post, edit, delete).
-- Wrote clear, user-friendly instructions with examples to help users understand how to effectively use these features. 
-- Included common use cases and troubleshooting tips to enhance user experience.
-
----
-
-### Contributions to the Developer Guide
-- **Documentation/diagrams setup**: Set up the initial structure and framework for technical diagrams in the Developer Guide. 
-- **Documentation/developer guide setup**: Established the overall structure and sections of the Developer Guide to ensure consistency and completeness. 
-- **Documentation/embed diagrams in developer guide**: Integrated UML diagrams and other technical diagrams into the Developer Guide to illustrate system architecture and component interactions. 
-- Created detailed technical documentation explaining the implementation of the search/filter feature and the review management system. 
-- Designed and updated UML diagrams to visualize the architecture and workflow. 
-
----
-
 ### Contributions to Team-Based Tasks
 - Managed releases `v1.0`, `v2.0`, and `v2.1` on GitHub, ensuring smooth deployment and version control.
 - Set up and kept maintaining the project repository organization and structure, e.g., `issue trackers`, `milestones`, `labels`.
