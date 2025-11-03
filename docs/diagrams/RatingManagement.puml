@@ -1,0 +1,81 @@
+
+@startuml Rating_Class_Diagram
+skinparam dpi 200
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultFontName Monospaced
+
+title Rating Feature - Class Diagram
+
+class RatingManager {
+  - Map<String, RatingStats> ratings
+  - RatingStorage storage
+  == Constructors ==
+  + RatingManager()
+  == Queries ==
+  + double getAverage(String moduleCode)
+  + int getCount(String moduleCode)
+  + boolean hasRatings(String moduleCode)
+  + Map<String, RatingStats> getAll()
+  == Commands ==
+  + void addRating(String moduleCode, int rating)
+}
+
+class RatingStorage {
+  - static final String FILE_PATH
+  == Persistence ==
+  + Map<String, RatingStats> load()
+  + void save(Map<String, RatingStats> ratings)
+}
+
+class RatingStats {
+  - int sum
+  - int count
+  == Constructors ==
+  + RatingStats()
+  + RatingStats(int sum, int count)
+  == Behavior ==
+  + void add(int rating)
+  + double average()
+  + int getSum()
+  + int getCount()
+}
+
+RatingManager --> RatingStorage : uses for persistence
+RatingManager *-- "per module" RatingStats : aggregates
+
+@enduml
+
+
+@startuml Rating_Add_Sequence
+skinparam dpi 200
+skinparam shadowing false
+skinparam defaultFontName Monospaced
+
+title Sequence - rate CS2113 4
+
+actor User
+participant UI
+participant Parser
+participant RateCommand
+participant RatingManager
+participant RatingStats
+participant RatingStorage
+
+User -> UI : "rate CS2113 4"
+UI -> Parser : parse("rate CS2113 4")
+Parser -> RateCommand : new RateCommand("CS2113", 4)
+UI -> RateCommand : execute(ui, modules, courseRecord)
+
+RateCommand -> RatingManager : addRating("CS2113", 4)
+alt new module entry
+  RatingManager -> RatingStats : new RatingStats()
+end
+RatingManager -> RatingStats : add(4)
+RatingManager -> RatingStorage : save(ratings)
+RatingStorage --> RatingManager : persisted
+
+RateCommand --> UI : "Added Rating: 4 to CS2113"
+@enduml
+

@@ -176,6 +176,8 @@ The ReviewManager handles in-memory storage of course reviews, while ReviewStora
 The Rating Management component enables users to rate modules and view average ratings for each course.
 It follows the same architecture as Review Management, with a clear separation between logic, data and persistence layers.
 
+![Rating Management Class Diagram](diagrams/RatingManagement.png)
+
 - **RatingManager** - Maintains a `Map<String, RatingStats>` mapping module codes to their cumulative rating data.
   - It handles all business logic for adding, updating, and retrieving ratings, ensuring each rating is between 1-5.
 - **RatingStats** - A helper class encapsulating statistics:
@@ -187,8 +189,19 @@ It follows the same architecture as Review Management, with a clear separation b
     `MODULE_CODE|SUM|COUNT`
   - Ratings are automatically reloaded at application start and saved on exit or when a new rating is added.
 
-
 #### Score Management Component
+The Score Management component allows users to store and view assessment breakdowns for individual modules.
+It is designed around the same modular architecture as the Review and Rating systems.
+
+- **ScoreManager** - Manages a `Map<String, Map<String, Integer>>` representing each module’s breakdown,
+  where the key is a component name (e.g., `"exam"`, `"project"`) and the value is a score weight.
+  Provides methods to:
+  - Add or update a module’s breakdown 
+  - Retrieve existing breakdowns 
+  - Validate format and numeric values
+- **ScoreStorage** - Persists breakdown data to `data/scores.txt` in the following format:
+  `MODULE_CODE|name:value|name2:value2|..`
+  Handles both loading and saving, ensuring file data remains synchronized with the in-memory state.
 
 ### Implementation Details
 
