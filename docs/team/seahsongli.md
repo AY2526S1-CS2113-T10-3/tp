@@ -78,7 +78,7 @@ insert i/<id> n/<name> d/<day> f/<start> t/<end> [s/<type>]
 ##### `parseDeleteCommand`
 **Expected Format:**
 ```bash
-delete i/<module_id>
+delete index/<module_index>
 ```
 
 ### User Interface Layer (`UI`)
