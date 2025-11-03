@@ -3,22 +3,15 @@ package seedu.duke;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
-import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UniflowTest {
 
-    @TempDir
-    Path tempDir;
-
     private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    private final ByteArrayInputStream inputStream = new ByteArrayInputStream("bye\n".getBytes());
     private final PrintStream originalOut = System.out;
-    private final InputStream originalIn = System.in;
 
     @BeforeEach
     void setUp() {
@@ -28,7 +21,6 @@ class UniflowTest {
     @AfterEach
     void tearDown() {
         System.setOut(originalOut);
-        System.setIn(originalIn);
         outputStream.reset();
     }
 

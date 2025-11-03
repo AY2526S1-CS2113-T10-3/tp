@@ -410,8 +410,8 @@ class ReviewManagerTest {
         String course = uniqueCourse();
         newManager.addReview(course, "Maks", "Review");
 
-        // Merge should return false when file doesn't exist
-        boolean merged = newManager.mergeWithFile();
+        // Merge when file doesn't exist
+        newManager.mergeWithFile();
 
         // Should still have the in-memory review
         assertTrue(newManager.hasCourse(course));
@@ -424,8 +424,11 @@ class ReviewManagerTest {
     void mergeWithFile_emptyFile_handlesGracefully() throws IOException {
         // Create empty file
         File file = new File(TEST_FILE_PATH);
-        boolean mkdirsResult = file.getParentFile().mkdirs();
-        boolean createResult = file.createNewFile();
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+        file.createNewFile();
 
         ReviewManager newManager = new ReviewManager();
         String course = uniqueCourse();
@@ -467,7 +470,10 @@ class ReviewManagerTest {
     void loadReviews_corruptedFile_handlesGracefully() throws IOException {
         // Create a file with corrupted data
         File file = new File(TEST_FILE_PATH);
-        boolean mkdirsResult = file.getParentFile().mkdirs();
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
         try (FileWriter writer = new FileWriter(file)) {
             writer.write("CORRUPTED|DATA|INVALID\n");
             writer.write("MORE|CORRUPTED\n");

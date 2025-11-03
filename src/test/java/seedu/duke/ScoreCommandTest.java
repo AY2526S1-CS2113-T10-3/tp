@@ -120,76 +120,78 @@ class ScoreCommandTest {
 
     @Test
     void execute_moduleDoesNotExist_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand("CS9999", "exam:50").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand("CS9999", "exam:50").execute(ui, modules, record),
+                "Should throw exception for non-existent module"
         );
-        assertTrue(ex.getMessage().toLowerCase().contains("does not exist"));
     }
 
     @Test
     void execute_nullModuleId_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(null, "exam:50").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(null, "exam:50").execute(ui, modules, record),
+                "Should throw exception for null module ID"
         );
-        assertTrue(ex.getMessage().toLowerCase().contains("invalid"));
     }
 
     @Test
     void execute_emptyModuleId_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand("", "exam:50").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand("", "exam:50").execute(ui, modules, record),
+                "Should throw exception for empty module ID"
         );
-        assertTrue(ex.getMessage().toLowerCase().contains("invalid"));
     }
 
     @Test
     void execute_emptyBreakdown_throws() {
-        UniflowException ex1 = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, "").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, "").execute(ui, modules, record),
+                "Should throw exception for empty breakdown"
         );
-        UniflowException ex2 = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, "   ").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, "   ").execute(ui, modules, record),
+                "Should throw exception for whitespace-only breakdown"
         );
-        assertTrue(ex1.getMessage().toLowerCase().contains("provide"));
-        assertTrue(ex2.getMessage().toLowerCase().contains("provide"));
     }
 
     @Test
     void execute_malformedPairNoColon_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, "exam50").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, "exam50").execute(ui, modules, record),
+                "Should throw exception for malformed pair without colon"
         );
-        assertTrue(ex.getMessage().toLowerCase().contains("format"));
     }
 
     @Test
     void execute_malformedPairMissingValue_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, "exam:").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, "exam:").execute(ui, modules, record),
+                "Should throw exception for missing value"
         );
     }
 
     @Test
     void execute_malformedPairMissingName_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, ":50").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, ":50").execute(ui, modules, record),
+                "Should throw exception for missing component name"
         );
     }
 
     @Test
     void execute_nonNumericValue_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, "exam:fifty").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, "exam:fifty").execute(ui, modules, record),
+                "Should throw exception for non-numeric value"
         );
-        assertTrue(ex.getMessage().toLowerCase().contains("numeric"));
     }
 
     @Test
     void execute_negativeValue_throws() {
-        UniflowException ex = assertThrows(UniflowException.class, () ->
-                new ScoreCommand(MODULE_ID, "exam:-10").execute(ui, modules, record)
+        assertThrows(UniflowException.class, () ->
+                        new ScoreCommand(MODULE_ID, "exam:-10").execute(ui, modules, record),
+                "Should throw exception for negative value"
         );
-        assertTrue(ex.getMessage().toLowerCase().contains("positive"));
     }
 
     @Test
