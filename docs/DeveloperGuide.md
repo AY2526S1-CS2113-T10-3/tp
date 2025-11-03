@@ -1,5 +1,45 @@
 # Developer Guide
 
+## Table of Contents
+- [Acknowledgements](#acknowledgements)
+- [Design & implementation](#design--implementation)
+    - [Architecture Overview](#architecture-overview)
+    - [Command Execution Flow](#command-execution-flow)
+    - [Key Design Patterns](#key-design-patterns)
+    - [Design Details](#design-details)
+        - [Command Component](#command-component)
+        - [Model Component](#model-component)
+        - [Review Management Component](#review-management-component)
+        - [Rating Management Component](#rating-management-component)
+        - [Score Management Component](#score-management-component)
+- [Implementation Details](#implementation-details)
+    - [Find Review Feature](#find-review-feature)
+    - [Review Data Persistence (ReviewSyncManager & ReviewCleaner)](#review-data-persistence-reviewsyncmanager--reviewcleaner)
+    - [Review Data Management (Reload/Reset)](#review-data-management-reloadreset)
+    - [Insert Module Feature](#insert-module-feature)
+    - [Filter Module Feature](#filter-module-feature)
+    - [GPA Calculation Feature](#gpa-calculation-feature)
+    - [Score Breakdown Feature](#score-breakdown-feature)
+    - [Rating Feature](#rating-feature)
+    - [Timetable Clash Detection](#timetable-clash-detection)
+- [Product scope](#product-scope)
+    - [Target user profile](#target-user-profile)
+    - [Value proposition](#value-proposition)
+- [User Stories](#user-stories)
+- [Non-Functional Requirements](#non-functional-requirements)
+- [Glossary](#glossary)
+- [Instructions for manual testing](#instructions-for-manual-testing)
+    - [Setting up the application](#setting-up-the-application)
+    - [Testing Module Management](#testing-module-management)
+    - [Testing Filtering](#testing-filtering)
+    - [Testing Grade Management](#testing-grade-management)
+    - [Testing Score Breakdown](#testing-score-breakdown)
+    - [Testing Review System](#testing-review-system)
+    - [Testing Rating System](#testing-rating-system)
+    - [Testing Timetable Commands](#testing-timetable-commands)
+    - [Testing Error Handling](#testing-error-handling)
+    - [Data Persistence Testing](#data-persistence-testing)
+
 ## Acknowledgements
 
 * Java 17 - Programming language and runtime environment
@@ -623,3 +663,6 @@ Expected: Confirmation that reviews are reloaded from file.
 3. Restart the application
 4. Use `review` command to verify reviews are loaded
 5. Check that `data/reviews.txt` file exists and contains review data in format: course|user|review
+
+
+[↑ Back to top](#developer-guide)
