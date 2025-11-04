@@ -1,4 +1,4 @@
- Developer Guide
+# Developer Guide
 
 ## Table of Contents
 - [Acknowledgements](#acknowledgements)
@@ -12,6 +12,7 @@
         - [Review Management Component](#review-management-component)
         - [Rating Management Component](#rating-management-component)
         - [Score Management Component](#score-management-component)
+        - [Grade Management Component](#grade-management-component)
 - [Implementation Details](#implementation-details)
     - [Show Timetable Feature](#show-timetable-feature)
     - [Reset Timetable Feature](#reset-timetable-feature)
@@ -23,46 +24,8 @@
     - [Insert Module Feature](#insert-module-feature)
     - [Filter Module Feature](#filter-module-feature)
     - [GPA Calculation Feature](#gpa-calculation-feature)
-    - [Score Breakdown Feature](#score-breakdown-feature)
-    - [Rating Feature](#rating-feature)
-    - [Timetable Clash Detection](#timetable-clash-detection)
-- [Product scope](#product-scope)
-    - [Target user profile](#target-user-profile)
-    - [Value proposition](#value-proposition)
-- [User Stories](#user-stories)
-- [Non-Functional Requirements](#non-functional-requirements)
-- [Glossary](#glossary)
-- [Instructions for manual testing](#instructions-for-manual-testing)
-    - [Setting up the application](#setting-up-the-application)
-    - [Testing Module Management](#testing-module-management)
-    - [Testing Filtering](#testing-filtering)
-    - [Testing Grade Management](#testing-grade-management)
-    - [Testing Score Breakdown](#testing-score-breakdown)
-    - [Testing Review System](#testing-review-system)
-    - [Testing Rating System](#testing-rating-system)
-    - [Testing Timetable Commands](#testing-timetable-commands)
-    - [Testing Error Handling](#testing-error-handling)
-    - [Data Persistence Testing](#data-persistence-testing)
-
-## Table of Contents
-- [Acknowledgements](#acknowledgements)
-- [Design & implementation](#design--implementation)
-    - [Architecture Overview](#architecture-overview)
-    - [Command Execution Flow](#command-execution-flow)
-    - [Key Design Patterns](#key-design-patterns)
-    - [Design Details](#design-details)
-        - [Command Component](#command-component)
-        - [Model Component](#model-component)
-        - [Review Management Component](#review-management-component)
-        - [Rating Management Component](#rating-management-component)
-        - [Score Management Component](#score-management-component)
-- [Implementation Details](#implementation-details)
-    - [Find Review Feature](#find-review-feature)
-    - [Review Data Persistence (ReviewSyncManager & ReviewCleaner)](#review-data-persistence-reviewsyncmanager--reviewcleaner)
-    - [Review Data Management (Reload/Reset)](#review-data-management-reloadreset)
-    - [Insert Module Feature](#insert-module-feature)
-    - [Filter Module Feature](#filter-module-feature)
-    - [GPA Calculation Feature](#gpa-calculation-feature)
+    - [Projected GPA Feature](#projected-gpa-feature)
+    - [Grade Management Commands](#grade-management-commands)
     - [Score Breakdown Feature](#score-breakdown-feature)
     - [Rating Feature](#rating-feature)
     - [Timetable Clash Detection](#timetable-clash-detection)
@@ -124,10 +87,15 @@ The architecture diagram above shows the high-level design of the application. T
 - Provides add, delete, filter operations and detects timetable clashes
 
 **Course**
-- Represents a completed course with code, credits, and grade for GPA calculation
+- Represents a completed course with code, credits, grade and indication of whether it is a major required course
 
 **CourseRecord**
-- Manages completed courses for academic record keeping
+- Manages a list of courses for academic record keeping
+- It includes two separate lists, one for all courses, one for major-required courses
+- It includes methods for computing the GPA of the courses stored in the record
+
+**GradeStorage**
+- It deals with loading and saving of the grade record in the `data/grades.txt` file.
 
 **ReviewManager**
 - Manages course reviews **in-memory** using a Map. Now operates in a "RAM-first" model.
@@ -240,8 +208,8 @@ All command classes inherit from the abstract `Command` class and implement the 
 The Model component consists of:
 - **Module**: Represents a course session with timing and session type information. Each module can store a score breakdown for different assessment components.
 - **ModuleList**: Manages a collection of modules with operations for adding, deleting, filtering, and clash detection.
-- **Course**: Represents a completed course with a grade, used for GPA calculation.
-- **CourseRecord**: Manages the collection of completed courses.
+- **Course**: Represents a course with a grade, used for GPA calculation.
+- **CourseRecord**: Manages the collection of courses.
 
 The use of composition relationships allows ModuleList and CourseRecord to fully manage their respective collections.
 
@@ -320,6 +288,30 @@ It is designed around the same modular architecture as the Review and Rating sys
 - **ScoreStorage** - Persists breakdown data to `data/scores.txt` in the following format:
   `MODULE_CODE|name:value|name2:value2|..`
   Handles both loading and saving, ensuring file data remains synchronized with the in-memory state.
+
+#### Grade Management Component
+
+The Grade Management component allows users to record, display their academic grades, and compute their GPA.  
+It combines the use of the CourseRecord and GradeStorage classes for GPA calculation, temporary grade testing, and grade persistence.
+
+CourseRecord: Two lists of CourseRecord in Uniflow— one for confirmed grades (will be saved) and one for temporary predicted grades used in projection. Responsible for computing GPA.    
+*Remark: tempRecord in Uniflow.java stored the predicted grades temporarily.*   
+  
+**GradeStorage**: Handles loading and saving of grade record in data/grades.txt, ensuring persistence between sessions.  
+- completed courses will be stored in the format:  
+  `EC3322 | 5 | B | 1`  
+- When the user uses Uniflow again, it will read the stored data and load the saved course records.  
+  
+Some of the Commands Implemented:
+  
+`AddGradeCommand` – Adds a completed course's grade.  
+`ShowGradeCommand` – Displays all saved grades.  
+`RemoveGradeCommand` – Deletes a grade record.  
+`AddTestGradeCommand`, `RemoveTestGradeCommand` – Manage predicted grades and projected GPA.  
+`ProjectGpaCommand` – Combines attained grades and predicted grades to calculate projected GPA.  
+
+Design Rationale:
+Separate handling for predicted grades allows users to explore a projected GPA simulation safely without overwriting confirmed academic record.
 
 ### Implementation Details
 
@@ -407,17 +399,44 @@ The application supports filtering by: day, session type, module ID, module name
 
 The GPA calculation feature computes the cumulative GPA based on completed courses.
 
-![Compute GPA Sequence](diagrams/ComputeGpaSequence.png)
+![Compute GPA Sequence](diagrams/ComputeGPASequence.png)
 
 How GPA calculation works:
 
-1. ComputeGpaCommand retrieves all courses from CourseRecord
-2. For each course, the letter grade is converted to a grade point (A+ = 5.0, F = 0.0)
-3. The weighted sum is calculated: Σ(grade_point × credits)
+1. Execution of `gpa` command will call the computeGpa() method in CourseRecord. 
+2. For each course, the letter grade is converted to a grade point (A+ = 5.0, B+ = 4.0)
+3. The total_grade_points is calculated: Σ(grade_point × credits)
 4. GPA = total_grade_points / total_credits
-5. The result is displayed with summary statistics
+5. The result is displayed with summary statistics (e.g. the number of courses and credits studied)
 
 The grade point conversion follows the standard NUS grading scale.
+
+#### Projected GPA Feature
+
+The projected GPA feature allows users to simulate their projected GPA result based on predicted grades of future courses.
+
+How it works:
+
+1. The user enters their predicted grades of not yet completed courses using   
+    `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR`.  
+2. These will be stored in a temporary course record list.  
+3. `projectgpa` command combined the courses from permanent and temporary records and compute a projected GPA.  
+4. The result shows the projected overall GPA based on the predictions.  
+
+This feature helps students plan ahead and understand how their upcoming courses' performances impact their GPA.  
+The temporary record will not be saved as permanant record and is just for testing in this execution.  
+
+#### Grade Management Commands
+
+The following commands are used to facilitate the management and organisation of the course record.  
+  
+`showgrade` – Displays the completed courses and allows users to track what is stored.  
+`removegrade INDEX` – Deletes a course grade from the permanent record by user-specified index.  
+`showtempgrade` – Displays the predicted grades currently stored in a temporary record, allowing users to track their current inputs.
+`removetempgrade INDEX` – Deletes a predicted grade from the temporary record.
+
+Input Validation:
+All command inputs will be checked to ensure validity. Invalid input will cause a UniflowException that displays a reminder to users.
 
 #### Score Breakdown Feature
 Stores per-module assessment breakdowns like `exam:50 project:30`
@@ -508,7 +527,10 @@ Uniflow solves several problems for university students:
 | v2.0    | student   | filter modules by session type      | quickly find all my tutorials or labs                             |
 | v2.0    | student   | search modules by code or name      | locate specific modules without scanning the entire list          |
 | v2.0    | student   | add my grades for completed courses | maintain an academic record                                       |
+| v2.0    | student   | add predicted grades for courses    | manage expectations for courses                                   |
 | v2.0    | student   | calculate my GPA automatically      | track my academic performance                                     |
+| v2.0    | student   | calculate my Major GPA automatically| track my academic performance with clearer picture                |
+| v2.0    | student   | calculate my projected GPA          | manage and set strategy for studying                              |
 | v2.0    | student   | store score breakdowns for modules  | track individual assessment components                            |
 | v2.0    | student   | add reviews for courses             | share my experiences with other students                          |
 | v2.0    | student   | read reviews for courses            | make informed decisions about module selection                    |
@@ -523,6 +545,7 @@ Uniflow solves several problems for university students:
 | v2.1    | (student) | view the average rating for a module| decide which modules to take next semester                        |
 | v2.1    | student   | be prompted to save reviews on exit | not lose work if user forget to save manually                     |
 | v2.1    | student   | count reviews for a course          | see how many reviews a course has                                 |
+| v2.1    | student   | show/remove grades of the record    | have more organised record and better management of academic progress |
 | v2.1    | (dev)     | manually merge reviews to disk      | save user progress without exiting or reloading                   |
 
 
@@ -549,6 +572,7 @@ Uniflow solves several problems for university students:
 * **Timetable Clash** - When two modules are scheduled at overlapping times on the same day.
 * **Course Record** - Collection of completed courses with grades for GPA calculation.
 * **GPA** - Grade Point Average, calculated from course grades and credits.
+* **Major GPA** - Grade Point Average that only accounts for major-required courses. Used by many universities as a graduation requirement. 
 * **Score Breakdown** - Individual assessment components and their weightings for a module.
 * **ScoreManager** - Manages creation, updating, and retrieval of score breakdowns for each module.
 * **ScoreStorage** - Handles the persistence of score breakdown data to file and ensures integrity between sessions.
@@ -628,9 +652,9 @@ Expected: Shows all modules with "CS" in their code.
 
 **Adding grades:**
 ```
-addgrade c/CS2113 cr/4 g/A
-addgrade c/MA1521 cr/4 g/B+
-addgrade c/ST2334 cr/4 g/A-
+addgrade c/CS2113 cr/4 g/A m/true
+addgrade c/MA1521 cr/4 g/B+ m/true
+addgrade c/ST2334 cr/4 g/A- m/true
 ```
 Expected: Each course is added to academic record with confirmation.
 
@@ -638,13 +662,38 @@ Expected: Each course is added to academic record with confirmation.
 ```
 gpa
 ```
-Expected: Displays total courses, grade points, credits, and calculated GPA.
+Expected: Displays total courses studied, total grade points, total credits studied, and calculated GPA (for both all courses and major required GPA).
 
 **Testing invalid grade:**
 ```
-addgrade c/CS1010 cr/4 g/Z
+addgrade c/CS1010 cr/4 g/Z m/true
 ```
 Expected: Error message about invalid grade.
+
+**Testing invalid IsMajor:**
+```
+addgrade c/CS1010 cr/4 g/Z m/test
+```
+Expected: Error message that reminds users to input true/false.
+
+**Testing missing components:**
+```
+addgrade c/CS1010 g/Z m/test
+```
+Expected: Error message that reminds users to follow the correct format.
+
+**Testing invalid index for removegrade:**
+```
+removegrade -1
+```
+Expected: Error message that reminds users to enter a valid index.
+
+**Testing Storage:**
+1. Add a grade to the permanent course record using the command `addgrade`.
+2. Exit Uniflow.
+3. Run Uniflow again.
+4. Type the command `showgrade`.
+5. The previously added grade should appear on the list. 
 
 ### Testing Score Breakdown
 
