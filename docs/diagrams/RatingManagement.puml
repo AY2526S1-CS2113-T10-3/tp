@@ -1,10 +1,10 @@
-
 @startuml Rating_Class_Diagram
 skinparam dpi 200
 skinparam classAttributeIconSize 0
 skinparam shadowing false
 skinparam packageStyle rectangle
 skinparam defaultFontName Monospaced
+hide circle
 
 title Rating Feature - Class Diagram
 
@@ -78,4 +78,3 @@ RatingStorage --> RatingManager : persisted
 
 RateCommand --> UI : "Added Rating: 4 to CS2113"
 @enduml
-
