@@ -619,7 +619,7 @@ Expected: All added modules displayed with their details.
 
 **Deleting modules:**
 ```
-delete index/i
+delete index/1
 ```
 Expected: Module at index 1 of the timetable removed. Confirmation message shows remaining module count.
 
