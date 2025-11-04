@@ -122,9 +122,9 @@ filter hastutorial
 filter notutorial
 ```
 
-**ASSUMPTION**
+**EXAMPLE**
 
-For all test cases below, assume you have the following modules in your timetable:
+For all test cases below, suppose you have the following modules in your timetable:
 ```commandline
 1. CS2113 - Software Engineering - Lecture - Monday 14:00-16:00
 2. CS2113 - Software Engineering - Tutorial - Tuesday 10:00-11:00
@@ -133,6 +133,17 @@ For all test cases below, assume you have the following modules in your timetabl
 5. MA1521 - Calculus - Lecture - Friday 16:00-18:00
 6. MA1521 - Calculus - Tutorial - Friday 18:00-19:00
 ```
+To comply with the scenario above, please run the following commands before executing the test cases:
+```commandline
+reset timetable
+insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
+insert i/CS2113 n/Software Engineering d/Tuesday f/10:00 t/11:00 s/Tutorial
+insert i/CS3241 n/Computer Graphics d/Wednesday f/10:00 t/12:00 s/Lecture
+insert i/CS2040 n/Data Structures d/Thursday f/14:00 t/16:00 s/Lecture
+insert i/MA1521 n/Calculus d/Friday f/16:00 t/18:00 s/Lecture
+insert i/MA1521 n/Calculus d/Friday f/18:00 t/19:00 s/Tutorial
+```
+
 **Test Case 1: Filter by Day**
 
 Input:
