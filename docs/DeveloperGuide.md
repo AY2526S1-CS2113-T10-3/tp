@@ -832,33 +832,6 @@ insert i/CS2113
 ```
 Expected: Error about missing fields.
 
-**Testing Find Review:**
-```
-findreview u/Alice
-```
-Expected: Shows only the review from Alice (`Great course, very practical!`).
-
-```
-findreview u/Bob c/CS2113
-```
-Expected: Shows only Bob's review for CS2113.
-
-```
-findreview u/NonExistentUser
-```
-Expected: Message indicating no reviews found for this user.
-
-**Testing Review Data Management (Reload/Reset):**
-```
-reset all reviews
-```
-Expected: Confirmation that reviews are reset. `review CS2113` should now show default data (or nothing).
-
-```
-reloadreviews
-```
-Expected: Confirmation that reviews are reloaded from file.
-
 ### Data Persistence Testing
 
 1. Add several reviews using `addreview` commands
