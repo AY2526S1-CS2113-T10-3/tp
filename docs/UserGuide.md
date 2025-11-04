@@ -113,32 +113,135 @@ Note: This action cannot be undone. The system will confirm if your timetable is
 Filters modules by various criteria including day, session type, module CODE, module name, or tutorial presence.
 
 Format:
-```commandline
 filter day/DAY
 filter type/SESSION_TYPE
 filter id/MODULE_CODE
 filter name/MODULE_NAME
 filter hastutorial
 filter notutorial
-```
-Examples:
-```commandline
+
+ASSUMPTION: For all test cases below, assume you have the following modules in your timetable:
+1. CS2113 - Software Engineering - Lecture - Monday 14:00-16:00
+2. CS2113 - Software Engineering - Tutorial - Tuesday 10:00-11:00
+3. CS3241 - Computer Graphics - Lecture - Wednesday 10:00-12:00
+4. CS2040 - Data Structures - Lecture - Thursday 14:00-16:00
+5. MA1521 - Calculus - Lecture - Friday 16:00-18:00
+6. MA1521 - Calculus - Tutorial - Friday 18:00-19:00
+
+**Test Case 1: Filter by Day**
+
+Input:
 filter day/Monday
-filter type/tutorial
-filter hastutorial
-filter notutorial
-filter id/CS2113
-filter name/Software
-```
+
 Expected Output:
-```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
- Found 1 module(s) matching day 'Monday':
- 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+Found 1 module(s) matching day 'Monday':
+1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
-```
+
+**Test Case 2: Filter by Session Type**
+
+Input:
+filter type/tutorial
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+Found 2 module(s) matching session type 'tutorial':
+1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
+___________________________________________________________________________
+___________________________________________________________________________
+
+**Test Case 3: Filter Modules with Tutorials**
+
+Input:
+filter hastutorial
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+Found 2 module(s) matching modules with tutorial sessions:
+1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
+___________________________________________________________________________
+___________________________________________________________________________
+
+**Test Case 4: Filter Modules without Tutorials**
+
+Input:
+filter notutorial
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+Found 2 module(s) matching modules without tutorial sessions:
+1. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
+2. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
+___________________________________________________________________________
+___________________________________________________________________________
+
+**Test Case 5: Filter by Module ID (Exact)**
+
+Input:
+filter id/CS2113
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+Found 2 module(s) matching ID containing 'CS2113':
+1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+___________________________________________________________________________
+___________________________________________________________________________
+
+**Test Case 6: Filter by Module ID (Partial Match)**
+
+Input:
+filter id/CS
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+Found 4 module(s) matching ID containing 'CS':
+1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+3. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
+4. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
+___________________________________________________________________________
+___________________________________________________________________________
+
+**Test Case 7: Filter by Module Name**
+
+Input:
+filter name/Software
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+Found 2 module(s) matching name containing 'Software':
+1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+___________________________________________________________________________
+___________________________________________________________________________
+
+**Test Case 8: Filter with No Matches**
+
+Input:
+filter day/Saturday
+
+Expected Output:
+___________________________________________________________________________
+___________________________________________________________________________
+No modules found matching day 'Saturday'.
+___________________________________________________________________________
+___________________________________________________________________________
+
+Note: The filter command performs case-insensitive matching for all criteria.
+
+---
 
 ### Recording Component Scores: `score`
 Allows users to record or view score breakdowns for a specific module (e.g., exam scores, project scores, participation).
