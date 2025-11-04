@@ -19,6 +19,7 @@ This product is designed for university students who prefer a fast, keyboard-bas
 - **What it does**: Allows users to search and filter courses with command `filter` based on various criteria such as course code, name, or other attributes.
 - **Justification**: This enhancement is essential for users managing multiple courses across semesters. It significantly improves user experience by enabling quick access to specific course information without having to scroll through the entire course list.
 - **Highlights**: The implementation required careful consideration of search algorithms and filtering logic to ensure efficient and accurate results. I designed the feature to be extensible, allowing for future enhancements such as advanced filtering options.
+
 #### 2. Review Management System
 - **Review Post Feature**: `addreview`
     - Implemented the functionality for users to create and post reviews for their courses, allowing students to share their experiences and insights.
@@ -28,26 +29,34 @@ This product is designed for university students who prefer a fast, keyboard-bas
     - Developed the deletion functionality to allow users to remove reviews they no longer wish to keep.
 - **Justification**: The review system adds significant value to the application by creating a knowledge-sharing platform where students can help each other make informed course selections. This peer-to-peer information exchange is crucial for academic planning.
 - **Highlights**: The implementation required careful design of the data structure to efficiently store and retrieve reviews. I ensured data integrity by implementing proper validation and error handling mechanisms.
+
 #### 3. Testing and Code Quality Enhancements
-- **Comprehensive JUnit Test Suite**: Developed extensive JUnit test cases to ensure feature reliability and robustness across the application, significantly improving overall code coverage and quality. Test suites include:
-    - **FilterCommandTest**: Created a comprehensive test file with 20+ test cases covering:
-        - Basic filtering by course code and name
-        - Case-insensitive matching and partial matches
-        - Combined filters with OR logic
-        - Edge cases (empty list, no matches, null parameters)
-        - Special characters and whitespace handling
-        - Output formatting validation
-    - **Review System Tests**: Covered various scenarios including:
-        - Single and multiple review operations
-        - Edge cases for review indexing
-        - Parameter extraction validation
-        - File I/O operations and data persistence
-    - **Parser Tests**: Validated parameter extraction logic with multiple parameters and boundary conditions
-- **Assertions Implementation**: Enhanced code reliability by implementing assertions throughout the codebase to catch potential bugs and validate program state during development and runtime. Strategic placement of assertions helps identify issues early in the development lifecycle.
-- **Test-Driven Debugging**: Utilized test cases to identify and fix bugs in parameter extraction and review persistence, ensuring features work correctly across different scenarios.
-- **Code Review and Refactoring**: Conducted thorough code reviews to identify potential issues and refactored code segments for better maintainability, readability, and adherence to coding standards.
-- **Justification**: These enhancements are critical for maintaining code quality and preventing bugs. Comprehensive testing ensures that features work as intended and continue to function correctly as the codebase evolves. The test-first approach helps catch regressions early.
-- **Highlights**: The test cases cover various edge cases and scenarios, ensuring robust error handling and validation. The assertions help catch bugs early in the development process and prevent runtime errors. Test suite is designed to be maintainable and easily extensible for future features.
+- **Comprehensive JUnit Test Suite**: Developed and implemented extensive test coverage across multiple test files:
+    - **New Test Files Created**:
+        - **FilterCommandTest**: 20+ test cases for basic/advanced filtering, case-insensitive matching, OR logic, edge cases, and special characters
+        - **ScoreManagerTest**: Score calculation, GPA computation, credit weighting, and grade format variations
+        - **GradeStorageTest**: File I/O with detailed logging, data persistence, multiple courses, and edge cases (non-existent/empty files)
+        - **ModuleStorageTest**: Module persistence, data integrity verification, and error handling for corrupted/missing files
+        - **CommandTest**: Command parsing, validation, and execution across various command types
+        - **UITest**: Output validation, formatting verification, and display consistency
+    - **Enhanced Existing Test Files**:
+        - **ParserTest**: Improved parameter extraction, boundary conditions, complex parsing, and error handling
+        - **RatingManagerTest**: Expanded rating operations, validation logic, and edge cases
+        - **ReviewManagerTest**: Enhanced review operations, indexing edge cases, and persistence verification
+        - **ScoreCommandTest**: Improved command execution, output formatting, and ScoreManager integration
+        - **UniflowTest**: Enhanced integration testing for application flow and component interactions
+
+- **Enhanced Debugging & Assertions**: Implemented comprehensive logging and assertions across all test suites to trace execution, validate state transitions, and catch bugs early. Strategic assertion placement ensures data integrity at critical checkpoints.
+
+- **Test-Driven Development**: Utilized test cases to identify and fix bugs in parameter extraction, file persistence, review operations, and score calculations across diverse scenarios.
+
+- **Justification**: Comprehensive testing significantly improves code coverage, prevents regressions, and ensures features remain functional as code evolves. Detailed logging and assertions enable rapid debugging and maintain high quality standards.
+
+- **Highlights**:
+    - Established robust testing infrastructure with multiple new test files from scratch
+    - Test suites cover extensive edge cases: special characters, varying data formats, null/empty inputs, file operations
+    - Detailed logging with expected vs. actual values for efficient troubleshooting
+    - Comprehensive assertions validate object states, data persistence, and error conditions
 
 ---
 
