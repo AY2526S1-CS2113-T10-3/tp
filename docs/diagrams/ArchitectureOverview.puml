@@ -1,7 +1,9 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
+
 LAYOUT_WITH_LEGEND()
+
 
 Container(ui, "UI", "Java", "Handles user interactions")
 Container(parser, "Parser", "Java", "Parses commands")
@@ -10,6 +12,8 @@ Container(moduleList, "ModuleList", "Java", "Manages modules")
 Container(courseRecord, "CourseRecord", "Java", "Manages grades")
 Container(reviewManager, "ReviewManager", "Java", "Manages reviews")
 Container(storage, "ReviewStorage", "Java", "Persists reviews")
+Container(ratingManager, "RatingManager", "Java", "Manages ratings")
+
 
 Rel(ui, parser, "Sends input to")
 Rel(parser, command, "Creates")
@@ -18,5 +22,7 @@ Rel(command, courseRecord, "Uses")
 Rel(command, reviewManager, "Uses")
 Rel(reviewManager, storage, "Uses")
 Rel(command, ui, "Displays results via")
+Rel(command, ratingManager, "Uses")
 
 @enduml
+
