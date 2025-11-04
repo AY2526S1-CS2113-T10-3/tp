@@ -113,40 +113,51 @@ Note: This action cannot be undone. The system will confirm if your timetable is
 Filters modules by various criteria including day, session type, module CODE, module name, or tutorial presence.
 
 Format:
+```commandline
 filter day/DAY
 filter type/SESSION_TYPE
 filter id/MODULE_CODE
 filter name/MODULE_NAME
 filter hastutorial
 filter notutorial
+```
 
-ASSUMPTION: For all test cases below, assume you have the following modules in your timetable:
+**ASSUMPTION**
+
+For all test cases below, assume you have the following modules in your timetable:
+```commandline
 1. CS2113 - Software Engineering - Lecture - Monday 14:00-16:00
 2. CS2113 - Software Engineering - Tutorial - Tuesday 10:00-11:00
 3. CS3241 - Computer Graphics - Lecture - Wednesday 10:00-12:00
 4. CS2040 - Data Structures - Lecture - Thursday 14:00-16:00
 5. MA1521 - Calculus - Lecture - Friday 16:00-18:00
 6. MA1521 - Calculus - Tutorial - Friday 18:00-19:00
-
+```
 **Test Case 1: Filter by Day**
 
 Input:
+```commandline
 filter day/Monday
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 1 module(s) matching day 'Monday':
 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 **Test Case 2: Filter by Session Type**
 
 Input:
+```commandline
 filter type/tutorial
+```
 
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 2 module(s) matching session type 'tutorial':
@@ -154,13 +165,16 @@ Found 2 module(s) matching session type 'tutorial':
 2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 **Test Case 3: Filter Modules with Tutorials**
 
 Input:
+```commandline
 filter hastutorial
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 2 module(s) matching modules with tutorial sessions:
@@ -168,13 +182,16 @@ Found 2 module(s) matching modules with tutorial sessions:
 2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 **Test Case 4: Filter Modules without Tutorials**
 
 Input:
+```commandline
 filter notutorial
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 2 module(s) matching modules without tutorial sessions:
@@ -182,13 +199,16 @@ Found 2 module(s) matching modules without tutorial sessions:
 2. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 **Test Case 5: Filter by Module ID (Exact)**
 
 Input:
+```commandline
 filter id/CS2113
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 2 module(s) matching ID containing 'CS2113':
@@ -196,13 +216,16 @@ Found 2 module(s) matching ID containing 'CS2113':
 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 **Test Case 6: Filter by Module ID (Partial Match)**
 
 Input:
+```commandline
 filter id/CS
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 4 module(s) matching ID containing 'CS':
@@ -212,13 +235,16 @@ Found 4 module(s) matching ID containing 'CS':
 4. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 **Test Case 7: Filter by Module Name**
 
 Input:
+```commandline
 filter name/Software
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 Found 2 module(s) matching name containing 'Software':
@@ -226,18 +252,21 @@ Found 2 module(s) matching name containing 'Software':
 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
-
+```
 **Test Case 8: Filter with No Matches**
 
 Input:
+```commandline
 filter day/Saturday
-
+```
 Expected Output:
+```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
 No modules found matching day 'Saturday'.
 ___________________________________________________________________________
 ___________________________________________________________________________
+```
 
 Note: The filter command performs case-insensitive matching for all criteria.
 
