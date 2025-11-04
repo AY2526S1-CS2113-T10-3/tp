@@ -1,0 +1,123 @@
+@startuml
+!theme plain
+skinparam defaultTextAlignment center
+skinparam ActivityDiamondBackgroundColor #LightBlue
+skinparam ActivityBackgroundColor #LightYellow
+
+title Command Execution Flow
+
+start
+
+:User enters command string;
+
+:UI reads input from console;
+
+:Parser analyzes input;
+
+if (Valid command syntax?) then (yes)
+  :Parser creates Command object;
+else (no)
+  :Throw UniflowException;
+  :UI shows error message;
+  stop
+endif
+
+:Call Command.execute() with:
+- UI
+- ModuleList
+- CourseRecord;
+
+partition "Command Operations" {
+  if (Command type?) then (ModuleList)
+    :Execute operations:
+    - insert
+    - delete
+    - list
+    - filter
+    - show timetable
+    - reset timetable
+    - clash detection;
+    :ModuleStorage saves timetable data;
+
+  elseif (CourseRecord) then
+    :Execute operations:
+    - addgrade
+    - computeGpa();
+    :GradeStorage saves grade records;
+
+  elseif (ReviewManager) then
+    :Execute operations:
+    - addreview
+    - review
+    - findreview
+    - editreview
+    - deletereview;
+    note right
+      **RAM-first model:**
+      No automatic save
+      User-controlled persistence
+    end note
+
+  elseif (RatingManager) then
+    :Execute operations:
+    - rate (add rating)
+    - rate (view average);
+    :RatingStorage saves rating data;
+
+  elseif (ScoreManager) then
+    :Execute operations:
+    - score (add breakdown)
+    - score (view breakdown);
+    :ScoreStorage saves score data;
+  endif
+}
+
+:UI displays feedback:
+- Confirmation messages
+- GPA summaries
+- Filtered module lists
+- Average ratings
+- Score breakdowns;
+
+if (Command.isExit()?) then (false)
+  :Continue loop;
+  detach
+
+else (true)
+
+  partition "Exit Save Process" {
+    :ExitSaveManager activated;
+
+    :Load in-memory reviews
+    from ReviewManager;
+
+    :Load file reviews
+    from ReviewStorage;
+
+    :Compare memory vs file;
+
+    if (Unsaved reviews found?) then (yes)
+      :Prompt user:
+      "Save unsaved reviews?
+      (yes/no)";
+
+      if (User response?) then (yes)
+        :Merge new reviews;
+        :Save to data/reviews.txt;
+        :Show success message;
+      else (no)
+        :Show skip message;
+      endif
+
+    else (no)
+      :No action needed;
+    endif
+  }
+
+  :UI displays goodbye message;
+
+  stop
+
+endif
+
+@enduml

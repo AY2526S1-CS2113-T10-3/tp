@@ -123,10 +123,11 @@ The architecture diagram above shows the high-level design of the application. T
 
 ### Command Execution Flow
 
-```
-User Input → Parser → Command Object → execute() → Updates Data → UI Output → Loop/Exit
-```
+The following workflow diagram illustrates the complete command execution flow in Uniflow:
 
+![Command Execution Flow](diagrams/CommandExecutionFlow.png)
+
+**Workflow Steps:**
 1. User enters a command string through the UI Scanner
     The `UI` component reads the input from the console.
 2. Parser analyzes the input and creates the appropriate `Command object`
