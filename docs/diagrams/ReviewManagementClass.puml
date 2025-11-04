@@ -4,6 +4,7 @@ title Core Review Logic (RAM-First Model)
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
 hide empty members
+hide circle
 
 class LoadReviewsCommand extends Command {
     - reviewManager : ReviewManager

@@ -3,6 +3,8 @@ skinparam dpi 200
 skinparam classAttributeIconSize 0
 skinparam shadowing false
 skinparam defaultFontName Monospaced
+hide circle
+
 title RatingStorage - Class Diagram
 
 class RatingStorage {
