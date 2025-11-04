@@ -51,7 +51,7 @@ This product is designed for university students who prefer a fast, keyboard-bas
     - They can then set potential strategies for courses they are going to complete.  
     
   Related command: `addtestgrade`, `projectgpa`  
-  Related codes in the project: `CourseRecord`, `AddTestGradeCommand`
+  Related codes in the project: `CourseRecord`, `AddTestGradeCommand`, `ProjectGpaCommand`
 #### Other Parts 
 - `Parser`, `Uniflow`: amended codes in `Parser` and `Uniflow` for executing the commands for GPA calculator.
    - Included codes for checking and validating users' input.  
