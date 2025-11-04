@@ -720,7 +720,8 @@ Expected: Error message about invalid format.
 
 **Adding reviews (in-memory):**
 ```commandline
-addreview c/CS2113 u/Alice r/Great course, very practical! addreview c/CS2113 u/Bob r/Challenging but rewarding
+addreview c/CS2113 u/Alice r/Great course, very practical!
+addreview c/CS2113 u/Bob r/Challenging but rewarding
 ```
 Expected: Confirmation that reviews are added (to memory).
 
