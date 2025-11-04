@@ -3,20 +3,62 @@
 
 LAYOUT_WITH_LEGEND()
 
-Container(ui, "UI", "Java", "Handles user interactions")
-Container(parser, "Parser", "Java", "Parses commands")
-Container(command, "Command", "Java", "Executes operations")
-Container(moduleList, "ModuleList", "Java", "Manages modules")
-Container(courseRecord, "CourseRecord", "Java", "Manages grades")
-Container(reviewManager, "ReviewManager", "Java", "Manages reviews")
-Container(storage, "ReviewStorage", "Java", "Persists reviews")
+title Uniflow Architecture Overview
+
+Container(ui, "UI", "Java", "Handles user interactions,\nreads commands,\ndisplays formatted output")
+Container(parser, "Parser", "Java", "Parses user input,\nvalidates syntax,\ncreates Command objects")
+Container(command, "Command", "Java", "Abstract base class,\nexecutes operations via\ncommand pattern")
+Container(moduleList, "ModuleList", "Java", "Manages timetable modules,\nfiltering, clash detection")
+Container(module, "Module", "Java", "Represents a module with\nschedule and score breakdown")
+Container(courseRecord, "CourseRecord", "Java", "Manages grade records,\ncomputes GPA")
+Container(course, "Course", "Java", "Represents a completed course\nwith grade and credits")
+Container(reviewManager, "ReviewManager", "Java", "In-memory review management\n(RAM-first model)")
+Container(reviewStorage, "ReviewStorage", "Java", "Persists reviews to\ndata/reviews.txt")
+Container(exitSaveManager, "ExitSaveManager", "Java", "Prompts user to save\nunsaved reviews on exit")
+Container(ratingManager, "RatingManager", "Java", "Manages course ratings,\ncomputes averages")
+Container(ratingStorage, "RatingStorage", "Java", "Persists ratings to\ndata/ratings.txt")
+Container(scoreManager, "ScoreManager", "Java", "Manages score breakdowns\nper module")
+Container(scoreStorage, "ScoreStorage", "Java", "Persists scores to\ndata/scores.txt")
+Container(gradeStorage, "GradeStorage", "Java", "Persists grade records to\ndata/grades.txt")
+Container(moduleStorage, "ModuleStorage", "Java", "Persists timetable to\ndata/modules.txt")
 
 Rel(ui, parser, "Sends input to")
 Rel(parser, command, "Creates")
-Rel(command, moduleList, "Uses")
-Rel(command, courseRecord, "Uses")
-Rel(command, reviewManager, "Uses")
-Rel(reviewManager, storage, "Uses")
 Rel(command, ui, "Displays results via")
+Rel(command, moduleList, "Manages")
+Rel(command, courseRecord, "Manages")
+Rel(command, reviewManager, "Uses")
+Rel(command, ratingManager, "Uses")
+Rel(command, scoreManager, "Uses")
+
+Rel(moduleList, module, "Contains")
+Rel(courseRecord, course, "Contains")
+
+Rel(reviewManager, reviewStorage, "Loads/saves via")
+Rel(ratingManager, ratingStorage, "Loads/saves via")
+Rel(scoreManager, scoreStorage, "Loads/saves via")
+Rel(courseRecord, gradeStorage, "Loads/saves via")
+Rel(moduleList, moduleStorage, "Loads/saves via")
+
+Rel(exitSaveManager, reviewManager, "Checks unsaved reviews")
+Rel(exitSaveManager, reviewStorage, "Merges to file")
+Rel(exitSaveManager, ui, "Prompts user")
+Rel(command, exitSaveManager, "Triggers on exit")
+
+Rel(module, scoreManager, "Score breakdown\nstored in")
+
+note right of reviewManager
+  RAM-first model:
+  - All changes in memory
+  - User-controlled persistence
+  - No auto-save on add/edit/delete
+end note
+
+note right of exitSaveManager
+  New component (v2.1):
+  - Detects unsaved reviews
+  - Prompts user (yes/no)
+  - Prevents data loss on exit
+end note
 
 @enduml

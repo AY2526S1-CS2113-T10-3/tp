@@ -123,10 +123,11 @@ The architecture diagram above shows the high-level design of the application. T
 
 ### Command Execution Flow
 
-```
-User Input → Parser → Command Object → execute() → Updates Data → UI Output → Loop/Exit
-```
+The following workflow diagram illustrates the complete command execution flow in Uniflow:
 
+![Command Execution Flow](diagrams/CommandExecutionFlow.png)
+
+**Workflow Steps:**
 1. User enters a command string through the UI Scanner
     The `UI` component reads the input from the console.
 2. Parser analyzes the input and creates the appropriate `Command object`
@@ -244,7 +245,7 @@ It follows the same architecture as Review Management, with a clear separation b
 #### Score Management Component
 The Score Management component allows users to store and view assessment breakdowns for individual modules.
 It is designed around the same modular architecture as the Review and Rating systems.
-![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.puml)
+![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.png)
 
 - **ScoreManager** - Manages a `Map<String, Map<String, Integer>>` representing each module’s breakdown,
   where the key is a component name (e.g., `"exam"`, `"project"`) and the value is a score weight.
@@ -277,7 +278,7 @@ It follows the same architecture as Review Management, with a clear separation b
 #### Score Management Component
 The Score Management component allows users to store and view assessment breakdowns for individual modules.
 It is designed around the same modular architecture as the Review and Rating systems.
-![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.puml)
+![Score System Class Diagram](diagrams/ScoreManagementSystemClassDiagram.png)
 
 - **ScoreManager** - Manages a `Map<String, Map<String, Integer>>` representing each module’s breakdown,
   where the key is a component name (e.g., `"exam"`, `"project"`) and the value is a score weight.
@@ -388,12 +389,12 @@ The filter feature allows users to search modules using various criteria.
 
 How filtering works:
 
-1. Parser creates a FilterCommand with the filter type and value
-2. FilterCommand calls the appropriate filter method on ModuleList
+1. Parser creates a FilterCommand with the `filter` type and value
+2. FilterCommand calls the appropriate `filter` method on ModuleList
 3. ModuleList uses predicate-based filtering to create a new filtered list
 4. The filtered results are displayed to the user
 
-The application supports filtering by: day, session type, module ID, module name, and tutorial presence. The predicate-based approach allows for flexible and extensible filtering logic.
+The application supports filtering by: `day`, `session type`, `module ID`, `module name`, and `tutorial presence`. The predicate-based approach allows for flexible and extensible filtering logic.
 
 #### GPA Calculation Feature
 
@@ -458,7 +459,7 @@ How the score feature works:
 #### Rating Feature
 The rating feature allows users to rate modules they've taken and view the average rating for each module.
 
-![Rate Command Sequence](diagrams/RatingCommandSequence.puml)
+![Rate Command Sequence](diagrams/RatingCommandSequence.png)
 
 How it works:
 1. Parser creates a `RateCommand` when the user enters `rate <MODULE_CODE> [RATING]`
@@ -516,37 +517,37 @@ Uniflow solves several problems for university students:
 
 ## User Stories
 
-| Version | As a ...  | I want to ...                       | So that I can ...                                                 |
-|---------|-----------|-------------------------------------|-------------------------------------------------------------------|
-| v1.0    | new user  | see usage instructions              | refer to them when I forget how to use the application            |
-| v1.0    | student   | add modules to my timetable         | keep track of all my classes                                      |
-| v1.0    | student   | delete modules from my timetable    | remove classes I've dropped                                       |
-| v1.0    | student   | list all my modules                 | see my complete schedule at a glance                              |
-| v1.0    | student   | check for timetable clashes         | avoid scheduling conflicts                                        |
-| v2.0    | student   | filter modules by day               | see what classes I have on specific days                          |
-| v2.0    | student   | filter modules by session type      | quickly find all my tutorials or labs                             |
-| v2.0    | student   | search modules by code or name      | locate specific modules without scanning the entire list          |
-| v2.0    | student   | add my grades for completed courses | maintain an academic record                                       |
-| v2.0    | student   | add predicted grades for courses    | manage expectations for courses                                   |
-| v2.0    | student   | calculate my GPA automatically      | track my academic performance                                     |
-| v2.0    | student   | calculate my Major GPA automatically| track my academic performance with clearer picture                |
-| v2.0    | student   | calculate my projected GPA          | manage and set strategy for studying                              |
-| v2.0    | student   | store score breakdowns for modules  | track individual assessment components                            |
-| v2.0    | student   | add reviews for courses             | share my experiences with other students                          |
-| v2.0    | student   | read reviews for courses            | make informed decisions about module selection                    |
-| v2.0    | student   | reset my timetable                  | start fresh for a new semester                                    |
-| v2.0    | student   | rate a course                       | share simple feedback on module quality                           |
-| v2.0    | student   | search for reviews by user          | see all feedback from a specific person                           |
-| v2.0    | student   | search for reviews by user & course | find a specific person's review for a course                      |
-| v2.0    | (dev)     | manually reload reviews from file   | test persistence without restarting the app                       |
-| v2.0    | (dev)     | reset all reviews                   | clear the in-memory state for testing (without affecting the file) |
-| v2.1    | (student) | view all scores for a module        | review performance breakdowns across assessments                  |
-| v2.1    | (student) | update component scores for a module| correct mistakes or refine ongoing assessments                    |
-| v2.1    | (student) | view the average rating for a module| decide which modules to take next semester                        |
-| v2.1    | student   | be prompted to save reviews on exit | not lose work if user forget to save manually                     |
-| v2.1    | student   | count reviews for a course          | see how many reviews a course has                                 |
-| v2.1    | student   | show/remove grades of the record    | have more organised record and better management of academic progress |
-| v2.1    | (dev)     | manually merge reviews to disk      | save user progress without exiting or reloading                   |
+| Version | As a ...  | I want to ...                        | So that I can ...                                                     |
+|---------|-----------|--------------------------------------|-----------------------------------------------------------------------|
+| v1.0    | new user  | see usage instructions               | refer to them when I forget how to use the application                |
+| v1.0    | student   | add modules to my timetable          | keep track of all my classes                                          |
+| v1.0    | student   | delete modules from my timetable     | remove classes I've dropped                                           |
+| v1.0    | student   | list all my modules                  | see my complete schedule at a glance                                  |
+| v1.0    | student   | check for timetable clashes          | avoid scheduling conflicts                                            |
+| v2.0    | student   | filter modules by day                | see what classes I have on specific days                              |
+| v2.0    | student   | filter modules by session type       | quickly find all my tutorials or labs                                 |
+| v2.0    | student   | search modules by code or name       | locate specific modules without scanning the entire list              |
+| v2.0    | student   | add my grades for completed courses  | maintain an academic record                                           |
+| v2.0    | student   | add predicted grades for courses     | manage expectations for courses                                       |
+| v2.0    | student   | calculate my GPA automatically       | track my academic performance                                         |
+| v2.0    | student   | calculate my Major GPA automatically | track my academic performance with clearer picture                    |
+| v2.0    | student   | calculate my projected GPA           | manage and set strategy for studying                                  |
+| v2.0    | student   | store score breakdowns for modules   | track individual assessment components                                |
+| v2.0    | student   | add reviews for courses              | share my experiences with other students                              |
+| v2.0    | student   | read reviews for courses             | make informed decisions about module selection                        |
+| v2.0    | student   | reset my timetable                   | start fresh for a new semester                                        |
+| v2.0    | student   | rate a course                        | share simple feedback on module quality                               |
+| v2.0    | student   | search for reviews by user           | see all feedback from a specific person                               |
+| v2.0    | student   | search for reviews by user & course  | find a specific person's review for a course                          |
+| v2.0    | (dev)     | manually reload reviews from file    | test persistence without restarting the app                           |
+| v2.0    | (dev)     | reset all reviews                    | clear the in-memory state for testing (without affecting the file)    |
+| v2.1    | (student) | view all scores for a module         | review performance breakdowns across assessments                      |
+| v2.1    | (student) | update component scores for a module | correct mistakes or refine ongoing assessments                        |
+| v2.1    | (student) | view the average rating for a module | decide which modules to take next semester                            |
+| v2.1    | student   | be prompted to save reviews on exit  | not lose work if user forget to save manually                         |
+| v2.1    | student   | count reviews for a course           | see how many reviews a course has                                     |
+| v2.1    | student   | show/remove grades of the record     | have more organised record and better management of academic progress |
+| v2.1    | (dev)     | manually merge reviews to disk       | save user progress without exiting or reloading                       |
 
 
 ## Non-Functional Requirements
