@@ -249,8 +249,12 @@ class FilterCommandTest {
         assertTrue(output.contains("CS2113"), "Output should contain CS2113");
 
         int matchCount = 0;
-        if (output.contains("MA1521")) matchCount++;
-        if (output.contains("CS2113")) matchCount++;
+        if (output.contains("MA1521")) {
+            matchCount++;
+        }
+        if (output.contains("CS2113")) {
+            matchCount++;
+        }
         assertEquals(2, matchCount, "Should find exactly 2 modules with '21' in ID");
 
         LOGGER.log(Level.INFO, "Filter partial ID test passed");
