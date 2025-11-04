@@ -30,7 +30,7 @@ public class AddTestGradeCommand extends Command{
      * @throws UniflowException If error occurs when adding the course.
      */
     @Override
-    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) {
+    public void execute(UI ui, ModuleList modules, CourseRecord courseRecord) throws UniflowException {
         tempRecord.addCourse(tempCourse);
         ui.showMessage("Added course: " + tempCourse + " in temporary record.");
     }

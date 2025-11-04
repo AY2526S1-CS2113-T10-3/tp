@@ -112,7 +112,6 @@ public class Parser {
         if (trimmedCommand.startsWith(COMMAND_RATE)) {
             return parseRateCommand(trimmedCommand);
         }
-
         if (trimmedCommand.startsWith(COMMAND_COUNT_REVIEWS)) {
             String input = trimmedCommand.substring(COMMAND_COUNT_REVIEWS.length()).trim();
             return new CountReviewsCommand(input, Uniflow.getReviewManager());

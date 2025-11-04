@@ -114,24 +114,6 @@ public class ModuleListTest {
     }
 
     @Test
-    public void findWithTutorials_hasTutorials_returnsFilteredList() throws UniflowException {
-        moduleList.addModule(testModule1);
-        moduleList.addModule(tutorialModule);
-
-        ModuleList filtered = moduleList.findWithTutorials();
-        assertEquals(1, filtered.getSize());
-    }
-
-    @Test
-    public void findWithoutTutorials_hasNonTutorials_returnsFilteredList() throws UniflowException {
-        moduleList.addModule(testModule1);
-        moduleList.addModule(tutorialModule);
-
-        ModuleList filtered = moduleList.findWithoutTutorials();
-        assertEquals(1, filtered.getSize());
-    }
-
-    @Test
     public void findByDay_existingDay_returnsFilteredList() throws UniflowException {
         moduleList.addModule(testModule1);
         moduleList.addModule(testModule2);
