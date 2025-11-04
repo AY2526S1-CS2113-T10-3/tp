@@ -61,15 +61,22 @@ This product is designed for university students who prefer a fast, keyboard-bas
 ---
 
 ### Contributions to the User Guide
-- **Documentation/user guide update-1**: Contributed comprehensive documentation for the search and filtering features, as well as the review management system (post, edit, delete).
+- **Documentation/user guide updates**: Contributed comprehensive documentation for the `filter` feature with various test cases.
 - Wrote clear, user-friendly instructions with examples to help users understand how to effectively use these features.
 - Included common use cases and troubleshooting tips to enhance user experience.
+- Added table of contents and organized sections for easy navigation.
+- Table formatting and visual aids to improve readability.
 
 ---
 
 ### Contributions to the Developer Guide
-- **Documentation/diagrams setup**: Set up the initial structure and framework for technical diagrams in the Developer Guide.
-- **Documentation/developer guide setup**: Established the overall structure and sections of the Developer Guide to ensure consistency and completeness.
+- **Documentation/diagrams**:
+  - Set up the initial structure and framework for technical diagrams in the Developer Guide.
+  - Summarize and make`Command Execution Flow` diagram.
+  - Summarize and make `Architecture Overview` diagram.
+- **Documentation/developer guide**:
+  - Established the overall structure and sections of the Developer Guide to ensure consistency and completeness.
+  - Write the `filter` feature.
 - **Documentation/embed diagrams in developer guide**: Integrated UML diagrams and other technical diagrams into the Developer Guide to illustrate system architecture and component interactions.
 - Created detailed technical documentation explaining the implementation of the search/filter feature and the review management system.
 - Designed and updated UML diagrams to visualize the architecture and workflow.
