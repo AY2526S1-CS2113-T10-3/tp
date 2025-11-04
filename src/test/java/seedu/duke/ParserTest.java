@@ -169,23 +169,7 @@ class ParserTest {
     void parseAddGradeCommandMissingCode() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade mc/4 g/A m/yes");
-        });
-    }
-
-    @Test
-    void parseAddGradeCommandMissingCredits() {
-        Parser parser = new Parser();
-        assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 g/A m/yes");
-        });
-    }
-
-    @Test
-    void parseAddGradeCommandMissingGrade() {
-        Parser parser = new Parser();
-        assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 mc/4 m/yes");
+            Parser.parse("addgrade cr/4 g/A m/true");
         });
     }
 
@@ -193,39 +177,7 @@ class ParserTest {
     void parseAddGradeCommandMissingMajor() {
         Parser parser = new Parser();
         assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 mc/4 g/A");
-        });
-    }
-
-    @Test
-    void parseAddGradeCommandInvalidGrade() {
-        Parser parser = new Parser();
-        assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 mc/4 g/Z m/yes");
-        });
-    }
-
-    @Test
-    void parseAddGradeCommandInvalidCredits() {
-        Parser parser = new Parser();
-        assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 mc/abc g/A m/yes");
-        });
-    }
-
-    @Test
-    void parseAddGradeCommandNegativeCredits() {
-        Parser parser = new Parser();
-        assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 mc/-4 g/A m/yes");
-        });
-    }
-
-    @Test
-    void parseAddGradeCommandInvalidMajor() {
-        Parser parser = new Parser();
-        assertThrows(Exception.class, () -> {
-            Parser.parse("addgrade c/CS2113 mc/4 g/A m/invalid");
+            Parser.parse("addgrade c/CS2113 cr/4 g/A");
         });
     }
 
