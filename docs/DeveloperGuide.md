@@ -389,12 +389,12 @@ The filter feature allows users to search modules using various criteria.
 
 How filtering works:
 
-1. Parser creates a FilterCommand with the filter type and value
-2. FilterCommand calls the appropriate filter method on ModuleList
+1. Parser creates a FilterCommand with the `filter` type and value
+2. FilterCommand calls the appropriate `filter` method on ModuleList
 3. ModuleList uses predicate-based filtering to create a new filtered list
 4. The filtered results are displayed to the user
 
-The application supports filtering by: day, session type, module ID, module name, and tutorial presence. The predicate-based approach allows for flexible and extensible filtering logic.
+The application supports filtering by: `day`, `session type`, `module ID`, `module name`, and `tutorial presence`. The predicate-based approach allows for flexible and extensible filtering logic.
 
 #### GPA Calculation Feature
 
