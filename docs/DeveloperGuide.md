@@ -619,9 +619,9 @@ Expected: All added modules displayed with their details.
 
 **Deleting modules:**
 ```
-delete i/CS2113
+delete index/i
 ```
-Expected: First CS2113 entry removed. Confirmation message shows remaining module count.
+Expected: Module at index 1 of the timetable removed. Confirmation message shows remaining module count.
 
 ### Testing Filtering
 
@@ -704,6 +704,12 @@ score CS2113 exam:50 project:30 participation:20
 ```
 Expected: Confirmation that breakdown is saved for CS2113.
 
+**Viewing score breakdown:**
+```commandline
+score CS2113
+```
+Expected: Show the score breakdown saved for CS2113.
+
 **Testing invalid breakdown format:**
 ```
 score CS2113 exam:fifty
@@ -714,7 +720,8 @@ Expected: Error message about invalid format.
 
 **Adding reviews (in-memory):**
 ```commandline
-addreview c/CS2113 u/Alice r/Great course, very practical! addreview c/CS2113 u/Bob r/Challenging but rewarding
+addreview c/CS2113 u/Alice r/Great course, very practical!
+addreview c/CS2113 u/Bob r/Challenging but rewarding
 ```
 Expected: Confirmation that reviews are added (to memory).
 
@@ -824,33 +831,6 @@ Expected: Error message about invalid command.
 insert i/CS2113
 ```
 Expected: Error about missing fields.
-
-**Testing Find Review:**
-```
-findreview u/Alice
-```
-Expected: Shows only the review from Alice (`Great course, very practical!`).
-
-```
-findreview u/Bob c/CS2113
-```
-Expected: Shows only Bob's review for CS2113.
-
-```
-findreview u/NonExistentUser
-```
-Expected: Message indicating no reviews found for this user.
-
-**Testing Review Data Management (Reload/Reset):**
-```
-reset all reviews
-```
-Expected: Confirmation that reviews are reset. `review CS2113` should now show default data (or nothing).
-
-```
-reloadreviews
-```
-Expected: Confirmation that reviews are reloaded from file.
 
 ### Data Persistence Testing
 
