@@ -154,8 +154,8 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-Found 1 module(s) matching day 'Monday':
-1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ Found 1 module(s) matching day 'Monday':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
@@ -171,9 +171,9 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-Found 2 module(s) matching session type 'tutorial':
-1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
-2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
+ Found 2 module(s) matching session type 'tutorial':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ 2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
@@ -188,9 +188,9 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-Found 2 module(s) matching modules with tutorial sessions:
-1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
-2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
+ Found 2 module(s) matching modules with tutorial sessions:
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ 2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
@@ -222,9 +222,9 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-Found 2 module(s) matching ID containing 'CS2113':
-1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
-2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ Found 2 module(s) matching ID containing 'CS2113':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
@@ -239,11 +239,11 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-Found 4 module(s) matching ID containing 'CS':
-1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
-2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
-3. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
-4. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
+ Found 4 module(s) matching ID containing 'CS':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ 3. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
+ 4. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
@@ -258,9 +258,9 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-Found 2 module(s) matching name containing 'Software':
-1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
-2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ Found 2 module(s) matching name containing 'Software':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
@@ -274,12 +274,12 @@ Expected Output:
 ```commandline
 ___________________________________________________________________________
 ___________________________________________________________________________
-No modules found matching day 'Saturday'.
+ No modules found matching day 'Saturday'.
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
 
-Note: The filter command performs case-insensitive matching for all criteria.
+Note: The filter command performs **case-insensitive matching** for all criteria.
 
 ---
 
