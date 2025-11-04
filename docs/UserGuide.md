@@ -83,7 +83,9 @@ Now you have 1 module(s) in the list.
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
-Note: The `SESSION_TYPE` field is optional. If left empty, it will default to `Lecture`.
+**Note**:
+- The course code cannot contain spaces. 
+- The `SESSION_TYPE` field is optional. If left empty, it will default to `Lecture`.
 
 ### Deleting a Module: `delete`
 Removes a module from the timetable by index.
