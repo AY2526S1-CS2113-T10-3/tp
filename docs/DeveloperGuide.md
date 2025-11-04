@@ -704,6 +704,12 @@ score CS2113 exam:50 project:30 participation:20
 ```
 Expected: Confirmation that breakdown is saved for CS2113.
 
+**Viewing score breakdown:**
+```commandline
+score CS2113
+```
+Expected: Show the score breakdown saved for CS2113.
+
 **Testing invalid breakdown format:**
 ```
 score CS2113 exam:fifty
