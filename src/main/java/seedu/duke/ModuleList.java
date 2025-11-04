@@ -2,6 +2,8 @@ package seedu.duke;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.function.Predicate;
 
 public class ModuleList {
@@ -117,21 +119,73 @@ public class ModuleList {
     }
 
     /**
-     * Finds modules that have tutorial sessions.
+     * Finds modules (by module ID) that have at least one tutorial session.
      *
-     * @return a new ModuleList containing modules with tutorial sessions
+     * @return a new ModuleList containing one representative session for each module that has tutorials
      */
-    public ModuleList findWithTutorials() {
-        return filter(Module::hasTutorial);
+    public ModuleList findModulesWithTutorials() {
+        // Get all unique module IDs that have tutorial sessions
+        Set<String> moduleIdsWithTutorials = new HashSet<>();
+        for (Module module : modules) {
+            if (module.hasTutorial()) {
+                moduleIdsWithTutorials.add(module.getId().toUpperCase());
+            }
+        }
+
+        // Return one session (preferably the tutorial) for each module that has tutorials
+        List<Module> result = new ArrayList<>();
+        Set<String> addedModules = new HashSet<>();
+
+        for (Module module : modules) {
+            String moduleId = module.getId().toUpperCase();
+            if (moduleIdsWithTutorials.contains(moduleId) && !addedModules.contains(moduleId)) {
+                // Prefer to add the tutorial session if available
+                if (module.hasTutorial()) {
+                    result.add(module);
+                    addedModules.add(moduleId);
+                }
+            }
+        }
+
+        // Add non-tutorial sessions for modules we haven't added yet
+        for (Module module : modules) {
+            String moduleId = module.getId().toUpperCase();
+            if (moduleIdsWithTutorials.contains(moduleId) && !addedModules.contains(moduleId)) {
+                result.add(module);
+                addedModules.add(moduleId);
+            }
+        }
+
+        return new ModuleList(result);
     }
 
     /**
-     * Finds modules that do not have tutorial sessions.
+     * Finds modules (by module ID) that do not have any tutorial sessions.
      *
-     * @return a new ModuleList containing modules without tutorial sessions
+     * @return a new ModuleList containing one representative session for each module without tutorials
      */
-    public ModuleList findWithoutTutorials() {
-        return filter(module -> !module.hasTutorial());
+    public ModuleList findModulesWithoutTutorials() {
+        // Get all unique module IDs that have tutorial sessions
+        Set<String> moduleIdsWithTutorials = new HashSet<>();
+        for (Module module : modules) {
+            if (module.hasTutorial()) {
+                moduleIdsWithTutorials.add(module.getId().toUpperCase());
+            }
+        }
+
+        // Return one session for each module that does NOT have tutorials
+        List<Module> result = new ArrayList<>();
+        Set<String> addedModules = new HashSet<>();
+
+        for (Module module : modules) {
+            String moduleId = module.getId().toUpperCase();
+            if (!moduleIdsWithTutorials.contains(moduleId) && !addedModules.contains(moduleId)) {
+                result.add(module);
+                addedModules.add(moduleId);
+            }
+        }
+
+        return new ModuleList(result);
     }
 
     /**
@@ -163,6 +217,7 @@ public class ModuleList {
     public ModuleList findByName(String name) {
         return filter(module -> module.getName().toLowerCase().contains(name.toLowerCase()));
     }
+
     public Module findClash(Module newModule) {
         for (Module existing : modules) {
             if (existing.getDay().equalsIgnoreCase(newModule.getDay())) {
