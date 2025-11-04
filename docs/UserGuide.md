@@ -1,5 +1,50 @@
 # User Guide
 
+## Table of Contents
+- [Introduction](#introduction)
+- [Quick Start](#quick-start)
+- [Features](#features)
+    - [Module Management](#module-management-features)
+        - [Adding a Module: `insert`](#adding-a-module-insert)
+        - [Deleting a Module: `delete`](#deleting-a-module-delete)
+        - [Listing All Modules: `list`](#listing-all-modules-list)
+        - [Showing Your Timetable: `show timetable`](#showing-your-timetable-show-timetable)
+        - [Resetting Your Timetable: `reset timetable`](#resetting-your-timetable-reset-timetable)
+        - [Filtering Modules: `filter`](#filtering-modules-filter)
+    - [Grade & GPA Management](#grade--gpa-management-features)
+        - [GPA Calculator Overview](#gpa-calculator)
+        - [Adding a Course's Grade Information: `addgrade`](#adding-a-courses-grade-information-addgrade)
+        - [Adding a Course's Predicted Grade: `addtestgrade`](#adding-a-courses-predicted-grade-addtestgrade)
+        - [Listing Stored Course Grades: `showgrade`](#listing-out-the-currently-stored-course-grades-showgrade)
+        - [Listing Temporary Predicted Grades: `showtestgrade`](#listing-out-the-temporarily-stored-predicted-grades-showtestgrade)
+        - [Removing a Course From Saved Record: `removegrade`](#removing-a-course-from-saved-record-removegrade)
+        - [Removing a Course From Temporary Record: `removetestgrade`](#removing-a-course-from-temporary-record-removetestgrade)
+        - [Computing Cumulative GPA: `gpa`](#computing-cumulative-gpa-gpa)
+        - [Computing Projected GPA: `projectgpa`](#computing-a-projected-gpa-projectgpa)
+    - [Review Management](#review-management-features)
+        - [Adding a Review: `addreview`](#adding-a-review-addreview)
+        - [Viewing Reviews: `review`](#viewing-reviews-review)
+        - [Editing a Review: `editreview`](#editing-a-review-editreview)
+        - [Deleting a Review: `deletereview`](#deleting-a-review-deletereview)
+        - [Finding Reviews: `findreview`](#finding-reviews-findreview)
+        - [Counting Reviews: `amount reviews`](#counting-reviews-amount-reviews)
+        - [Loading Reviews from File: `load reviews`](#loading-reviews-from-file-load-reviews)
+        - [Adding In-Memory Reviews to File: `add reviews database`](#adding-in-memory-reviews-to-file-add-reviews-database)
+        - [Resetting All Reviews: `reset all reviews`](#resetting-all-reviews-reset-all-reviews)
+    - [Course Ratings & Scores](#course-ratings--scores-features)
+        - [Rating a Course: `rate`](#rating-a-course-rate)
+        - [Recording Component Scores: `score`](#recording-component-scores-score)
+    - [System Commands](#system-commands)
+        - [Exiting the Program: `bye`](#exiting-the-program-bye)
+- [Command Summary](#command-summary-uniflow)
+    - [Module Management](#module-management)
+    - [GPA Calculator](#gpa-calculator-1)
+    - [Review Management](#review-management)
+    - [Course Ratings](#course-ratings)
+    - [Score Breakdown](#score-breakdown)
+    - [System and Utility Commands](#system-and-utility-commands)
+- [Data Persistence](#data-persistence)
+
 ## Introduction
 
 Uniflow is a command-line university module management assistant designed for students.
@@ -38,7 +83,9 @@ Now you have 1 module(s) in the list.
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
-Note: The `SESSION_TYPE` field is optional. If left empty, it will default to `Lecture`.
+**Note**:
+- The course code cannot contain spaces. 
+- The `SESSION_TYPE` field is optional. If left empty, it will default to `Lecture`.
 
 ### Deleting a Module: `delete`
 Removes a module from the timetable by index.
@@ -121,14 +168,34 @@ filter name/MODULE_NAME
 filter hastutorial
 filter notutorial
 ```
-Examples:
+
+**EXAMPLE**
+
+For all test cases below, suppose you have the following modules in your timetable:
+```commandline
+1. CS2113 - Software Engineering - Lecture - Monday 14:00-16:00
+2. CS2113 - Software Engineering - Tutorial - Tuesday 10:00-11:00
+3. CS3241 - Computer Graphics - Lecture - Wednesday 10:00-12:00
+4. CS2040 - Data Structures - Lecture - Thursday 14:00-16:00
+5. MA1521 - Calculus - Lecture - Friday 16:00-18:00
+6. MA1521 - Calculus - Tutorial - Friday 18:00-19:00
+```
+To comply with the scenario above, please run the following commands before executing the test cases:
+```commandline
+reset timetable
+insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture
+insert i/CS2113 n/Software Engineering d/Tuesday f/10:00 t/11:00 s/Tutorial
+insert i/CS3241 n/Computer Graphics d/Wednesday f/10:00 t/12:00 s/Lecture
+insert i/CS2040 n/Data Structures d/Thursday f/14:00 t/16:00 s/Lecture
+insert i/MA1521 n/Calculus d/Friday f/16:00 t/18:00 s/Lecture
+insert i/MA1521 n/Calculus d/Friday f/18:00 t/19:00 s/Tutorial
+```
+
+**Test Case 1: Filter by Day**
+
+Input:
 ```commandline
 filter day/Monday
-filter type/tutorial
-filter hastutorial
-filter notutorial
-filter id/CS2113
-filter name/Software
 ```
 Expected Output:
 ```commandline
@@ -139,6 +206,129 @@ ___________________________________________________________________________
 ___________________________________________________________________________
 ___________________________________________________________________________
 ```
+
+**Test Case 2: Filter by Session Type**
+
+Input:
+```commandline
+filter type/tutorial
+```
+
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Found 2 module(s) matching session type 'tutorial':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ 2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+**Test Case 3: Filter Modules with Tutorials**
+
+Input:
+```commandline
+filter hastutorial
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Found 2 module(s) matching modules with tutorial sessions:
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ 2. Module[ID=MA1521, Name=Calculus, Type=tutorial, Day=Friday, Time=18:00-19:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+**Test Case 4: Filter Modules without Tutorials**
+
+Input:
+```commandline
+filter notutorial
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+Found 2 module(s) matching modules without tutorial sessions:
+1. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
+2. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+**Test Case 5: Filter by Module ID (Exact)**
+
+Input:
+```commandline
+filter id/CS2113
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Found 2 module(s) matching ID containing 'CS2113':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+**Test Case 6: Filter by Module ID (Partial Match)**
+
+Input:
+```commandline
+filter id/CS
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Found 4 module(s) matching ID containing 'CS':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+ 3. Module[ID=CS3241, Name=Computer Graphics, Type=lecture, Day=Wednesday, Time=10:00-12:00]
+ 4. Module[ID=CS2040, Name=Data Structures, Type=lecture, Day=Thursday, Time=14:00-16:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+**Test Case 7: Filter by Module Name**
+
+Input:
+```commandline
+filter name/Software
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ Found 2 module(s) matching name containing 'Software':
+ 1. Module[ID=CS2113, Name=Software Engineering, Type=lecture, Day=Monday, Time=14:00-16:00]
+ 2. Module[ID=CS2113, Name=Software Engineering, Type=tutorial, Day=Tuesday, Time=10:00-11:00]
+___________________________________________________________________________
+___________________________________________________________________________
+```
+**Test Case 8: Filter with No Matches**
+
+Input:
+```commandline
+filter day/Saturday
+```
+Expected Output:
+```commandline
+___________________________________________________________________________
+___________________________________________________________________________
+ No modules found matching day 'Saturday'.
+___________________________________________________________________________
+___________________________________________________________________________
+```
+
+Note: The filter command performs **case-insensitive matching** for all criteria.
+
+---
 
 ### Recording Component Scores: `score`
 Allows users to record or view score breakdowns for a specific module (e.g., exam scores, project scores, participation).
@@ -597,50 +787,50 @@ ___________________________________________________________________________
 You have unsaved reviews in memory. Do you want to save them before exiting? (yes/no)
 ```
 
-# Command Summary (Uniflow)
+## Command Summary (Uniflow)
 
-## Module Management
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **insert** | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture` | Adds a new module to your timetable |
-| **delete** | `delete index/MODULE_INDEX`  *Example:* `delete index/1` | Deletes a module by its list index |
-| **list** | `list` | Lists all modules currently added |
-| **show timetable** | `show timetable` | Displays all modules with full details |
-| **reset timetable** | `reset timetable` | Removes all modules from your timetable (cannot be undone) |
-| **filter** | `filter day/DAY` <br> `filter type/SESSION_TYPE` <br> `filter id/MODULE_CODE` <br> `filter name/MODULE_NAME` <br> `filter hastutorial` <br> `filter notutorial` <br> *Example:* `filter day/Monday` | Filters modules by given criteria such as day, session type, or presence of tutorials |
-
----
-
-## GPA Calculator
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **addgrade** | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true` | Adds a grade entry for a course to your permanent record |
-| **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adds a *temporary* grade for GPA projection |
-| **removegrade** | `removegrade INDEX` <br> *Example:* `removegrade 3` | Removes a grade entry for a course from your permanent record |
-| **removetestgrade** | `removetestgrade INDEX` <br> *Example:* `removetestgrade 3` | Removes a course from the *temporary* grade record |
-| **showgrade** | `showgrade` | Displays what courses are saved in the permanent record |
-| **showtestgrade** | `showtestgrade` | Displays what courses are currently in the temporary record |
-| **gpa** | `gpa` | Computes cumulative GPA and major GPA based on stored grades |
-| **projectgpa** | `projectgpa` | Computes predicted GPA including test grades |
+### Module Management
+| **Action**          | **Format and Examples**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | **Explanation**                                                                       |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| **insert**          | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture`                                                                                                                                                                                                                                                                                                                                   | Adds a new module to your timetable                                                   |
+| **delete**          | `delete index/MODULE_INDEX` <br> *Example:* `delete index/1`                                                                                                                                                                                                                                                                                                                                                                                                                                             | Deletes a module by its list index                                                    |
+| **list**            | `list`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Lists all modules currently added                                                     |
+| **show timetable**  | `show timetable`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Displays all modules with full details                                                |
+| **reset timetable** | `reset timetable`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Removes all modules from your timetable (cannot be undone)                            |
+| **filter**          | `filter day/DAY` <br> e.g., `filter day/Monday` - Shows all Monday modules <br> `filter type/SESSION_TYPE` <br> e.g., `filter type/tutorial` - Shows all tutorial sessions <br> `filter id/MODULE_CODE` <br> e.g.,`filter id/CS` - Shows all modules with "CS" in ID <br> `filter name/MODULE_NAME` <br> e.g., `filter name/Engineering` - Shows modules with "Engineering" in name <br> `filter hastutorial` - Shows modules with tutorials <br> `filter notutorial` - Shows modules without tutorials | Filters modules by given criteria such as day, session type, or presence of tutorials |
 
 ---
 
-## Review Management
-| **Action** | **Format and Examples** | **Explanation** |
-| :--- | :--- | :--- |
-| **addreview** | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great!` | Adds a review **to memory** (session-only) |
-| **review** | `review MODULE_CODE` <br> *Example:* `review CS2113` | Displays all reviews **from memory** |
-| **editreview** | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved!` | Edits an existing review **in memory** |
-| **deletereview** | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes your review **from memory** |
-| **findreview** | `findreview [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `findreview u/John` | Searches for reviews **in memory** by module or user |
-| **amount reviews** | `amount reviews [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `amount reviews c/CS2113` | Counts reviews **in memory** by module or user |
-| **load reviews** | `load reviews` | Clears memory and loads reviews from file (prompts to merge) |
-| **add reviews database** | `add reviews database` | Manually merges reviews from memory into the file (saves progress) |
-| **reset all reviews** | `reset all reviews` | Clears all reviews **from memory only** (does not touch the file) |                                                                                                    | Deletes all reviews and resets the review storage |
+### GPA Calculator
+| **Action**          | **Format and Examples**                                                                                                      | **Explanation**                                               |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| **addgrade**        | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true`         | Adds a grade entry for a course to your permanent record      |
+| **addtestgrade**    | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adds a *temporary* grade for GPA projection                   |
+| **removegrade**     | `removegrade INDEX` <br> *Example:* `removegrade 3`                                                                          | Removes a grade entry for a course from your permanent record |
+| **removetestgrade** | `removetestgrade INDEX` <br> *Example:* `removetestgrade 3`                                                                  | Removes a course from the *temporary* grade record            |
+| **showgrade**       | `showgrade`                                                                                                                  | Displays what courses are saved in the permanent record       |
+| **showtestgrade**   | `showtestgrade`                                                                                                              | Displays what courses are currently in the temporary record   |
+| **gpa**             | `gpa`                                                                                                                        | Computes cumulative GPA and major GPA based on stored grades  |
+| **projectgpa**      | `projectgpa`                                                                                                                 | Computes predicted GPA including test grades                  |
 
 ---
 
-## Course Ratings
+### Review Management
+| **Action**               | **Format and Examples**                                                                                          | **Explanation**                                                    |
+|:-------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------|
+| **addreview**            | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great!`          | Adds a review **to memory** (session-only)                         |
+| **review**               | `review MODULE_CODE` <br> *Example:* `review CS2113`                                                             | Displays all reviews **from memory**                               |
+| **editreview**           | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved!` | Edits an existing review **in memory**                             |
+| **deletereview**         | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John`                           | Deletes your review **from memory**                                |
+| **findreview**           | `findreview [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `findreview u/John`                                    | Searches for reviews **in memory** by module or user               |
+| **amount reviews**       | `amount reviews [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `amount reviews c/CS2113`                          | Counts reviews **in memory** by module or user                     |
+| **load reviews**         | `load reviews`                                                                                                   | Clears memory and loads reviews from file (prompts to merge)       |
+| **add reviews database** | `add reviews database`                                                                                           | Manually merges reviews from memory into the file (saves progress) |
+| **reset all reviews**    | `reset all reviews`                                                                                              | Clears all reviews **from memory only** (does not touch the file)  |                                                                                                    | Deletes all reviews and resets the review storage |
+
+---
+
+### Course Ratings
 | **Action**      | **Format and Examples**                                   | **Explanation**                            |
 |-----------------|-----------------------------------------------------------|--------------------------------------------|
 | **rate (add)**  | `rate MODULE_CODE RATING` <br> *Example:* `rate CS2113 4` | Adds a numerical rating (1–5) for a module |
@@ -648,28 +838,28 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 
 ---
 
-## Score Breakdown
-| **Action** | **Format and Examples** | **Explanation**                                 |
-|-------------|----------------------|-------------------------------------------------|
-| **score (add)** | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course         |
-| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113` | Displays the saved score breakdown for a module |
+### Score Breakdown
+| **Action**       | **Format and Examples**                                                                                                        | **Explanation**                                 |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| **score (add)**  | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course         |
+| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113`                                                                             | Displays the saved score breakdown for a module |
 
 ---
 
-## System and Utility Commands
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **bye** | `bye` | Exits the program (prompts to save unsaved reviews) |
+### System and Utility Commands
+| **Action** | **Format and Examples** | **Explanation**                                     |
+|------------|-------------------------|-----------------------------------------------------|
+| **bye**    | `bye`                   | Exits the program (prompts to save unsaved reviews) |
 
 ---
 
-## Data Persistence
-| **File Location** | **Stored Data**                  |
-|-------------------|----------------------------------|
-| `data/modules.txt` | Timetable modules                |
-| `data/ratings.txt` | Module ratings                   |
-| `data/reviews.txt` | Module reviews                   |
-| `data/grades.txt` | Saved course grades |
+### Data Persistence
+| **File Location**  | **Stored Data**     |
+|--------------------|---------------------|
+| `data/modules.txt` | Timetable modules   |
+| `data/ratings.txt` | Module ratings      |
+| `data/reviews.txt` | Module reviews      |
+| `data/grades.txt`  | Saved course grades |
 
 **Note on Data Persistence:**
 Most data (Timetable, Grades, Scores, Ratings) is saved automatically.

@@ -67,5 +67,4 @@ public class GradeStorage {
         }
         return record;
     }
-
 }

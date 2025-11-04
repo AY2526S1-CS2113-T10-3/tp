@@ -7,7 +7,7 @@ public class FilterCommand extends Command {
     /**
      * Creates a filter command with the specified type and value.
      *
-     * @param filterType the type of filter (e.g., "type", "day", "id", "name", "hastutorial", "notutorial")
+     * @param filterType  the type of filter (e.g., "type", "day", "id", "name", "hastutorial", "notutorial")
      * @param filterValue the value to filter by (null for boolean filters like hastutorial)
      */
     public FilterCommand(String filterType, String filterValue) {
@@ -29,12 +29,12 @@ public class FilterCommand extends Command {
             break;
 
         case "hastutorial":
-            filteredModules = modules.findWithTutorials();
+            filteredModules = modules.findModulesWithTutorials();
             ui.showFilteredModules(filteredModules, "modules with tutorial sessions");
             break;
 
         case "notutorial":
-            filteredModules = modules.findWithoutTutorials();
+            filteredModules = modules.findModulesWithoutTutorials();
             ui.showFilteredModules(filteredModules, "modules without tutorial sessions");
             break;
 
