@@ -740,9 +740,9 @@ ___________________________________________________________________________
 You have unsaved reviews in memory. Do you want to save them before exiting? (yes/no)
 ```
 
-# Command Summary (Uniflow)
+## Command Summary (Uniflow)
 
-## Module Management
+### Module Management
 | **Action**          | **Format and Examples**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | **Explanation**                                                                       |
 |---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
 | **insert**          | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture`                                                                                                                                                                                                                                                                                                                                   | Adds a new module to your timetable                                                   |
@@ -754,7 +754,7 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 
 ---
 
-## GPA Calculator
+### GPA Calculator
 | **Action**          | **Format and Examples**                                                                                                      | **Explanation**                                               |
 |---------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
 | **addgrade**        | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true`         | Adds a grade entry for a course to your permanent record      |
@@ -768,7 +768,7 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 
 ---
 
-## Review Management
+### Review Management
 | **Action**               | **Format and Examples**                                                                                          | **Explanation**                                                    |
 |:-------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------|
 | **addreview**            | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great!`          | Adds a review **to memory** (session-only)                         |
@@ -783,7 +783,7 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 
 ---
 
-## Course Ratings
+### Course Ratings
 | **Action**      | **Format and Examples**                                   | **Explanation**                            |
 |-----------------|-----------------------------------------------------------|--------------------------------------------|
 | **rate (add)**  | `rate MODULE_CODE RATING` <br> *Example:* `rate CS2113 4` | Adds a numerical rating (1–5) for a module |
@@ -791,7 +791,7 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 
 ---
 
-## Score Breakdown
+### Score Breakdown
 | **Action**       | **Format and Examples**                                                                                                        | **Explanation**                                 |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
 | **score (add)**  | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course         |
@@ -799,14 +799,14 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 
 ---
 
-## System and Utility Commands
+### System and Utility Commands
 | **Action** | **Format and Examples** | **Explanation**                                     |
 |------------|-------------------------|-----------------------------------------------------|
 | **bye**    | `bye`                   | Exits the program (prompts to save unsaved reviews) |
 
 ---
 
-## Data Persistence
+### Data Persistence
 | **File Location**  | **Stored Data**     |
 |--------------------|---------------------|
 | `data/modules.txt` | Timetable modules   |
