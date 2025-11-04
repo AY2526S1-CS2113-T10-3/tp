@@ -600,43 +600,43 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 # Command Summary (Uniflow)
 
 ## Module Management
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **insert** | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture` | Adds a new module to your timetable |
-| **delete** | `delete index/MODULE_INDEX`  *Example:* `delete index/1` | Deletes a module by its list index |
-| **list** | `list` | Lists all modules currently added |
-| **show timetable** | `show timetable` | Displays all modules with full details |
-| **reset timetable** | `reset timetable` | Removes all modules from your timetable (cannot be undone) |
-| **filter** | `filter day/DAY` <br> `filter type/SESSION_TYPE` <br> `filter id/MODULE_CODE` <br> `filter name/MODULE_NAME` <br> `filter hastutorial` <br> `filter notutorial` <br> *Example:* `filter day/Monday` | Filters modules by given criteria such as day, session type, or presence of tutorials |
+| **Action**          | **Format and Examples**                                                                                                                                                                             | **Explanation**                                                                       |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| **insert**          | `insert i/MODULE_CODE n/NAME d/DAY f/START_TIME t/END_TIME s/SESSION_TYPE` <br> *Example:* `insert i/CS2113 n/Software Engineering d/Monday f/14:00 t/16:00 s/Lecture`                              | Adds a new module to your timetable                                                   |
+| **delete**          | `delete index/MODULE_INDEX` <br> *Example:* `delete index/1`                                                                                                                                        | Deletes a module by its list index                                                    |
+| **list**            | `list`                                                                                                                                                                                              | Lists all modules currently added                                                     |
+| **show timetable**  | `show timetable`                                                                                                                                                                                    | Displays all modules with full details                                                |
+| **reset timetable** | `reset timetable`                                                                                                                                                                                   | Removes all modules from your timetable (cannot be undone)                            |
+| **filter**          | `filter day/DAY` <br> `filter type/SESSION_TYPE` <br> `filter id/MODULE_CODE` <br> `filter name/MODULE_NAME` <br> `filter hastutorial` <br> `filter notutorial` <br> *Example:* `filter day/Monday` | Filters modules by given criteria such as day, session type, or presence of tutorials |
 
 ---
 
 ## GPA Calculator
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **addgrade** | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true` | Adds a grade entry for a course to your permanent record |
-| **addtestgrade** | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adds a *temporary* grade for GPA projection |
-| **removegrade** | `removegrade INDEX` <br> *Example:* `removegrade 3` | Removes a grade entry for a course from your permanent record |
-| **removetestgrade** | `removetestgrade INDEX` <br> *Example:* `removetestgrade 3` | Removes a course from the *temporary* grade record |
-| **showgrade** | `showgrade` | Displays what courses are saved in the permanent record |
-| **showtestgrade** | `showtestgrade` | Displays what courses are currently in the temporary record |
-| **gpa** | `gpa` | Computes cumulative GPA and major GPA based on stored grades |
-| **projectgpa** | `projectgpa` | Computes predicted GPA including test grades |
+| **Action**          | **Format and Examples**                                                                                                      | **Explanation**                                               |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| **addgrade**        | `addgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addgrade c/CS2113 cr/4 g/A m/true`         | Adds a grade entry for a course to your permanent record      |
+| **addtestgrade**    | `addtestgrade c/COURSE_CODE cr/NUMBER_OF_CREDITS g/GRADE m/IS_MAJOR` <br> *Example:* `addtestgrade c/CS2113 cr/4 g/A m/true` | Adds a *temporary* grade for GPA projection                   |
+| **removegrade**     | `removegrade INDEX` <br> *Example:* `removegrade 3`                                                                          | Removes a grade entry for a course from your permanent record |
+| **removetestgrade** | `removetestgrade INDEX` <br> *Example:* `removetestgrade 3`                                                                  | Removes a course from the *temporary* grade record            |
+| **showgrade**       | `showgrade`                                                                                                                  | Displays what courses are saved in the permanent record       |
+| **showtestgrade**   | `showtestgrade`                                                                                                              | Displays what courses are currently in the temporary record   |
+| **gpa**             | `gpa`                                                                                                                        | Computes cumulative GPA and major GPA based on stored grades  |
+| **projectgpa**      | `projectgpa`                                                                                                                 | Computes predicted GPA including test grades                  |
 
 ---
 
 ## Review Management
-| **Action** | **Format and Examples** | **Explanation** |
-| :--- | :--- | :--- |
-| **addreview** | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great!` | Adds a review **to memory** (session-only) |
-| **review** | `review MODULE_CODE` <br> *Example:* `review CS2113` | Displays all reviews **from memory** |
-| **editreview** | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved!` | Edits an existing review **in memory** |
-| **deletereview** | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John` | Deletes your review **from memory** |
-| **findreview** | `findreview [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `findreview u/John` | Searches for reviews **in memory** by module or user |
-| **amount reviews** | `amount reviews [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `amount reviews c/CS2113` | Counts reviews **in memory** by module or user |
-| **load reviews** | `load reviews` | Clears memory and loads reviews from file (prompts to merge) |
-| **add reviews database** | `add reviews database` | Manually merges reviews from memory into the file (saves progress) |
-| **reset all reviews** | `reset all reviews` | Clears all reviews **from memory only** (does not touch the file) |                                                                                                    | Deletes all reviews and resets the review storage |
+| **Action**               | **Format and Examples**                                                                                          | **Explanation**                                                    |
+|:-------------------------|:-----------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------|
+| **addreview**            | `addreview c/MODULE_CODE u/USERNAME r/REVIEW_TEXT` <br> *Example:* `addreview c/CS2113 u/John r/Great!`          | Adds a review **to memory** (session-only)                         |
+| **review**               | `review MODULE_CODE` <br> *Example:* `review CS2113`                                                             | Displays all reviews **from memory**                               |
+| **editreview**           | `editreview c/MODULE_CODE u/USERNAME r/NEW_REVIEW_TEXT` <br> *Example:* `editreview c/CS2113 u/John r/Improved!` | Edits an existing review **in memory**                             |
+| **deletereview**         | `deletereview c/MODULE_CODE u/USERNAME` <br> *Example:* `deletereview c/CS2113 u/John`                           | Deletes your review **from memory**                                |
+| **findreview**           | `findreview [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `findreview u/John`                                    | Searches for reviews **in memory** by module or user               |
+| **amount reviews**       | `amount reviews [c/MODULE_CODE] [u/USERNAME]` <br> *Example:* `amount reviews c/CS2113`                          | Counts reviews **in memory** by module or user                     |
+| **load reviews**         | `load reviews`                                                                                                   | Clears memory and loads reviews from file (prompts to merge)       |
+| **add reviews database** | `add reviews database`                                                                                           | Manually merges reviews from memory into the file (saves progress) |
+| **reset all reviews**    | `reset all reviews`                                                                                              | Clears all reviews **from memory only** (does not touch the file)  |                                                                                                    | Deletes all reviews and resets the review storage |
 
 ---
 
@@ -649,27 +649,27 @@ You have unsaved reviews in memory. Do you want to save them before exiting? (ye
 ---
 
 ## Score Breakdown
-| **Action** | **Format and Examples** | **Explanation**                                 |
-|-------------|----------------------|-------------------------------------------------|
-| **score (add)** | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course         |
-| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113` | Displays the saved score breakdown for a module |
+| **Action**       | **Format and Examples**                                                                                                        | **Explanation**                                 |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| **score (add)**  | `score MODULE_CODE component1:value1 component2:value2 ...` <br> *Example:* `score CS2113 exam:50 project:30 participation:20` | Adds a new score breakdown for a course         |
+| **score (view)** | `score MODULE_CODE` <br> *Example:* `score CS2113`                                                                             | Displays the saved score breakdown for a module |
 
 ---
 
 ## System and Utility Commands
-| **Action** | **Format and Examples** | **Explanation** |
-|-------------|----------------------|-------------|
-| **bye** | `bye` | Exits the program (prompts to save unsaved reviews) |
+| **Action** | **Format and Examples** | **Explanation**                                     |
+|------------|-------------------------|-----------------------------------------------------|
+| **bye**    | `bye`                   | Exits the program (prompts to save unsaved reviews) |
 
 ---
 
 ## Data Persistence
-| **File Location** | **Stored Data**                  |
-|-------------------|----------------------------------|
-| `data/modules.txt` | Timetable modules                |
-| `data/ratings.txt` | Module ratings                   |
-| `data/reviews.txt` | Module reviews                   |
-| `data/grades.txt` | Saved course grades |
+| **File Location**  | **Stored Data**     |
+|--------------------|---------------------|
+| `data/modules.txt` | Timetable modules   |
+| `data/ratings.txt` | Module ratings      |
+| `data/reviews.txt` | Module reviews      |
+| `data/grades.txt`  | Saved course grades |
 
 **Note on Data Persistence:**
 Most data (Timetable, Grades, Scores, Ratings) is saved automatically.
