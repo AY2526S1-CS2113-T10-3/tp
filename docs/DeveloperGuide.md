@@ -619,7 +619,7 @@ Expected: All added modules displayed with their details.
 
 **Deleting modules:**
 ```
-delete i/CS2113
+delete index/CS2113
 ```
 Expected: First CS2113 entry removed. Confirmation message shows remaining module count.
 
